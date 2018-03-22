@@ -1,1 +1,1 @@
-web: gunicorn first_django_app.wsgi --log-file -
+web: gunicorn final_conectate_group4.wsgi --log-file -
