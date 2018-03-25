@@ -11,7 +11,7 @@ class UsuarioForm(UserCreationForm):
         super(UsuarioForm, self).__init__(*args, **kwargs)
         self.fields['password1'].label = "Contraseña"
         self.fields['password2'].label = "Confirmar contraseña"
-        self.fields['email'].label = "Correo Electrtónico"
+        self.fields['email'].label = "Correo Electrónico"
         self.fields['first_name'].label = "Nombre"
         self.fields['groups'].label = "Perfil"
     # end def
@@ -27,7 +27,7 @@ class UsuarioEditFormAdmin(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(UsuarioEditFormAdmin, self).__init__(*args, **kwargs)
-        self.fields['email'].label = "Correo Electrtónico"
+        self.fields['email'].label = "Correo Electrónico"
         self.fields['first_name'].label = "Nombre"
         self.fields['groups'].label = "Perfil"
 

@@ -27,13 +27,16 @@ class Categoria (models.Model):
 class Herramienta(ChangesMixin, models.Model):
     nombre= models.CharField(max_length=100)
     descripcion= models.CharField(max_length=1000, null=True, blank=True)
-    informacion= models.CharField(max_length=1000, null=True, blank=True)
-    usos = models.CharField(max_length=1000, null=True, blank=True)
-    enlaces = models.CharField(max_length=1000, null=True, blank=True)
+    licencia = models.CharField(max_length=1000, null=True, blank=True)  # add #Tipo de licencia
+    usos = models.CharField(max_length=1000, null=True, blank=True)  # Restricciones de uso
+    enlaces = models.CharField(max_length=1000, null=True, blank=True)  # url del siito de la herramienta
+    descarga_url = models.CharField(max_length=1000, null=True, blank=True)  # add #url para descargar
+    sistema_operativo = models.CharField(max_length=1000, null=True, blank=True)#add
+    version= models.CharField(max_length=1000, null=True, blank=True)#add
+    integracion_lms= models.CharField(max_length=1000, null=True, blank=True)#add
+    informacion= models.CharField(max_length=1000, null=True, blank=True)#descripcion funcional
     documentacion = models.CharField(max_length=1000, null=True, blank=True)
     estado=models.IntegerField(choices=((0, 'Borrador'), (1, 'Revisión'), (2, 'Publica')), default=0)
-    licencia = models.CharField(max_length=1000, null=True, blank=True) #add
-    descarga_url = models.CharField(max_length=1000, null=True, blank=True)#add
     creacion =models.DateField(auto_now_add=True)#add
     tipo= models.ForeignKey(Categoria, null=True, blank=True)#add
     owner= CurrentUserField(add_only=True, related_name="created_mymodels")
@@ -67,12 +70,15 @@ class Revision (models.Model):
 class HerramientaEdicion(ChangesMixin, models.Model):
     nombre = models.CharField(max_length=100, null=True, blank=True)
     descripcion = models.CharField(max_length=1000, null=True, blank=True)
-    informacion = models.CharField(max_length=1000, null=True, blank=True)
-    usos = models.CharField(max_length=1000, null=True, blank=True)
-    enlaces = models.CharField(max_length=1000, null=True, blank=True)
+    licencia = models.CharField(max_length=1000, null=True, blank=True)  # add #Tipo de licencia
+    usos = models.CharField(max_length=1000, null=True, blank=True)  # Restricciones de uso
+    enlaces = models.CharField(max_length=1000, null=True, blank=True)  # url del siito de la herramienta
+    descarga_url = models.CharField(max_length=1000, null=True, blank=True)  # add #url para descargar
+    sistema_operativo = models.CharField(max_length=1000, null=True, blank=True)  # add
+    version = models.CharField(max_length=1000, null=True, blank=True)  # add
+    integracion_lms = models.CharField(max_length=1000, null=True, blank=True)  # add
+    informacion = models.CharField(max_length=1000, null=True, blank=True)  # descripcion funcional
     documentacion = models.CharField(max_length=1000, null=True, blank=True)
-    licencia = models.CharField(max_length=1000, null=True, blank=True)  # add
-    descarga_url = models.CharField(max_length=1000, null=True, blank=True)  # add
     creacion = models.DateField(auto_now_add=True)  # add
     tipo = models.ForeignKey(Categoria, null=True, blank=True)  # add
     usuarioHerramienta= CurrentUserField(add_only=True, related_name='created_edit_model', on_delete=models.CASCADE)
