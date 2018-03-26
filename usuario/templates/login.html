@@ -8,7 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="row">
+<div id="container" class="row">
     <div class="col-md-4 col-sm-offset-4">
         <div class="page-header">
             <br>
@@ -45,6 +45,14 @@ $('form').submit( function(e) {
             success: function() {
                        alert("login succes");
                      },
+            error: function(xhr, status, error) {
+
+              $("#container").prepend(
+                '<div class="alert alert-danger">'+
+                    'Nombre de usuario o clave no valido'+
+                '</div>'
+              );
+            }
         });
         e.preventDefault();
     });
