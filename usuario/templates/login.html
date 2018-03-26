@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="container" class="row">
+    <div class="col-md-4 col-sm-offset-4">
+        <div class="page-header">
+            <br>
+            <h2>Login</h2>
+        </div>
+
+        <form id="formUsuario" method="post" action="https://final-conectate-group4.herokuapp.com/usuario/login">
+
+            <div class="form-group">
+                <label class="control-label" for="username">Nombre de usuario</label>
+                <input type="text" id="username" name="username" class="form-control" value="">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="password">Contraseña</label>
+                <input type="password" id="password" name="password" class="form-control" value="">
+            </div>
+            <div style="padding-top: 3%;">
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="" class="btn btn-primary"/>Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+$('form').submit( function(e) {
+        var formData= new FormData($("#formUsuario")[0]);
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function() {
+                       alert("login succes");
+                     },
+            error: function(xhr, status, error) {
+
+              $("#container").prepend(
+                '<div class="alert alert-danger">'+
+                    'Nombre de usuario o clave no valido'+
+                '</div>'
+              );
+            }
+        });
+        e.preventDefault();
+    });
+</script>
+
+</body>
+</html>
