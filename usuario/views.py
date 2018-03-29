@@ -9,10 +9,6 @@ from django.contrib.auth.models import Group
 from usuario.models import Usuario
 from herramienta.models import HerramientaEdicion
 from django.core.paginator import Paginator
-from django.template.response import TemplateResponse
-
-from rest_framework.exceptions import APIException
-from django.template import RequestContext
 
 
 # Create your views here.
