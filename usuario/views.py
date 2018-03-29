@@ -9,6 +9,9 @@ from django.contrib.auth.models import Group
 from usuario.models import Usuario
 from herramienta.models import HerramientaEdicion
 from django.core.paginator import Paginator
+from django.template.response import TemplateResponse
+
+from rest_framework.exceptions import APIException
 from django.template import RequestContext
 
 
@@ -40,6 +43,44 @@ def login_rest(request):
 def login_view(request):
     return render(request, 'login.html')
 
+@csrf_exempt
+def crear_usuario_rest(request):
+    if request.method == 'POST':
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        username= request.POST.get("username")
+        first_name= request.POST.get("first_name")
+        last_name=request.POST.get("last_name")
+        perfiles=request.POST.getlist("perfiles")
+
+        if Usuario.objects.filter(email=email).exists():
+            mensaje = 'Email ya existe'
+            raise Http404(mensaje)
+        try:
+            usuario = Usuario.objects.create(email=email, password=password, username=username, first_name=first_name,
+                                             last_name=last_name)
+            for perfil in perfiles:
+                my_group = Group.objects.get(name=perfil)
+                my_group.user_set.add(usuario)
+            usuario.save()
+            return HttpResponse(serializers.serialize("json", [usuario]))
+
+        except Exception as e:
+            raise Http404(e)
+
+
+
+
+
+
+@csrf_exempt
+def get_groups(request):
+    if request.method == 'GET':
+        groups = Group.objects.all()
+    return HttpResponse(serializers.serialize("json", groups))
+
+def crear_usuario(request):
+    return render(request, 'crearUsuario.html')
 
 def in_admin_group(user):
     return user.is_authenticated() and 'Admin' in user.groups.iterator()
@@ -119,3 +160,5 @@ def admin_ver_usuario_herramienta(request):
         'paginator': pag
     }
     return render(request, 'usuarioherramienta.html', cxt)
+
+

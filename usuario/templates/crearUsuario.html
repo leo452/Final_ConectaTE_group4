@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script>
+       $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/getgroups").done(function(data) {
+              $.each(data, function(i,item) {
+                $("#perfil").append(
+            '<div class="checkbox">'+
+            '<label for="id_perfiles_'+i+'"</label>'+
+            '<input type="checkbox" name="perfiles" value="'+item.fields.name+'" tittle id="id_perfiles'+i+'" class>'+
+            item.fields.name+'</label>'+
+            '</div>'
+                );
+              });
+            });
+</script>
+<div class="row">
+    <div class="col-md-6 col-sm-offset-3">
+<br>
+        <div class="page-header">
+            <h2>Crear usuario</h2>
+        </div>
+        <div id="error" class="alert alert-danger" hidden>
+        </div>
+        <form id="formUsuario" method="post" action="https://final-conectate-group4.herokuapp.com/usuario/crearusuario" enctype="multipart/form-data"    >
+            <label class="control-label">Nombre de usuario</label>
+            <input id="username" name="username" type="text" placeholder="username" class="form-control input-md" required=""><br>
+            <label class="control-label">Nombre</label>
+            <input id="first_name" name="first_name" type="text" placeholder="first name" class="form-control input-md" required=""><br>
+            <label class="control-label">Apellido</label>
+            <input id="last_name" name="last_name" type="text" placeholder="last name" class="form-control input-md" required=""><br>
+            <label class="control-label">Email</label>
+            <input id="email" name="email" type="text" placeholder="email" class="form-control input-md" required=""><br>
+            <label class="control-label">Perfil</label>
+            <div id="perfil">
+            </div>
+            <label class="control-label">Contraseña</label>
+            <input id="password" name="password" type="password" placeholder="password" class="form-control input-md" required=""><br>
+            <label class="control-label">Vuelve a escribir tu contraseña</label>
+            <input id="password2" name="password2" type="password" placeholder="password2" class="form-control input-md" required=""><br>
+
+            <input type="submit" value="Crear" class="btn btn-primary"/>
+            <a href="" class="btn btn-secondary"/>Cancelar</a>
+        </form>
+    </div>
+    <script>
+
+    $('form').submit( function(e) {
+        if($('#formUsuario input[type=checkbox]:checked').length==0)
+        {
+          $("#error").empty();
+          $("#error").append("Debe escoger al menos un perfil");
+          $("#error").removeAttr("hidden");
+          window.scrollTo(0,0);
+          return false;
+        }
+        if($("#password")[0].value!==$("#password2")[0].value){
+          $("#error").empty();
+          $("#error").append("las contraseñas deben coincidir");
+          $("#error").removeAttr("hidden");
+          window.scrollTo(0,0);
+          return false;
+        }
+        var formData= new FormData($("#formUsuario")[0]);
+        console.log($("#formUsuario")[0] )
+        $.ajax({
+            url: $(this).attr('action'),
+            type: $(this).attr('method'),
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function() {
+                       //window.location = "https://quiet-peak-80751.herokuapp.com/polls";
+                       alert("usuario creado");
+                     },
+            error: function(xhr, status, error) {
+              var mensaje='';
+              if(xhr.responseText.includes("Email ya existe"))
+              {
+                mensaje='Email ya existe';
+              }
+              else{
+                mensaje='Nombre de usuario ya existe';
+              }
+
+              $("#error").empty();
+              $("#error").append(mensaje);
+              $("#error").removeAttr("hidden");
+              window.scrollTo(0,0);
+            }
+        });
+        e.preventDefault();
+    });
+    </script>
+</div>
+</body>
+</html>
