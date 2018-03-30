@@ -3,4 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-# Create your views here.
+from herramienta.models import Herramienta
+
+
+def home(request):
+    lista_herramientas = Herramienta.objects.all()
+    context = {'lista_herramientas': lista_herramientas}
+    return render(request, 'home.html', context)

@@ -1,0 +1,58 @@
+{% extends "base.herramienta.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+
+<!-- Page Content -->
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-lg-12 col-centered">
+
+      <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+
+      </div>
+
+      <div class="row">
+        {% for currentHerramienta in lista_herramientas %}
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h4 class="card-title">
+                <a href="#">{{ currentHerramienta.nombre }}</a>
+              </h4>
+              <h5>{{ currentHerramienta.tipo }}</h5>
+              <p class="card-text">{{ currentHerramienta.descripcion }}</p>
+            </div>
+            <div class="card-footer">
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.col-lg-9 -->
+
+  </div>
+  <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+  <div class="container">
+    <p class="m-0 text-center text-white">Universidad de los Andes - 2018</p>
+  </div>
+  <!-- /.container -->
+</footer>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+
+{% endblock %}
