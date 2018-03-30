@@ -68,6 +68,7 @@ class Revision (models.Model):
 
 
 class HerramientaEdicion(ChangesMixin, models.Model):
+
     nombre = models.CharField(max_length=100, null=True, blank=True)
     descripcion = models.CharField(max_length=1000, null=True, blank=True)
     licencia = models.CharField(max_length=1000, null=True, blank=True)  # add #Tipo de licencia

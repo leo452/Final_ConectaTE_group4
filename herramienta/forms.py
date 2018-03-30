@@ -15,7 +15,7 @@ class CategoriaForm(forms.ModelForm):
 class HerramientaForm(forms.ModelForm):
     class Meta:
         model = models.Herramienta
-        fields = ['nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion',   'documentacion', 'estado',  'tipo']
+        fields = ['nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion', 'documentacion', 'estado', 'tipo']
         exclude = ['owner']
 
     def save(self, commit=True):
@@ -34,5 +34,5 @@ class RevisioForm(forms.ModelForm):
 class HerramientaEdicionForm(forms.ModelForm):
     class Meta:
         model = models.HerramientaEdicion
-        fields = ['herramienta','nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion',   'documentacion', 'tipo']
+        fields = ['herramienta','nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion', 'documentacion',  'tipo','revision','observacion']
         exclude = ['owner', 'usuarioHerramienta']
