@@ -34,5 +34,5 @@ class RevisioForm(forms.ModelForm):
 class HerramientaEdicionForm(forms.ModelForm):
     class Meta:
         model = models.HerramientaEdicion
-        fields = ['herramienta','nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion', 'documentacion',  'tipo','revision','observacion']
+        fields = ['herramienta','nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion', 'documentacion',  'tipo']
         exclude = ['owner', 'usuarioHerramienta']
