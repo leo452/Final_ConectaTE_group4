@@ -11,9 +11,8 @@ class Usuario(User):
     perfil= models.IntegerField(default=0)
     def __str__(self):
         return self.username
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.is_staff=True
-            print("ENTRAAAAAAAAAA")
-        super(User,self).save(*args,**kwargs)
+    #
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         self.is_staff=True
+    #     super(User,self).save(*args,**kwargs)
