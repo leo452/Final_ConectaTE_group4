@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login, get_user_model, logout, upd
 from django.core import serializers
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
 from herramienta.models import HerramientaEdicion
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -110,18 +110,56 @@ def paginator(request, query, paginas):
         return context
 
 
+@csrf_exempt
+def edicion_perfiles_list(request):
+    if request.method == "GET":
+        page = request.GET.get('page')
+        user_list = User.objects.all()
+        pag = Paginator(user_list, 10)
+
+        try:
+            user_pag = pag.page(page)
+            page = int(str(page))
+        except PageNotAnInteger:
+            user_pag = pag.page(1)
+            page = 1
+        except EmptyPage:
+            user_pag = pag.page(pag.num_pages)
+            page = pag.num_pages
+
+        #data = serializers.serialize('json', user_pag.object_list)
+        data = serializers.serialize('json', user_pag)
+        response = HttpResponse(data)
+
+        if page < pag.num_pages:
+            pagenext = str((int(page + 1)))
+            # response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
+            response['next'] = "http://localhost:8000/usuario" + \
+                               request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
+                               "page=" + pagenext
+        if page > 1:
+            pageprevious = str((int(page - 1)))
+            # response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
+            response['previous'] = "http://localhost:8000/usuario" + \
+                                   request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
+                                   "page=" + pageprevious
+        response['numpages'] = pag.num_pages
+        return response
+    #grupos = Group.objects.all()
+    #user_list = Usuario.objects.all()
+    #pag = paginator(request, user_list, 10)
+    #cxt = {
+    #    'user_pag': pag['queryset'],
+    #    'user_list': user_list,
+    #    'paginator': pag,
+    #    'grupos': grupos
+    #}
+    #return render(request, 'editarperfiles.html', cxt)
+
+
 #@user_passes_test(in_admin_group, login_url='usuario/loginview')
-def admin_edicion_perfiles(request):
-    grupos = Group.objects.all()
-    user_list = Usuario.objects.all()
-    pag = paginator(request, user_list, 10)
-    cxt = {
-        'user_pag': pag['queryset'],
-        'user_list': user_list,
-        'paginator': pag,
-        'grupos': grupos
-    }
-    return render(request, 'editarperfiles.html', cxt)
+def edicion_perfiles_view(request):
+    return render(request, 'editarperfiles.html')
 
 @csrf_exempt
 def admin_cambia_grupo(request):
@@ -139,22 +177,63 @@ def admin_cambia_grupo(request):
 
 
 def usuarios(request):
-    usuarios = Usuario.objects.all()
-    return HttpResponse(serializers.serialize("json", usuarios))
+    if request.method == "GET":
+        usuarios = Usuario.objects.all()
+        return HttpResponse(serializers.serialize("json", usuarios))
+
+def grupos(request):
+    if request.method == "GET":
+        grupos = Group.objects.all()
+        return HttpResponse(serializers.serialize("json", grupos))
 
 def usuarioHeramientas(request, uId):
     usuherramienta = HerramientaEdicion.objects.all().filter(usuarioHerramienta = uId)
     return HttpResponse(serializers.serialize("json", usuherramienta))
 
 
-def admin_ver_usuario_herramienta(request):
-    user_list = Usuario.objects.all()
-    pag = paginator(request, user_list, 10)
-    cxt = {
-        'user_pag': pag['queryset'],
-        'user_list': user_list,
-        'paginator': pag
-    }
-    return render(request, 'usuarioherramienta.html', cxt)
+def usuario_herramienta_list(request):
+    if request.method == "GET":
+        page = request.GET.get('page')
+        user_list = User.objects.all(groups=User.groups.all(name="miembroGTI"))
+        pag = Paginator(user_list, 10)
+
+        try:
+            user_pag = pag.page(page)
+            page = int(str(page))
+        except PageNotAnInteger:
+            user_pag = pag.page(1)
+            page = 1
+        except EmptyPage:
+            user_pag = pag.page(pag.num_pages)
+            page = pag.num_pages
+
+        #data = serializers.serialize('json', user_pag.object_list)
+        data = serializers.serialize('json', user_pag)
+        response = HttpResponse(data)
+
+        if page < pag.num_pages:
+            pagenext = str((int(page + 1)))
+            # response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
+            response['next'] = "http://localhost:8000/usuario" + \
+                               request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
+                               "page=" + pagenext
+        if page > 1:
+            pageprevious = str((int(page - 1)))
+            # response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
+            response['previous'] = "http://localhost:8000/usuario" + \
+                                   request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
+                                   "page=" + pageprevious
+        response['numpages'] = pag.num_pages
+        return response
+    #user_list = Usuario.objects.all()
+    #pag = paginator(request, user_list, 10)
+    #cxt = {
+    #    'user_pag': pag['queryset'],
+    #    'user_list': user_list,
+    #    'paginator': pag
+    #}
+    #return render(request, 'usuarioherramienta.html', cxt)
 
 
+def usuario_herramienta_view(request):
+    return render(request, 'usuarioherramienta.html')

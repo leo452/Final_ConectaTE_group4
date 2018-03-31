@@ -10,7 +10,13 @@ urlpatterns = [
     url(r'^crearusuario$', views.crear_usuario_rest , name='crearusuario'),
     url(r'^crearusuarioview$', views.crear_usuario ,name='crearusuarioview'),
     url(r'^getgroups', views.get_groups,name='getgroups'),
-    url(r'^editarperfiles/', views.admin_edicion_perfiles, name="editarPerfiles"),
-    url(r'^cambiagrupo/', views.admin_cambia_grupo)
+    url(r'^editarperfiles$', views.edicion_perfiles_list),
+    url(r'^editarperfilesview/', views.edicion_perfiles_view, name="editarPerfilesview"),
+    url(r'^cambiagrupo/', views.admin_cambia_grupo),
+    url(r'^usuarios/', views.usuarios),
+    url(r'^grupos/', views.grupos),
+    url(r'^usuarioherramientas/(?P<id>\d+)$', views.usuarioHeramientas),
+    url(r'^usuarioherramientaview/', views.usuario_herramienta_view),
+    url(r'^usuarioherramienta$', views.usuario_herramienta_list)
     #url(r'^cambiaGrupo/(\d+)/(\d+)', views.admin_cambia_grupo)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
