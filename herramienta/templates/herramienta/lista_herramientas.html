@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <a class="btn btn-primary col-sm-12 col-md-2" href="{% url 'herramienta-v' %}">Agregar Herramienta</a>
+        <div class="col-sm-12">
+             <table class=" table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Editar
+                        </th>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Descripciòn
+                        </th>
+                        <th>
+                            Estado
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for herramienta in herramientas %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a>
+                            </td>
+                            <td>
+                                {{ herramienta.owner }}
+                            </td>
+                            <td>
+                                {{ herramienta.nombre }}
+                            </td>
+                            <td>
+                                {{ herramienta.descripcion }}
+                            </td>
+                            <td>
+                                {{ herramienta.estado }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+             {% if herramientas.has_other_pages %}
+              <ul class="pagination">
+                {% if herramientas.has_previous %}
+                  <li><a href="{% url 'herramientas' %}?page={{ herramientas.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in herramientas.paginator.page_range %}
+                  {% if herramientas.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="{% url 'herramientas' %}?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if herramientas.has_next %}
+                  <li><a href="{% url 'herramientas' %}?page={{ herramientas.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

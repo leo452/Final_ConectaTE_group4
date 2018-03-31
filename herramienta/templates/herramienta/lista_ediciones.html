@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <a class="btn btn-primary col-sm-12 col-md-2" href="{% url 'ediciones-v' %}">Agregar Revision</a>
+        <div class="col-sm-12">
+             <table class=" table table-striped">
+                <thead>
+                    <tr>
+                      <!--  <th>
+                            Editar
+                        </th>
+                        -->
+                        <th>
+                            Editor
+                        </th>
+                        <th>
+                            Fecha revision
+                        </th>
+                        <th>
+                            Herramienta
+                        </th>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Descripciòn
+                        </th>
+                        <th>
+                            licencia
+                        </th>
+                        <th>
+                            usos
+                        </th>
+                        <th>
+                            enlaces
+                        </th>
+                        <th>
+                            descarga url
+                        </th>
+                        <th>
+                            sistema operativo
+                        </th>
+                        <th>
+                            version
+                        </th>
+                        <th>
+                            integracion lms
+                        </th>
+                        <th>
+                            informacion
+                        </th>
+                        <th>
+                            documentacion
+                        </th>
+                        <th>
+                            observacion
+                        </th>
+                        <th>
+                            categoria
+                        </th>
+                        <th>
+                            estado de revision
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for revision in revisiones %}
+                        <tr>
+                            <!--<td>
+
+                            </td>-->
+                            <td>
+                                {{ revision.usuarioHerramienta.username }}
+                            </td>
+                            <td>
+                                {{ revision.creacion }}
+                            </td>
+                            <td>
+                                {{ revision.herramienta }}
+                            </td>
+                            <td>
+                                {{ revision.nombre }}
+                            </td>
+                            <td>
+                                {{ revision.descripcion }}
+                            </td>
+                            <td>
+                                {{ revision.licencia }}
+                            </td>
+                        <td>
+                                {{ revision.usos }}
+                            </td>
+                        <td>
+                                {{ revision.enlaces }}
+                            </td>
+                        <td>
+                                {{ revision.descarga_url }}
+                            </td>
+                        <td>
+                                {{ revision.sistema_operativo }}
+                            </td>
+                        <td>
+                                {{ revision.version }}
+                            </td>
+                        <td>
+                                {{ revision.integracion_lms}}
+                            </td>
+                        <td>
+                                {{ revision.informacion}}
+                            </td>
+                        <td>
+                                {{ revision.documentacion}}
+                            </td>
+                        <td>
+                                {{ revision.observacion}}
+                            </td>
+                        <td>
+                                {{ revision.tipo}}
+                            </td>
+                        <td>
+                                {{ revision.revision}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12">
+             {% if revisiones.has_other_pages %}
+              <ul class="pagination">
+                {% if revisiones.has_previous %}
+                  <li><a href="{% url 'ediciones' %}?page={{ revisiones.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in revisiones.paginator.page_range %}
+                  {% if revisiones.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a href="{% url 'ediciones' %}?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if revisiones.has_next %}
+                  <li><a href="{% url 'ediciones' %}?page={{ revisiones.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

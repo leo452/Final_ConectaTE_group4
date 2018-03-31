@@ -8,7 +8,7 @@ from django.db import models
 from django_model_changes import ChangesMixin
 
 from usuario.models import Usuario
-
+#modelo de categoria de la herramienta
 class Categoria (models.Model):
     nombre=models.CharField(max_length=100)
     descripcion=models.CharField(max_length=100, null=True, blank=True)
@@ -23,7 +23,7 @@ class Categoria (models.Model):
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
 
-
+#modelo de la herramienta
 class Herramienta(ChangesMixin, models.Model):
     nombre= models.CharField(max_length=100)
     descripcion= models.CharField(max_length=1000, null=True, blank=True)
@@ -51,7 +51,7 @@ class Herramienta(ChangesMixin, models.Model):
         verbose_name = 'Herramienta'
         verbose_name_plural = 'Herramientas'
 
-
+#modelo del estado de la revision
 class Revision (models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500, null=True, blank=True)
@@ -66,10 +66,10 @@ class Revision (models.Model):
         verbose_name = 'Revision'
         verbose_name_plural = 'Revisiones'
 
-
+#modelo de la edicion de la herramienta
 class HerramientaEdicion(ChangesMixin, models.Model):
 
-    nombre = models.CharField(max_length=100, null=True, blank=True)
+    nombre = models.CharField(max_length=100, default='', null=True, blank=True)
     descripcion = models.CharField(max_length=1000, null=True, blank=True)
     licencia = models.CharField(max_length=1000, null=True, blank=True)  # add #Tipo de licencia
     usos = models.CharField(max_length=1000, null=True, blank=True)  # Restricciones de uso

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load filters %}
+{% load static %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'herramienta/js/jquery.form.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'herramienta/js/revision.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form action="{{ url }}" id="formRevision" method="post" class="col-sm-12">
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }} {{ field|addcss:"form-control" }}
+                    {% if field.help_text %}
+                    <p class="help-block">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+          <button type="submit" class="btn btn-info col-sm-12">Guardar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
