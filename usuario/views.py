@@ -65,19 +65,19 @@ def crear_usuario_rest(request):
             raise Http404(e)
 
 
-
-
-
-
-@csrf_exempt
 def get_groups(request):
     if request.method == 'GET':
         groups = Group.objects.all()
     return HttpResponse(serializers.serialize("json", groups))
 
+
 def crear_usuario(request):
     return render(request, 'crearUsuario.html')
 
+
+# este metodo se usa para validar si un usuario esta autenticado y si es administrador
+# esto para asegurar que pueda acceder paginas de administracion
+# este metodo se unsa en la precondiocion @user_passes_test
 def in_admin_group(user):
     return user.is_authenticated() and 'Admin' in user.groups.iterator()
 
@@ -110,7 +110,9 @@ def paginator(request, query, paginas):
         return context
 
 
-@csrf_exempt
+# esta vista se accede al llamar /editarperfiles esta vista se encarga de prosesar la paginacion de los usuarios
+# que se muestran en la pagina /editarperfiles.html
+# esta vista se llama solamente desde /editarperfiles.html
 def edicion_perfiles_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
@@ -156,11 +158,18 @@ def edicion_perfiles_list(request):
     #}
     #return render(request, 'editarperfiles.html', cxt)
 
-
+# esta vista se encaraga de mostraa la el html editarperfiles.html
+# se adiciona una pre validacion antes de llamar esta vista para que esta solo pueda ser accedida por usuarios con
+# perfil administrador
 #@user_passes_test(in_admin_group, login_url='usuario/loginview')
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
+
+# esta vista se accede desde /cambiagrupo y se encarga de recivir y actualizar el perfil de un usuario
+# la vista espera dos parametros id y grupo
+# id representa el id del usuario que se quiere actualizar
+# grupo representa el id del nuevo grupo que al que se va a asociar al usuario
 @csrf_exempt
 def admin_cambia_grupo(request):
     if request.method == 'POST':
@@ -176,25 +185,37 @@ def admin_cambia_grupo(request):
         return HttpResponse("actualizado",content_type="text/plain")
 
 
+# esta vista se llama al aceder a /usuarios y retorna un JSON con el listado de Usuarios que se han Registrado en la
+# aplicacion
 def usuarios(request):
     if request.method == "GET":
         usuarios = Usuario.objects.all()
         return HttpResponse(serializers.serialize("json", usuarios))
 
+# esta vista se llama al aceder a /grupos y retorna un jason con el listado de grupos que se han creado en el modelo
+# de autenticacion de DJango
 def grupos(request):
     if request.method == "GET":
         grupos = Group.objects.all()
         return HttpResponse(serializers.serialize("json", grupos))
 
+
+# esta vista se llama al aceder a /usuarioherramientas/uId
+# donde id es el id de un Usuario
+# este metodo reorna un listado en formato JSON con todas las herramientas en las que el usuario indicado ha trabajdo
 def usuarioHeramientas(request, uId):
-    usuherramienta = HerramientaEdicion.objects.all().filter(usuarioHerramienta = uId)
+    user = get_object_or_404(Usuario, id=uId)
+    usuherramienta = HerramientaEdicion.objects.all().filter(usuarioHerramienta=user).distinct("herramienta")
     return HttpResponse(serializers.serialize("json", usuherramienta))
 
 
+# esta vista se accede al llamar /usuarioherramienta esta vista se encarga de prosesar la paginacion de los usuarios
+# que se muestran en la pagina /usuarioherramienta.html
+# esta vista se llama solamente desde /usuarioherramienta.html
 def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        user_list = User.objects.all(groups=User.groups.all(name="miembroGTI"))
+        user_list = User.objects.all().filter(groups=User.groups.get(name="miembroGTI"))
         pag = Paginator(user_list, 10)
 
         try:
@@ -235,5 +256,6 @@ def usuario_herramienta_list(request):
     #return render(request, 'usuarioherramienta.html', cxt)
 
 
+# esta vista se encaraga de mostraa la el html usuarioherramienta.html
 def usuario_herramienta_view(request):
     return render(request, 'usuarioherramienta.html')

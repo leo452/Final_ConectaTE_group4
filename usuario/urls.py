@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^cambiagrupo/', views.admin_cambia_grupo),
     url(r'^usuarios/', views.usuarios),
     url(r'^grupos/', views.grupos),
-    url(r'^usuarioherramientas/(?P<id>\d+)$', views.usuarioHeramientas),
+    url(r'^usuarioherramientas/(\d+)', views.usuarioHeramientas),
     url(r'^usuarioherramientaview/', views.usuario_herramienta_view),
     url(r'^usuarioherramienta$', views.usuario_herramienta_list)
     #url(r'^cambiaGrupo/(\d+)/(\d+)', views.admin_cambia_grupo)

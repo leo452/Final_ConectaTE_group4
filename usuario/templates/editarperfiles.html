@@ -79,7 +79,11 @@
                 //$.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupos").done(function(data) {
                 $.getJSON("http://localhost:8000/usuario/grupos").done(function(data1) {
                     $.each(data1, function (v, ite) {
-                        var opt ='<option value="'+ite.pk+'">'+ite.fields.name+'</option>';
+                        var opt;
+                        if (item.fields.grupos[0] == ite.pk)
+                            opt ='<option value="'+ite.pk+'" selected>'+ite.fields.name+'</option>';
+                        else
+                            opt ='<option value="'+ite.pk+'">'+ite.fields.name+'</option>';
                         $('#u_'+item.pk).append(opt);
                     });
                 });
