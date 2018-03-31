@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-#signal tools
 from herramienta import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -9,7 +8,7 @@ def write_update(sender, instance, **kwarg):
     values={'herramienta':instance}
     for key ,value  in instance.changes().items():
         values.update({key:value[0]})
-    models.HerramientaEdicion.objects.create(**values)
+   # models.HerramientaEdicion.objects.create(**values)
 
 @receiver(post_save, sender=models.HerramientaEdicion)
 def write_update_herramienta(sender, instance, **kwarg):
