@@ -24,7 +24,7 @@
             <hr>
 
             <!-- Date/Time -->
-            <p>Licencia: {{ herramienta.licencia }}</p>
+            <p>Versión: {{ herramienta.version }}</p>
 
             <hr>
 
@@ -32,12 +32,16 @@
             <h3>Descripción</h3>
             <p class="lead"> {{ herramienta.descripcion }}</p>
 
+            <h3>Licencia</h3>
+            <p class="lead">{{ herramienta.licencia }}</p>
+
             <h3>Documentación</h3>
             <p class="lead">{{ herramienta.documentacion }}</p>
-
-
             <h3>Enlaces</h3>
             <p class="lead">{{ herramienta.enlaces }}</p>
+
+            <h3>Descarga</h3>
+            <p class="lead">{{ herramienta.descarga_url }}</p>
 
             <hr>
 
@@ -56,9 +60,25 @@
 
             <!-- Side Widget -->
           <div class="card my-4">
+            <h5 class="card-header">Sistema Operativo</h5>
+            <div class="card-body">
+              {{ herramienta.sistema_operativo }}
+            </div>
+          </div>
+
+              <!-- Side Widget -->
+          <div class="card my-4">
             <h5 class="card-header">Información</h5>
             <div class="card-body">
               {{ herramienta.informacion }}
+            </div>
+          </div>
+
+            <!-- Side Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Integración IMS</h5>
+            <div class="card-body">
+              {{ herramienta.integracion_lms }}
             </div>
           </div>
 
