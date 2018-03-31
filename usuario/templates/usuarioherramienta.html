@@ -19,12 +19,12 @@
     };
     (function () {
         if(getUrlParameter("page")){
-            //var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page="+getUrlParameter("page");
-            var request="http://localhost:8000/usuario/usuarioherramienta?page="+getUrlParameter("page");
+            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page="+getUrlParameter("page");
+            //var request="http://localhost:8000/usuario/usuarioherramienta?page="+getUrlParameter("page");
         }
         else{
-            //var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page=1";
-            var request="http://localhost:8000/usuario/usuarioherramienta?page=1";
+            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page=1";
+            //var request="http://localhost:8000/usuario/usuarioherramienta?page=1";
         }
         $.get(request).done(function(data,textstatus, jqXHR) {
             if (jqXHR.getResponseHeader('previous') && jqXHR.getResponseHeader('next')) {
@@ -75,9 +75,8 @@
                         '</div>'+
                     '</div>'
                 );
-                http://localhost:8000/usuario
-                //$.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioHeramientas/"+item.id).done(function(data) {
-                $.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data) {
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data) {
+                //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data) {
                     $.each(data, function(c,ite) {
                         $("#u_"+item.pk).append(
                             '<p> - '+ite.fields.nombre +'</p> <br>'

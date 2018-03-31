@@ -135,14 +135,14 @@ def edicion_perfiles_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            # response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-            response['next'] = "http://localhost:8000/usuario" + \
+            #response['next'] = "http://localhost:8000/usuario" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
                                request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
-            # response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-            response['previous'] = "http://localhost:8000/usuario" + \
+            #response['previous'] = "http://localhost:8000/usuario" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
                                    request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
@@ -161,7 +161,8 @@ def edicion_perfiles_list(request):
 # esta vista se encaraga de mostraa la el html editarperfiles.html
 # se adiciona una pre validacion antes de llamar esta vista para que esta solo pueda ser accedida por usuarios con
 # perfil administrador
-#@user_passes_test(in_admin_group, login_url='usuario/loginview')
+#@user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
+#@user_passes_test(in_admin_group, login_url='http://localhost:8000/usuario/loginview')
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
@@ -191,6 +192,7 @@ def usuarios(request):
     if request.method == "GET":
         usuarios = Usuario.objects.all()
         return HttpResponse(serializers.serialize("json", usuarios))
+
 
 # esta vista se llama al aceder a /grupos y retorna un jason con el listado de grupos que se han creado en el modelo
 # de autenticacion de DJango
@@ -234,18 +236,19 @@ def usuario_herramienta_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            # response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-            response['next'] = "http://localhost:8000/usuario" + \
+            # response['next'] = "http://localhost:8000/usuario" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
                                request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
-            # response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-            response['previous'] = "http://localhost:8000/usuario" + \
+            #response['previous'] = "http://localhost:8000/usuario" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
                                    request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
+
     #user_list = Usuario.objects.all()
     #pag = paginator(request, user_list, 10)
     #cxt = {

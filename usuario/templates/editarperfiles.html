@@ -18,12 +18,12 @@
     };
     (function () {
         if(getUrlParameter("page")){
-            //var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page="+getUrlParameter("page");
-            var request="http://localhost:8000/usuario/editarperfiles?page="+getUrlParameter("page");
+            var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page="+getUrlParameter("page");
+            //var request="http://localhost:8000/usuario/editarperfiles?page="+getUrlParameter("page");
         }
         else{
-            //var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page=1";
-            var request="http://localhost:8000/usuario/editarperfiles?page=1";
+            var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page=1";
+            //var request="http://localhost:8000/usuario/editarperfiles?page=1";
         }
         $.get(request).done(function(data,textstatus, jqXHR) {
             if (jqXHR.getResponseHeader('previous') && jqXHR.getResponseHeader('next')) {
@@ -76,8 +76,8 @@
                             '</div>'+
                         '</div>';
                 $("#usuarios").append(div);
-                //$.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupos").done(function(data) {
-                $.getJSON("http://localhost:8000/usuario/grupos").done(function(data1) {
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupos").done(function(data) {
+                //$.getJSON("http://localhost:8000/usuario/grupos").done(function(data1) {
                     $.each(data1, function (v, ite) {
                         var opt;
                         if (item.fields.grupos[0] == ite.pk)
@@ -111,8 +111,8 @@
 function cambiar(id) {
     var usuario = id;
     var grupo = $('#u_'+usuario)[0].value;
-    //var url = "https://final-conectate-group4.herokuapp.com/usuario/cambiagrupo/";
-    var url = "http://localhost:8000/usuario/cambiagrupo/";
+    var url = "https://final-conectate-group4.herokuapp.com/usuario/cambiagrupo/";
+    //var url = "http://localhost:8000/usuario/cambiagrupo/";
     var arr = {id:usuario,grupo:grupo};
     var data = JSON.stringify(arr);
         //"editusers/cambiaGrupo/"+usuario+"/"+grupo;
