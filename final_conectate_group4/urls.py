@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^admin/', admin.site.urls),
     url(r'^usuario/', include('usuario.urls')),
-    url(r'^$', include('herramienta.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^herramientas/', include('herramienta.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
