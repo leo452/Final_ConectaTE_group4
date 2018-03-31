@@ -1,4 +1,7 @@
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
+from . import views
 import  views
 
 #las url que inician con api son las correspondientes a los servicios GET Y POST de herramientas utilizando REST
@@ -24,4 +27,6 @@ urlpatterns = [
     url(r'^edicion/add/$', views.addRevisionView, name='ediciones-v'),
    # url(r'^edicion/edit/(?P<id>\d+)/$', views.editRevisionView, name='ediciones-edit'),
     url(r'^revision/add/$', views.addRevisionEstadoView, name='revision-v'),
+    url(r'^detail/(?P<index>\d+)/$', views.details, name="tool_detail"),
+    url(r'^$', views.home, name='home'),
 ]

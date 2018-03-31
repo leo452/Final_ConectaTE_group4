@@ -25,7 +25,7 @@ class Categoria (models.Model):
 
 #modelo de la herramienta
 class Herramienta(ChangesMixin, models.Model):
-    nombre= models.CharField(max_length=100)
+    nombre= models.CharField(max_length=100, default='', null=True, blank=True)
     descripcion= models.CharField(max_length=1000, null=True, blank=True)
     licencia = models.CharField(max_length=1000, null=True, blank=True)  # add #Tipo de licencia
     usos = models.CharField(max_length=1000, null=True, blank=True)  # Restricciones de uso

@@ -2,4 +2,107 @@
 
 {% block content %}
 
+<script>
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+    (function () {
+        if(getUrlParameter("page")){
+            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page="+getUrlParameter("page");
+            //var request="http://localhost:8000/usuario/usuarioherramienta?page="+getUrlParameter("page");
+        }
+        else{
+            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page=1";
+            //var request="http://localhost:8000/usuario/usuarioherramienta?page=1";
+        }
+        $.get(request).done(function(data,textstatus, jqXHR) {
+            if (jqXHR.getResponseHeader('previous') && jqXHR.getResponseHeader('next')) {
+                $("#paginacion").prepend(
+                    '<a href="' + jqXHR.getResponseHeader('previous') + '">Atrás</a>' +
+                    '<span class="current">' +
+                    ' Página ' + getUrlParameter("page") + ' de ' + jqXHR.getResponseHeader('numpages') + '. ' +
+                    '</span>' +
+                    '<a href="' + jqXHR.getResponseHeader('next') + '">Siguiente</a>'
+                );
+            }
+            else if (jqXHR.getResponseHeader('previous')) {
+
+                $("#paginacion").prepend(
+                    '<a href="' + jqXHR.getResponseHeader('previous') + '">Atrás</a>' +
+                    '<span class="current">' +
+                    ' Página ' + getUrlParameter("page") + ' de ' + jqXHR.getResponseHeader('numpages') + '. ' +
+                    '</span>'
+                );
+            }
+            else if (jqXHR.getResponseHeader('next')) {
+                $("#paginacion").prepend(
+                    '<span class="current">' +
+                    ' Página 1 de ' + jqXHR.getResponseHeader('numpages') + '. ' +
+                    '</span>' +
+                    '<a href="' + jqXHR.getResponseHeader('next') + '">Siguiente</a>'
+                );
+            }
+            else {
+                $("#paginacion").prepend(
+                    '<span class="current">' +
+                    ' Página ' + 1 + ' de 1. ' +
+                    '</span>'
+                );
+            }
+            $.each(JSON.parse(data), function(i, item) {
+                $("#usuarios").prepend(
+                    '<div class="col-md-2 col-sm-1 col-xs-6">'+
+                        '<div class="panel panel-default">'+
+                            '<div class="panel-heading" style="text-align: center; background-color: black;">'+
+                                '<span style="color: white; font-size: large;">'+item.fields.first_name + item.fields.last_name + '</span>'+
+                            '</div>'+
+                            '<div class="panel-body" style="text-align: center">'+
+                                '<span>Herramientas</span>'+
+                                '<span id="u_"'+item.pk+'">'+
+                                '</span>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'
+                );
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data) {
+                //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data) {
+                    $.each(data, function(c,ite) {
+                        $("#u_"+item.pk).append(
+                            '<p> - '+ite.fields.nombre +'</p> <br>'
+                        );
+                    });
+                });
+
+            });
+        });
+    })();
+
+</script>
+
+    <h1>Herramientas Trabajadas por MiembrosGTI </h1>
+    <div id="usuarios" class="row">
+
+    </div>
+    <div class="pagination pagination-right">
+        <span id="paginacion">
+
+        </span>
+    </div>
+    <div style="padding-top: 3%;" align="center">
+        <a href="/" class="btn btn-primary"><span
+            class="glyphicon glyphicon-step-backward">Volver</span></a>
+    </div>
+
+
 {% endblock %}

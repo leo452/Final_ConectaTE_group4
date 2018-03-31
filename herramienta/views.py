@@ -10,6 +10,8 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, get_object_or_404
+from herramienta.models import Herramienta
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -252,7 +254,7 @@ def listHerramienta(request):
 
 def addHerramientaView(request):
     url = "/herramienta/api/herramientas/form/"
-    return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(), "url":url})
+    return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(), "url": url})
 
 def editHerramientaView(request, id):
     try:
@@ -302,3 +304,14 @@ def addRevisionView(request):
 
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
+
+def home(request):
+    lista_herramientas = Herramienta.objects.all()
+    context = {'lista_herramientas': lista_herramientas}
+    return render(request, 'home.html', context)
+
+
+def details(request, index=None):
+    instance = get_object_or_404(Herramienta, id=index)
+    context = {'herramienta': instance}
+    return render(request, 'detalleherramienta.html', context)
