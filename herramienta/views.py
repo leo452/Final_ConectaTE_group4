@@ -370,7 +370,6 @@ class Importer(View):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
-    @user_passes_test(in_admin_group)
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
