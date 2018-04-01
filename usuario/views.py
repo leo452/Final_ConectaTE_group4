@@ -127,7 +127,8 @@ def paginator(request, query, paginas):
 def edicion_perfiles_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        user_list = User.objects.all().filter(is_staff=False)
+        user_li = User.objects.all().filter(is_staff=False)
+        user_list = user_li.filter(groups__isnull=False)
         pag = Paginator(user_list, 10)
 
         try:
@@ -146,13 +147,13 @@ def edicion_perfiles_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            #response['next'] = "http://localhost:8000/usuario/editarperfiles?" + \
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            #response['next'] = "http://localhost:8000/usuario/editarperfilesview?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
-            #response['previous'] = "http://localhost:8000/usuario" + \
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            #response['previous'] = "http://localhost:8000/usuario/editarperfilesview?" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
@@ -174,7 +175,7 @@ def edicion_perfiles_list(request):
 # perfil administrador
 # @user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
 #@user_passes_test(in_admin_group, login_url='http://localhost:8000/usuario/loginview')
-@user_passes_test(in_admin_group)
+#@user_passes_test(in_admin_group)
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
@@ -205,6 +206,15 @@ def usuarios(request):
     if request.method == "GET":
         usuarios = Usuario.objects.all()
         return HttpResponse(serializers.serialize("json", usuarios))
+
+
+# esta vista se llama al aceder a /grupos y retorna un JSON con el listado de grupos que se han creado en el modelo
+# de autenticacion de DJango
+def grupo(request, id):
+    if request.method == "GET":
+        user = get_object_or_404(Usuario, id=id)
+        grupos = user.groups.all()
+        return HttpResponse(serializers.serialize("json", grupos))
 
 
 # esta vista se llama al aceder a /grupos y retorna un JSON con el listado de grupos que se han creado en el modelo
@@ -262,13 +272,13 @@ def usuario_herramienta_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            #response['next'] = "http://localhost:8000/usuario" + \
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
+            #response['next'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
-            #response['previous'] = "http://localhost:8000/usuario" + \
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
+            #response['previous'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
