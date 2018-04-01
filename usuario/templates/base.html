@@ -41,6 +41,9 @@
             .jumbotron .lang-logo img {
             max-width: 100%
             }
+            select.form-control:not([size]):not([multiple]){
+                height: 34px;
+            }
         </style>
     </head>
     <body>
@@ -54,9 +57,40 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'home' %}">Home
-                            <span class="sr-only">(current)</span>
-                        </a>
+                            <a class="nav-link" href="{% url 'home' %}">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="dropdownMenu1">Herramientas</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li>
+                                    <a href="{% url 'categoria-v' %}">Categorias</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'ediciones' %}">Revisiones</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'revision-v' %}">Estados de revision</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'herramientas' %}">Herramientas</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="dropdownMenu2">Usuarios</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li>
+                                    <a href="{% url 'crearusuarioview' %}">Creaciòn</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'editarPerfilesview' %}">Perfiles</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'usuarioherramientaview' %}">Herramientas por usuarios</a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">Login</a>
@@ -67,12 +101,11 @@
         </nav>
 
         {% block content %}{% endblock %}
-  <script src="{% static 'herramienta/js/jquery-3.3.1.min.js' %}"></script>
-  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    {% block script %}{% endblock %}
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
+        {% block script %}{% endblock %}
+
 
     </body>
 
