@@ -7,7 +7,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
-from herramienta.models import HerramientaEdicion
+from herramienta.models import Herramienta, HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -82,6 +82,11 @@ def in_admin_group(user):
     return user.is_authenticated() and 'Admin' in user.groups.iterator()
 
 
+# metodo para realizar paginacion para una vista. se esperan dos parametros query y paginas
+# query recive el listado de objetos a paginas
+# paginas recive el numero de objetos por pagina
+# se retorna un areglo con todos los datos de paginacion para ser procedos en una vista
+# este metodo esta ideado para ser usado en una vista que envie informacion como contexto a un html
 def paginator(request, query, paginas):
     result_list = Paginator(query, paginas)
     try:
@@ -147,6 +152,7 @@ def edicion_perfiles_list(request):
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
+
     #grupos = Group.objects.all()
     #user_list = Usuario.objects.all()
     #pag = paginator(request, user_list, 10)
@@ -158,6 +164,7 @@ def edicion_perfiles_list(request):
     #}
     #return render(request, 'editarperfiles.html', cxt)
 
+
 # esta vista se encaraga de mostraa la el html editarperfiles.html
 # se adiciona una pre validacion antes de llamar esta vista para que esta solo pueda ser accedida por usuarios con
 # perfil administrador
@@ -167,7 +174,8 @@ def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
 
-# esta vista se accede desde /cambiagrupo y se encarga de recivir y actualizar el perfil de un usuario
+# esta vista recive las peticiones del servicio /cambiagrupo y se encarga de recibir y actualizar el perfil de un
+# usuario
 # la vista espera dos parametros id y grupo
 # id representa el id del usuario que se quiere actualizar
 # grupo representa el id del nuevo grupo que al que se va a asociar al usuario
@@ -194,7 +202,7 @@ def usuarios(request):
         return HttpResponse(serializers.serialize("json", usuarios))
 
 
-# esta vista se llama al aceder a /grupos y retorna un jason con el listado de grupos que se han creado en el modelo
+# esta vista se llama al aceder a /grupos y retorna un JSON con el listado de grupos que se han creado en el modelo
 # de autenticacion de DJango
 def grupos(request):
     if request.method == "GET":
@@ -202,12 +210,23 @@ def grupos(request):
         return HttpResponse(serializers.serialize("json", grupos))
 
 
+# esta vista se llama al aceder a /edicionherramientas/uId
+# donde uId es el ide del Usuario
+# este metodo reorna un listado en formato JSON con todas las ediciones de herramientas
+# en las que el usuario indicado ha trabajdo
+def edicionherramientas(request, uId):
+    if request.method == "GET":
+        user = get_object_or_404(Usuario, id=uId)
+        tools = HerramientaEdicion.objects.all().filter(usuarioHerramienta=user)
+        return HttpResponse(serializers.serialize("json", tools))
+
+
 # esta vista se llama al aceder a /usuarioherramientas/uId
 # donde id es el id de un Usuario
 # este metodo reorna un listado en formato JSON con todas las herramientas en las que el usuario indicado ha trabajdo
 def usuarioHeramientas(request, uId):
     user = get_object_or_404(Usuario, id=uId)
-    usuherramienta = HerramientaEdicion.objects.all().filter(usuarioHerramienta=user).distinct("herramienta")
+    usuherramienta = Herramienta.objects.all().filter(owner=user)
     return HttpResponse(serializers.serialize("json", usuherramienta))
 
 
