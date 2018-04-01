@@ -90,7 +90,7 @@
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a >{{ request.user.username }}</a>
+                            {{ request.user.username }}
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
