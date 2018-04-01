@@ -62,35 +62,30 @@
             }
             $.each(JSON.parse(data), function(i, item) {
                 $("#usuarios").prepend(
-                    '<div class="col-lg-6 card h-100">'+
+                    '<div class="col-lg-6 card h-100 py-2">'+
                         '<div class="panel panel-default">'+
                             '<div class="panel-heading" style="text-align: center; background-color: black;">'+
                                 '<span style="color: white; font-size: large;">'+item.fields.first_name + item.fields.last_name + '</span>'+
                             '</div>'+
                             '<div class="panel-body" style="text-align: center">'+
                                 '<span>Herramientas Creadas</span>'+
-                                '<table id="u_"'+item.pk+'">'+
-                                    '<tr>'+
-                                        '<th>Herramienta</th>'+
-                                        '<th>Estado</th>'+
-                                        '<th>Fecha Creacion</th>'+
-                                    '</tr>'+
+                                '<table id="u_"'+item.pk+'" style="width:100%">'+
                                 '</table><br>'+
                                 '<span>Herramientas Editadas</span>'+
-                                '<table id="eu_"'+item.pk+'">'+
-                                    '<tr>'+
-                                        '<th>Herramienta</th>'+
-                                        '<th>Detalle</th>'+
-                                        '<th>Fecha</th>'+
-                                    '</tr>'+
+                                '<table id="eu_"'+item.pk+'" style="width:100%">'+
                                 '</table>'+
                             '</div>'+
                         '</div>'+
                     '</div>'
                 );
-                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data) {
-                //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data) {
-                    $.each(data, function(c,ite) {
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
+                //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
+                    $("#u_"+item.pk).append('<tr>'+
+                                        '<th>Herramienta</th>'+
+                                        '<th>Estado</th>'+
+                                        '<th>Fecha Creacion</th>'+
+                                    '</tr>');
+                    $.each(data1, function(c,ite) {
                         var div = '<tr>'+
                                     '<td>'+ite.fields.nombre +'</td>';
                         var estado = parseInt(ite.fields.estado);
@@ -111,9 +106,14 @@
                         $("#u_"+item.pk).append(div);
                     });
                 });
-                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/edicionherramientas/"+item.pk).done(function(data) {
-                //$.getJSON("http://localhost:8000/usuario/edicionherramientas/"+item.pk).done(function(data) {
-                    $.each(data, function(d,iten) {
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/edicionherramientas/"+item.pk).done(function(data2) {
+                //$.getJSON("http://localhost:8000/usuario/edicionherramientas/"+item.pk).done(function(data2) {
+                    $("#eu_"+item.pk).append('<tr>'+
+                                        '<th>Herramienta</th>'+
+                                        '<th>Detalle</th>'+
+                                        '<th>Fecha</th>'+
+                                    '</tr>');
+                    $.each(data2, function(d,iten) {
                         $("#eu_"+item.pk).append(
                             '<tr>'+
                                 '<td>'+iten.fields.nombre +'</td>'+

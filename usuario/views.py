@@ -263,7 +263,7 @@ def usuario_herramienta_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            # response['next'] = "http://localhost:8000/usuario" + \
+            #response['next'] = "http://localhost:8000/usuario" + \
             response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
                                request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
                                "page=" + pagenext
