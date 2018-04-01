@@ -41,7 +41,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
-#servicio rest encargado de la creación de un usuario
+#servicio rest encargado de la creacion de un usuario
 @csrf_exempt
 def crear_usuario_rest(request):
     if request.method == 'POST':
