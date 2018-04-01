@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, get_user_model, logout, update_session_auth_hash
@@ -9,6 +9,7 @@ from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
 from herramienta.models import HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 
 # Create your views here.
@@ -30,7 +31,9 @@ def login_rest(request):
         else:
             if usuario.check_password(password):
                 login(request, usuario)
-                return HttpResponse(serializers.serialize("json", [usuario]))
+                messages.success(request, 'Categoría agregada con Éxito!')
+                return redirect('home')
+                # return HttpResponse(serializers.serialize("json", [usuario]))
             else:
                 mensaje = 'Nombre de usuario o clave no valido'
                 raise Http404(mensaje)
