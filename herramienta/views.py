@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.core.cache import cache
+from data_importer.views import DataImporterForm
+from django.utils.decorators import method_decorator
+from django.views import View
+
 import models
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseNotFound
-from forms import CategoriaForm, RevisioForm,HerramientaForm,HerramientaEdicionForm
+from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm
 from django.shortcuts import render
 from django.views.generic import ListView
 import json
@@ -11,7 +16,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404
+
+from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta
+from django.views.generic.edit import BaseFormView, FormView
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -315,3 +323,57 @@ def details(request, index=None):
     instance = get_object_or_404(Herramienta, id=index)
     context = {'herramienta': instance}
     return render(request, 'detalleherramienta.html', context)
+
+
+
+class SaveImporter(View):
+    def post(self, request, *args, **kwargs):
+        rows = request.POST.getlist('rows[]', False)
+        file = request.POST.get('file', False)
+        if rows and file:
+            data = cache.get(request.user.username)
+            if data:
+                rows = map(int, rows)
+                for x in data:
+                    if x['id_file'] == int(file):
+                        for y in x['data']:
+                            if y['row'] in rows:
+                                fields = {}
+                                del y['row']
+                                for key, value in y.items():
+                                    if value != '':
+                                        fields.update({key:value})
+                                if fields:
+                                    models.Herramienta.objects.create(**fields)
+        return HttpResponse('{}', content_type='application/json', status=201)
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(SaveImporter, self).dispatch(request, args, kwargs)
+
+class Importer(View):
+    form_class = ImporterForm
+    success_url = '/herramientas/importer'
+    template_name = 'herramienta/importer.html'
+    importer = CSVImporterTool
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            print 'Formulario valido'
+            file_user = models.FileUser(file=request.FILES['file'])
+            file_user.save()
+            impor = self.importer(source=file_user.file, id_file=file_user.id)
+            if impor.validar_columnas():
+                impor.is_valid()
+                datos = impor.save()
+                mensaje = {"mensaje": file_user.id, "respuesta":True, "data": datos}
+                return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
+            else:
+                mensaje = {"mensaje": "La plantilla no tiene el numero de campos requeridos.", "respuesta": False}
+                return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
+        print form.errors.as_json()
+        return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)
