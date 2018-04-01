@@ -10,7 +10,9 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from herramienta.models import Herramienta
 
 # Create your views here.
@@ -34,9 +36,9 @@ def addCategoria(request):
         form = CategoriaForm(request.POST)
         if form.is_valid():
             form.save()
-            mensaje = {"mensaje": "Guardado exitoso"}
-            return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
-                                content_type='application/json')
+
+            messages.success(request, 'Categoría agregada con Éxito!')
+            return redirect('home')
 
         erros = form.errors.items()
         return HttpResponse(json.dumps(erros), status=400,
@@ -85,9 +87,8 @@ def addRevision(request):
         form = RevisioForm(request.POST)
         if form.is_valid():
             form.save()
-            mensaje = {"mensaje": "Guardado exitoso"}
-            return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
-                                content_type='application/json')
+            messages.success(request, 'Estado de Revisión agregado con Éxito!')
+            return redirect('home')
 
         erros = form.errors.items()
         return HttpResponse(json.dumps(erros), status=400,

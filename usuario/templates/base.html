@@ -60,39 +60,28 @@
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="dropdownMenu1">Herramientas</a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li>
-                                    <a href="{% url 'categoria-v' %}">Categorias</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'ediciones' %}">Revisiones</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'revision-v' %}">Estados de revision</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'herramientas' %}">Herramientas</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Gestión de Herramientas
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+                                <a class="dropdown-item" href="{% url 'categoria-v' %}">Agregar Categoría</a>
+                                <a class="dropdown-item" href="{% url 'ediciones' %}">Revisiones</a>
+                                <a class="dropdown-item" href="{% url 'revision-v' %}">Agregar Estado de Revisión</a>
+                            </div>
                         </li>
-                        <li class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="dropdownMenu2">Usuarios</a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <li>
-                                    <a href="{% url 'crearusuarioview' %}">Creaciòn</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'editarPerfilesview' %}">Perfiles</a>
-                                </li>
-                                <li>
-                                    <a href="{% url 'usuarioherramientaview' %}">Herramientas por usuarios</a>
-                                </li>
-                            </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Gestión de Usuarios
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+                                <a class="dropdown-item" href="{% url 'crearusuarioview' %}">Crear Usuario</a>
+                                <a class="dropdown-item" href="{% url 'editarPerfilesview' %}">Perfiles</a>
+                                <a class="dropdown-item" href="{% url 'usuarioherramientaview' %}">Herramientas por usuarios</a>
+                            </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Login</a>
+                            <a class="nav-link" href="{% url 'loginview' %}">Login</a>
                         </li>
                     </ul>
                 </div>
@@ -100,11 +89,21 @@
         </nav>
 
         {% block content %}{% endblock %}
+
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <div class="MyAlert-bottom alert alert-success alert-dismissible fixed-bottom" role="alert" style="width: 300px">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
-        {% block script %}{% endblock %}
-
 
     </body>
 
