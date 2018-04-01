@@ -48,6 +48,22 @@
     <script>
 
     $('form').submit( function(e) {
+        var domain= $("#email")[0].value.split("@")[1];
+        if(domain!=="uniandes.edu.co")
+        {
+          $("#error").empty();
+          $("#error").append("el email debe ser uniandes");
+          $("#error").removeAttr("hidden");
+          return false;
+        }
+        if($('#formUsuario input[type=checkbox]:checked').length==0)
+        {
+          $("#error").empty();
+          $("#error").append("Debe escoger al menos un perfil");
+          $("#error").removeAttr("hidden");
+          window.scrollTo(0,0);
+          return false;
+        }
         if($('#formUsuario input[type=checkbox]:checked').length==0)
         {
           $("#error").empty();
