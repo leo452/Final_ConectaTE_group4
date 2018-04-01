@@ -250,7 +250,7 @@ class ListHerramientaEdicion(AJAXListMixin, ListView):
 def addCategoriaView(request):
     return render(request,'herramienta/add_categoria.html',{"form": CategoriaForm()})
 
-
+@user_passes_test(in_admin_group)
 def listHerramienta(request):
     herramienta_list = models.Herramienta.objects.all()
     paginator = Paginator(herramienta_list, 3) # Show 25 contacts per page
