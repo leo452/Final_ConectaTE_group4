@@ -127,7 +127,7 @@ def paginator(request, query, paginas):
 def edicion_perfiles_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        user_list = User.objects.all()
+        user_list = User.objects.all().filter(is_staff=False)
         pag = Paginator(user_list, 10)
 
         try:
