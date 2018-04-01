@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^revision/add/$', views.addRevisionEstadoView, name='revision-v'),
     url(r'^detail/(?P<index>\d+)/$', views.details, name="tool_detail"),
     url(r'^$', views.home, name='home'),
+    url(r'^importer/$', views.Importer.as_view(), name='importer'),
+    url(r'^importer/save/$', views.SaveImporter.as_view(), name='importer_save'),
 ]

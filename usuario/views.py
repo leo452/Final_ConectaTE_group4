@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, get_user_model, logout, update_session_auth_hash
 from django.core import serializers
@@ -7,8 +7,10 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
+from django.urls import reverse
 from herramienta.models import Herramienta, HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 
 
 # Create your views here.
@@ -38,6 +40,12 @@ def login_rest(request):
 
 def login_view(request):
     return render(request, 'login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home'))
+
 
 @csrf_exempt
 def crear_usuario_rest(request):
@@ -71,15 +79,18 @@ def get_groups(request):
     return HttpResponse(serializers.serialize("json", groups))
 
 
-def crear_usuario(request):
-    return render(request, 'crearUsuario.html')
-
-
 # este metodo se usa para validar si un usuario esta autenticado y si es administrador
 # esto para asegurar que pueda acceder paginas de administracion
 # este metodo se unsa en la precondiocion @user_passes_test
 def in_admin_group(user):
-    return user.is_authenticated() and 'Admin' in user.groups.iterator()
+    group = Group.objects.get(name="Administrador")
+    return True if group in user.groups.all() else False
+
+
+@user_passes_test(in_admin_group)
+def crear_usuario(request):
+    return render(request, 'crearUsuario.html')
+
 
 
 # metodo para realizar paginacion para una vista. se esperan dos parametros query y paginas
@@ -168,8 +179,9 @@ def edicion_perfiles_list(request):
 # esta vista se encaraga de mostraa la el html editarperfiles.html
 # se adiciona una pre validacion antes de llamar esta vista para que esta solo pueda ser accedida por usuarios con
 # perfil administrador
-#@user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
+# @user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
 #@user_passes_test(in_admin_group, login_url='http://localhost:8000/usuario/loginview')
+@user_passes_test(in_admin_group)
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
