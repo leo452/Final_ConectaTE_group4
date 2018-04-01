@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+#modelo de usuario generico que será utilizado en la aplicacion.
 class Usuario(User):
     perfil= models.IntegerField(default=0)
     def __str__(self):
