@@ -76,7 +76,8 @@ def get_groups(request):
 # esto para asegurar que pueda acceder paginas de administracion
 # este metodo se unsa en la precondiocion @user_passes_test
 def in_admin_group(user):
-    return user.is_authenticated() and 'Administrador' in user.groups.iterator()
+    group = Group.objects.get(name="Administrador")
+    return True if group in user.groups.all() else False
 
 
 @user_passes_test(in_admin_group)
