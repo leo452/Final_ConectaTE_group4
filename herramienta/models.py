@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from cuser.fields import CurrentUserField
+from django.core.validators import FileExtensionValidator
+
 from django.db import models
 
 # Create your models here.
@@ -106,3 +108,18 @@ class HerramientaEdicion(ChangesMixin, models.Model):
 
 
     editor.short_description = 'Editor'
+
+
+class FileUser(models.Model):
+    owner = CurrentUserField(add_only=True, related_name="upload_file")
+    file = models.FileField(upload_to='herramienta/upload/')
+
+    def __unicode__(self):
+        return '%s'%self.owner.username if self.owner else '--- ---'
+
+    def __str__(self):
+        return '%s'%self.owner.username if self.owner else '--- ---'
+
+    class Meta:
+        verbose_name = 'Archivo a cargar'
+        verbose_name_plural = 'Archivos cargados'

@@ -37,3 +37,24 @@ class HerramientaEdicionForm(forms.ModelForm):
         model = models.HerramientaEdicion
         fields = ['herramienta','tipo','revision','nombre', 'descripcion','licencia', 'usos','enlaces', 'descarga_url','sistema_operativo','version','integracion_lms','informacion', 'documentacion',  'observacion']
         exclude = ['owner', 'usuarioHerramienta']
+
+
+
+class ImporterForm(forms.Form):
+    file = forms.FileField()
+    class Meta:
+        model = models.FileUser
+        fields = ['file']
+    #end class
+
+    def clean(self):
+        clean_data = super(ImporterForm, self).clean()
+        print 'Este es archivo q existe  - >',clean_data
+        if clean_data.get('file'):
+            path = str(clean_data.get('file')).split('.')
+            if len(path)>1:
+                if path[1] != 'csv':
+                    self.add_error('file', 'El archivo debe ser de la extencion csv.')
+            else:
+                self.add_error('file', 'El archivo es requerido con extencion csv.')
+

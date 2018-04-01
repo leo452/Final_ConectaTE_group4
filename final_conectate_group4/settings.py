@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'usuario',
     'herramienta.apps.HerramientaConfig',
     'django_model_changes',
+    'data_importer',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -86,7 +87,11 @@ DATABASES = {
     }
 }
 
-
+# Data importer migration module
+from django.conf.global_settings import MIGRATION_MODULES
+MIGRATION_MODULES.update({
+    'data_importer': 'data_importer.django_migrations'
+})
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -118,6 +123,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django_cache',
+    },
+}
 
 # Change 'default' database configuration with $DATABASE_URL.
 DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
