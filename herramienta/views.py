@@ -15,15 +15,11 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-<<<<<<< HEAD
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-=======
 from django.shortcuts import render, get_object_or_404
 
 from herramienta.importer import CSVImporterTool
->>>>>>> a8757dea3f95d0053eb2b161722e143abe25452f
 from herramienta.models import Herramienta
 from django.views.generic.edit import BaseFormView, FormView
 
