@@ -146,15 +146,13 @@ def edicion_perfiles_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            #response['next'] = "http://localhost:8000/usuario" + \
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-                               request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
+            #response['next'] = "http://localhost:8000/usuario/editarperfiles?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
             #response['previous'] = "http://localhost:8000/usuario" + \
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-                                   request.build_absolute_uri().split("/editarperfiles")[1].split("page=")[0] + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
@@ -265,14 +263,12 @@ def usuario_herramienta_list(request):
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
             #response['next'] = "http://localhost:8000/usuario" + \
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-                               request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
             #response['previous'] = "http://localhost:8000/usuario" + \
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario" + \
-                                   request.build_absolute_uri().split("/usuarioherramienta")[1].split("page=")[0] + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
