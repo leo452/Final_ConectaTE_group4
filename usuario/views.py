@@ -226,9 +226,9 @@ def grupos(request):
 # donde uId es el ide del Usuario
 # este metodo reorna un listado en formato JSON con todas las ediciones de herramientas
 # en las que el usuario indicado ha trabajdo
-def edicionherramientas(request, uId):
+def edicionherramientas(request, id):
     if request.method == "GET":
-        user = get_object_or_404(Usuario, id=uId)
+        user = get_object_or_404(Usuario, id=id)
         tools = HerramientaEdicion.objects.all().filter(usuarioHerramienta=user)
         return HttpResponse(serializers.serialize("json", tools))
 
@@ -236,8 +236,8 @@ def edicionherramientas(request, uId):
 # esta vista se llama al aceder a /usuarioherramientas/uId
 # donde id es el id de un Usuario
 # este metodo reorna un listado en formato JSON con todas las herramientas en las que el usuario indicado ha trabajdo
-def usuarioHeramientas(request, uId):
-    user = get_object_or_404(Usuario, id=uId)
+def usuarioHeramientas(request, id):
+    user = get_object_or_404(Usuario, id=id)
     usuherramienta = Herramienta.objects.all().filter(owner=user)
     return HttpResponse(serializers.serialize("json", usuherramienta))
 
