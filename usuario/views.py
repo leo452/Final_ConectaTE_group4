@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, get_user_model, logout, update_session_auth_hash
 from django.core import serializers
@@ -7,6 +7,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
+from django.urls import reverse
 from herramienta.models import HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -39,6 +40,11 @@ def login_rest(request):
 
 def login_view(request):
     return render(request, 'login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home'))
 
 @csrf_exempt
 def crear_usuario_rest(request):
