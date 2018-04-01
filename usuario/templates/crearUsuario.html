@@ -54,6 +54,7 @@
           $("#error").empty();
           $("#error").append("el email debe ser uniandes");
           $("#error").removeAttr("hidden");
+          window.scrollTo(0,0);
           return false;
         }
         if($('#formUsuario input[type=checkbox]:checked').length==0)
