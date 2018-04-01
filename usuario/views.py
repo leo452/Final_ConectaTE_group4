@@ -31,9 +31,7 @@ def login_rest(request):
         else:
             if usuario.check_password(password):
                 login(request, usuario)
-                messages.success(request, 'Ingresado con Exito!')
-                return redirect('home')
-                # return HttpResponse(serializers.serialize("json", [usuario]))
+                return HttpResponse(serializers.serialize("json", [usuario]))
             else:
                 mensaje = 'Nombre de usuario o clave no valido'
                 raise Http404(mensaje)
