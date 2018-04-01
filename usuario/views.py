@@ -72,15 +72,16 @@ def get_groups(request):
     return HttpResponse(serializers.serialize("json", groups))
 
 
-def crear_usuario(request):
-    return render(request, 'crearUsuario.html')
-
-
 # este metodo se usa para validar si un usuario esta autenticado y si es administrador
 # esto para asegurar que pueda acceder paginas de administracion
 # este metodo se unsa en la precondiocion @user_passes_test
 def in_admin_group(user):
-    return user.is_authenticated() and 'Admin' in user.groups.iterator()
+    return user.is_authenticated() and 'Administrador' in user.groups.iterator()
+
+
+@user_passes_test(in_admin_group)
+def crear_usuario(request):
+    return render(request, 'crearUsuario.html')
 
 
 def paginator(request, query, paginas):
@@ -162,8 +163,10 @@ def edicion_perfiles_list(request):
 # esta vista se encaraga de mostraa la el html editarperfiles.html
 # se adiciona una pre validacion antes de llamar esta vista para que esta solo pueda ser accedida por usuarios con
 # perfil administrador
-#@user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
-#@user_passes_test(in_admin_group, login_url='http://localhost:8000/usuario/loginview')
+# @user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
+
+
+@user_passes_test(in_admin_group)
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 

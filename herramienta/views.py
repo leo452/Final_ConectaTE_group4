@@ -240,6 +240,7 @@ class ListHerramientaEdicion(AJAXListMixin, ListView):
 
 #vistas de herramientas
 
+# ///
 def addCategoriaView(request):
     return render(request,'herramienta/add_categoria.html',{"form": CategoriaForm()})
 
@@ -278,6 +279,7 @@ def editHerramientaView(request, id):
 
 #vista de ediciones de herramienta
 
+# ////
 def listRevisiones(request):
     revisiones_list = models.HerramientaEdicion.objects.all()
     paginator = Paginator(revisiones_list, 3) # Show 25 contacts per page
@@ -310,7 +312,7 @@ def addRevisionView(request):
     #return render(request,'herramienta/add_edicion_herramienta.html',{"form": HerramientaEdicionForm(instance=edicion), "url":url})
 
 
-
+# /////
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
@@ -352,6 +354,8 @@ class SaveImporter(View):
     def dispatch(self, request, *args, **kwargs):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
 
+
+# ///
 class Importer(View):
     form_class = ImporterForm
     success_url = '/herramientas/importer'
