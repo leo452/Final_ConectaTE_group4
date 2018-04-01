@@ -16,15 +16,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta
 from django.views.generic.edit import BaseFormView, FormView
 
 # Create your views here.
 #API PARA CATERGORIAS
+
+
 class AJAXListMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
@@ -54,6 +57,10 @@ def addCategoria(request):
     mensaje = "Metodo no permitido"
     return HttpResponse(json.dumps({"error": mensaje}),status=404,
                         content_type='application/json')
+
+def in_admin_group(user):
+    group = Group.objects.get(name="Administrador")
+    return True if group in user.groups.all() else False
 
 @csrf_exempt
 def editCategoria(request, id):
@@ -240,7 +247,7 @@ class ListHerramientaEdicion(AJAXListMixin, ListView):
 
 #vistas de herramientas
 
-# ///
+@user_passes_test(in_admin_group)
 def addCategoriaView(request):
     return render(request,'herramienta/add_categoria.html',{"form": CategoriaForm()})
 
@@ -279,7 +286,7 @@ def editHerramientaView(request, id):
 
 #vista de ediciones de herramienta
 
-# ////
+@user_passes_test(in_admin_group)
 def listRevisiones(request):
     revisiones_list = models.HerramientaEdicion.objects.all()
     paginator = Paginator(revisiones_list, 3) # Show 25 contacts per page
@@ -312,7 +319,7 @@ def addRevisionView(request):
     #return render(request,'herramienta/add_edicion_herramienta.html',{"form": HerramientaEdicionForm(instance=edicion), "url":url})
 
 
-# /////
+@user_passes_test(in_admin_group)
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
@@ -355,7 +362,7 @@ class SaveImporter(View):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
 
 
-# ///
+@user_passes_test(in_admin_group)
 class Importer(View):
     form_class = ImporterForm
     success_url = '/herramientas/importer'
