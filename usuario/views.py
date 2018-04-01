@@ -12,7 +12,7 @@ from herramienta.models import Herramienta, HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 
-
+#servicio rest para autenticar un usuario
 @csrf_exempt
 def login_rest(request):
     if request.method == 'POST':
@@ -32,7 +32,7 @@ def login_rest(request):
                 mensaje = 'Nombre de usuario o clave no valido'
                 raise Http404(mensaje)
 
-
+#metodo encargado de renderizar la pantalla de login
 def login_view(request):
     return render(request, 'login.html')
 
@@ -41,7 +41,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
 
-
+#servicio rest encargado de la creacion de un usuario
 @csrf_exempt
 def crear_usuario_rest(request):
     if request.method == 'POST':
@@ -67,7 +67,7 @@ def crear_usuario_rest(request):
         except Exception as e:
             raise Http404(e)
 
-
+#servicio rest para acceder e los grupos/perfiles que estan creados en la base de datos
 def get_groups(request):
     if request.method == 'GET':
         groups = Group.objects.all()
@@ -81,7 +81,8 @@ def in_admin_group(user):
     group = Group.objects.get(name="Administrador")
     return True if group in user.groups.all() else False
 
-
+#metodo renderizar la pantalla de creacion de usuario
+#esta pantalla solo si un usuario con perfil de administrador esta autenticado
 @user_passes_test(in_admin_group)
 def crear_usuario(request):
     return render(request, 'crearUsuario.html')
