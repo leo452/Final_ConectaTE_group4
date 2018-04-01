@@ -76,7 +76,7 @@
                             '</div>'+
                         '</div>';
                 $("#usuarios").append(div);
-                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupos").done(function(data) {
+                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupos").done(function(data1) {
                 //$.getJSON("http://localhost:8000/usuario/grupos").done(function(data1) {
                     $.each(data1, function (v, ite) {
                         var opt;

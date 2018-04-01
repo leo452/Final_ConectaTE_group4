@@ -13,11 +13,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 
 
-# Create your views here.
-def index(request):
-    # return HttpResponse('Hello from Python!')
-    return render(request, 'index.html')
-
 @csrf_exempt
 def login_rest(request):
     if request.method == 'POST':
@@ -248,7 +243,8 @@ def usuarioHeramientas(request, id):
 def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        user_list = User.objects.all().filter(groups=User.groups.get(name="miembroGTI"))
+        group = Group.objects.get(name="MiembroGTI")
+        user_list = User.objects.all().filter(groups=group)
         pag = Paginator(user_list, 10)
 
         try:
