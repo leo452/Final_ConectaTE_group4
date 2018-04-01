@@ -22,6 +22,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import BaseFormView, FormView
 
 # Create your views here.
@@ -321,6 +322,7 @@ def addRevisionView(request):
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
+
 def home(request):
     lista_herramientas = Herramienta.objects.all()
     context = {'lista_herramientas': lista_herramientas}
@@ -331,7 +333,6 @@ def details(request, index=None):
     instance = get_object_or_404(Herramienta, id=index)
     context = {'herramienta': instance}
     return render(request, 'detalleherramienta.html', context)
-
 
 
 class SaveImporter(View):
@@ -360,13 +361,12 @@ class SaveImporter(View):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
 
 
-class Importer(View):
+class Importer(LoginRequiredMixin, View):
     form_class = ImporterForm
     success_url = '/herramientas/importer'
     template_name = 'herramienta/importer.html'
     importer = CSVImporterTool
 
-    @user_passes_test(in_admin_group)
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
