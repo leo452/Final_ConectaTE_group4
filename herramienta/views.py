@@ -26,8 +26,6 @@ from django.views.generic.edit import BaseFormView, FormView
 
 # Create your views here.
 #API PARA CATERGORIAS
-
-
 class AJAXListMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
@@ -362,16 +360,17 @@ class SaveImporter(View):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
 
 
-@user_passes_test(in_admin_group)
 class Importer(View):
     form_class = ImporterForm
     success_url = '/herramientas/importer'
     template_name = 'herramienta/importer.html'
     importer = CSVImporterTool
 
+    @user_passes_test(in_admin_group)
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
+    @user_passes_test(in_admin_group)
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
