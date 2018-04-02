@@ -7,7 +7,7 @@ import models
 from django.core.cache import cache
 
 class CSVImporterTool(CSVImporter):
-    fields = ['nombre', 'descripcion', 'licencia', 'enlaces', 'descarga_url', 'sistema_operativo', 'versión', 'documentacion']
+    fields = ['nombre', 'descripcion', 'licencia', 'enlaces', 'descarga_url', 'sistema_operativo', 'version', 'documentacion']
     data_tem =None
 
     def __init__(self, source=None, id_file=0, *args, **kwargs):
