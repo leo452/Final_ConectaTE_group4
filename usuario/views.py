@@ -149,15 +149,15 @@ def edicion_perfiles_list(request):
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
 
-            #response['next'] = "http://localhost:8000/usuario/editarperfiles?" + \
+            #response['next'] = "http://localhost:8000/usuario/editarperfilesview?" + \
             #"page=" + pagenext
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
             #response['previous'] = "http://localhost:8000/usuario" + \
             #"page=" + pageprevious
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
