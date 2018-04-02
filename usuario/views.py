@@ -256,8 +256,7 @@ def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
         group = Group.objects.filter(name__in=["MiembroGTI", "Administrador"])
-        user_li = User.objects.all().filter(is_staff=False)
-        user_list = user_li.filter(groups=group)
+        user_list = User.objects.all().filter(groups__in=group).filter(is_staff=False)
         pag = Paginator(user_list, 10)
 
         try:
