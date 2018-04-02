@@ -339,11 +339,13 @@ class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         rows = request.POST.getlist('rows[]', False)
         file = request.POST.get('file', False)
+        print '************** ',file
         if rows and file:
             data = cache.get(request.user.username)
             if data:
                 rows = map(int, rows)
-                for x in data:
+                datos = data['files']
+                for x in datos:
                     if x['id_file'] == int(file):
                         for y in x['data']:
                             if y['row'] in rows:
@@ -353,7 +355,11 @@ class SaveImporter(View):
                                     if value != '':
                                         fields.update({key:value})
                                 if fields:
-                                    models.Herramienta.objects.create(**fields)
+                                    herrami = models.Herramienta.objects.filter(nombre=fields['nombre'])
+                                    if herrami:
+                                        herrami.update(**fields)
+                                    else:
+                                        models.Herramienta.objects.create(**fields)
         return HttpResponse('{}', content_type='application/json', status=201)
 
     @method_decorator(csrf_exempt)
