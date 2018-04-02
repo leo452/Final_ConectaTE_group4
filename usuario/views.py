@@ -51,13 +51,14 @@ def crear_usuario_rest(request):
         first_name= request.POST.get("first_name")
         last_name=request.POST.get("last_name")
         perfiles=request.POST.getlist("perfiles")
+        proyectos = request.POST.get("proyectos")
 
         if Usuario.objects.filter(email=email).exists():
             mensaje = 'Email ya existe'
             raise Http404(mensaje)
         try:
             usuario = Usuario.objects.create(email=email, password=password, username=username, first_name=first_name,
-                                             last_name=last_name)
+                                             last_name=last_name, proyectos=proyectos)
             for perfil in perfiles:
                 my_group = Group.objects.get(name=perfil)
                 my_group.user_set.add(usuario)
@@ -149,15 +150,15 @@ def edicion_perfiles_list(request):
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
 
-            #response['next'] = "http://localhost:8000/usuario/editarperfiles?" + \
+            #response['next'] = "http://localhost:8000/usuario/editarperfilesview?" + \
             #"page=" + pagenext
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
             #response['previous'] = "http://localhost:8000/usuario" + \
             #"page=" + pageprevious
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfilesview?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
@@ -255,8 +256,8 @@ def usuarioHeramientas(request, id):
 def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        group = Group.objects.filter(name__in=["MiembroGTI", "Administrador"])
-        user_list = User.objects.all().filter(groups__in=group)#.filter(is_staff=False)
+        group = Group.objects.filter(name="MiembroGTI")#(name__in=["MiembroGTI", "Administrador"])
+        user_list = Usuario.objects.all().filter(groups__in=group)#.filter(is_staff=False)
         pag = Paginator(user_list, 10)
 
         try:
