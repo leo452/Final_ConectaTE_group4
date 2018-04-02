@@ -5,6 +5,7 @@
 <script>
       //metodo encargado de añadir al formulario los grupos/perfiles que estan creados en la base de datos para que al nuevo usuario pueda asignarsele su perfil.
        $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/getgroups").done(function(data) {
+      //$.getJSON("http://localhost:8000/usuario/getgroups").done(function(data) {
               $.each(data, function(i,item) {
                 $("#perfil").append(
             '<div class="checkbox">'+

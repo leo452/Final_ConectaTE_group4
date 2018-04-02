@@ -46,8 +46,9 @@ class CSVImporterTool(CSVImporter):
             else:
                 resp.update({'nombre': 'Debe registrar un nombre'})
             list_data.append(resp)
-        data.append({'id_file': self.id_file, 'data':list_data})
-        cache.set(user.username, data, 120*60)
+        datos = data['files']
+        datos.append({'id_file': self.id_file, 'data':list_data})
+        cache.set(user.username, {'files':datos}, 120*60)
         return list_data
 
     def process_row(self, row, values):
