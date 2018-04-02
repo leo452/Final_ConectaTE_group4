@@ -128,7 +128,8 @@ def paginator(request, query, paginas):
 def edicion_perfiles_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        user_list = User.objects.all().filter(is_staff=False)
+        user_li = User.objects.all().filter(is_staff=False)
+        user_list = user_li.filter(groups__isnull=False)
         pag = Paginator(user_list, 10)
 
         try:
@@ -147,6 +148,7 @@ def edicion_perfiles_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
+
             #response['next'] = "http://localhost:8000/usuario/editarperfiles?" + \
             #"page=" + pagenext
             response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?" + \
@@ -212,6 +214,15 @@ def usuarios(request):
 
 # esta vista se llama al aceder a /grupos y retorna un JSON con el listado de grupos que se han creado en el modelo
 # de autenticacion de DJango
+def grupo(request, id):
+    if request.method == "GET":
+        user = get_object_or_404(Usuario, id=id)
+        grupos = user.groups.all()
+        return HttpResponse(serializers.serialize("json", grupos))
+
+
+# esta vista se llama al aceder a /grupos y retorna un JSON con el listado de grupos que se han creado en el modelo
+# de autenticacion de DJango
 def grupos(request):
     if request.method == "GET":
         grupos = Group.objects.all()
@@ -244,7 +255,7 @@ def usuarioHeramientas(request, id):
 def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
-        group = Group.objects.get(name="MiembroGTI")
+        group = Group.objects.filter(name__in=["MiembroGTI", "Administrador"])
         user_li = User.objects.all().filter(is_staff=False)
         user_list = user_li.filter(groups=group)
         pag = Paginator(user_list, 10)
@@ -265,16 +276,15 @@ def usuario_herramienta_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-            #response['next'] = "http://localhost:8000/usuario" + \
-            #"page=" + pagenext
-            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
+
+            #response['next'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
-            #response['previous'] = "http://localhost:8000/usuario" + \
-             #                      "page=" + pageprevious
-            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?" + \
-            "page=" + pageprevious
+            #response['previous'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
+                                   "page=" + pageprevious
         response['numpages'] = pag.num_pages
         return response
 
@@ -289,5 +299,6 @@ def usuario_herramienta_list(request):
 
 
 # esta vista se encaraga de mostraa la el html usuarioherramienta.html
+@user_passes_test(in_admin_group)
 def usuario_herramienta_view(request):
     return render(request, 'usuarioherramienta.html')
