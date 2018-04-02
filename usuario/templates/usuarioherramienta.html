@@ -61,8 +61,7 @@
                 );
             }
             $.each(JSON.parse(data), function(i, item) {
-                $("#usuarios").append(
-                    '<div class="col-lg-6 card h-100 py-2">'+
+                var div ='<div class="col-lg-6 card h-100 py-2">'+
                         '<div class="panel panel-default">'+
                             '<div class="panel-heading" style="text-align: center; background-color: black;">'+
                                 '<span style="color: white; font-size: large;">'+item.fields.first_name +' '+ item.fields.last_name + '</span>'+
@@ -73,9 +72,13 @@
                                     '<tr>'+
                                         '<th>Proyectos</th>'+
                                     '</tr>'+
-                                    '<tr>'+
-                                        '<td>'+item.fields.proyectos+'</th>'+
-                                    '</tr>'+
+                                    '<tr>';
+                if (item.fields.proyectos == "" || item.fields.proyectos == "null")
+                    div += '<td>Sin Proyectos</td>';
+                else
+                    div += '<td>'+item.fields.proyectos+'</td>';
+
+                div +='</tr>'+
                                 '</table><br>'+
                                 '<span>Herramientas Creadas</span><br>'+
                                 '<table id="u_'+item.pk+'" style="width:100%">'+
@@ -85,8 +88,8 @@
                                 '</table>'+
                             '</div>'+
                         '</div>'+
-                    '</div>'
-                );
+                    '</div>';
+                $("#usuarios").append(div);
                 $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
                 //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
                     $("#u_"+item.pk).append('<tr>'+
