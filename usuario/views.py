@@ -176,7 +176,7 @@ def edicion_perfiles_list(request):
 # perfil administrador
 # @user_passes_test(in_admin_group, login_url='https://final-conectate-group4.herokuapp.com/usuario/loginview')
 #@user_passes_test(in_admin_group, login_url='http://localhost:8000/usuario/loginview')
-#@user_passes_test(in_admin_group)
+@user_passes_test(in_admin_group)
 def edicion_perfiles_view(request):
     return render(request, 'editarperfiles.html')
 
@@ -295,5 +295,6 @@ def usuario_herramienta_list(request):
 
 
 # esta vista se encaraga de mostraa la el html usuarioherramienta.html
+@user_passes_test(in_admin_group)
 def usuario_herramienta_view(request):
     return render(request, 'usuarioherramienta.html')
