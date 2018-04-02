@@ -51,13 +51,14 @@ def crear_usuario_rest(request):
         first_name= request.POST.get("first_name")
         last_name=request.POST.get("last_name")
         perfiles=request.POST.getlist("perfiles")
+        proyectos = request.POST.get("proyectos")
 
         if Usuario.objects.filter(email=email).exists():
             mensaje = 'Email ya existe'
             raise Http404(mensaje)
         try:
             usuario = Usuario.objects.create(email=email, password=password, username=username, first_name=first_name,
-                                             last_name=last_name)
+                                             last_name=last_name, proyectos=proyectos)
             for perfil in perfiles:
                 my_group = Group.objects.get(name=perfil)
                 my_group.user_set.add(usuario)
@@ -256,7 +257,7 @@ def usuario_herramienta_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
         group = Group.objects.filter(name="MiembroGTI")#(name__in=["MiembroGTI", "Administrador"])
-        user_list = User.objects.all().filter(groups__in=group)#.filter(is_staff=False)
+        user_list = Usuario.objects.all().filter(groups__in=group)#.filter(is_staff=False)
         pag = Paginator(user_list, 10)
 
         try:

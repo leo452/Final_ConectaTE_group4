@@ -10,6 +10,7 @@ from django.dispatch import receiver
 # modelo de usuario generico que sera utilizado en la aplicacion.
 class Usuario(User):
     perfil= models.IntegerField(default=0)
+    proyectos =  models.CharField(max_length=1000, null=True, blank=True)
     def __str__(self):
         return self.username
     #
