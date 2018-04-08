@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^usuarios/', views.usuarios),
     url(r'^grupos/', views.grupos),
     url(r'^grupo/(?P<id>\d+)', views.grupo),
+    url(r'^usuarioproyectos/(?P<id>\d+)', views.usuarioProyecto),
     url(r'^usuarioherramientas/(?P<id>\d+)', views.usuarioHeramientas),
     url(r'^usuarioherramientaview/', views.usuario_herramienta_view, name="usuarioherramientaview"),
     url(r'^usuarioherramienta$', views.usuario_herramienta_list),

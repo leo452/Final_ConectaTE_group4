@@ -19,7 +19,7 @@
     };
     (function () {
         if(getUrlParameter("page")){
-           var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page="+getUrlParameter("page");
+            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page="+getUrlParameter("page");
             //var request="http://localhost:8000/usuario/usuarioherramienta?page="+getUrlParameter("page");
         }
         else{
@@ -69,14 +69,6 @@
                             '<div class="panel-body" style="text-align: center">'+
                                 '<span>Proyectos</span><br>'+
                                 '<table id="pu_'+item.pk+'" style="width:100%">'+
-                                    '<tr>';
-                div += '<td>Sin Proyectos</td>';
-                /*if (item.fields.proyectos == "" || item.fields.proyectos == "null")
-                    div += '<td>Sin Proyectos</td>';
-                else
-                    div += '<td>'+item.fields.proyectos+'</td>';*/
-
-                div +='</tr>'+
                                 '</table><br>'+
                                 '<span>Herramientas Creadas</span><br>'+
                                 '<table id="u_'+item.pk+'" style="width:100%">'+
@@ -132,6 +124,17 @@
                             '</tr>'
                         );
                     });
+                });
+                $.get("https://final-conectate-group4.herokuapp.com/usuario/usuarioproyectos/"+item.pk).done(function(data3,textstatus1, jqXHR1) {
+                //$.get("http://localhost:8000/usuario/usuarioproyectos/"+item.pk).done(function(data3,textstatus1, jqXHR1) {
+                    var div = '<tr>';
+                    if (data3 == "" || data3 == "null" || data3 == "None")
+                        div += '<td>Sin Proyectos</td>';
+                    else
+                        div += '<td>'+data3+'</td>';
+                    div += '</tr>';
+                    $("#pu_"+item.pk).append(div);
+
                 });
 
             });

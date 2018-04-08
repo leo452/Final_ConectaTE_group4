@@ -250,6 +250,14 @@ def usuarioHeramientas(request, id):
     return HttpResponse(serializers.serialize("json", usuherramienta))
 
 
+# esta vista se llama al aceder a /usuarioproyectos/uId
+# donde id es el id de un Usuario
+# este metodo reorna un listado en formato JSON con los proyectos que ha trabajado el usuario
+def usuarioProyecto(request, id):
+    user = get_object_or_404(Usuario, id=id)
+    return HttpResponse(user.proyectos)
+
+
 # esta vista se accede al llamar /usuarioherramienta esta vista se encarga de prosesar la paginacion de los usuarios
 # que se muestran en la pagina /usuarioherramienta.html
 # esta vista se llama solamente desde /usuarioherramienta.html
@@ -276,13 +284,14 @@ def usuario_herramienta_list(request):
 
         if page < pag.num_pages:
             pagenext = str((int(page + 1)))
-
             #response['next'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            #"page=" + pagenext
             response['next'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
                                "page=" + pagenext
         if page > 1:
             pageprevious = str((int(page - 1)))
             #response['previous'] = "http://localhost:8000/usuario/usuarioherramientaview?" + \
+            #"page=" + pageprevious
             response['previous'] = "https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientaview?" + \
                                    "page=" + pageprevious
         response['numpages'] = pag.num_pages
