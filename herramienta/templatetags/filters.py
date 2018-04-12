@@ -13,3 +13,15 @@ def addcss(field, css):
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
+
+
+@register.filter(name='has_borrador_access')
+def has_borrador_access(user, herramienta):
+    return True if herramienta.owner.username == user.username and herramienta.estado == 0 else False
+
+
+@register.filter(name='has_revision_access')
+def has_revision_access(user, herramienta):
+    return True if herramienta.estado == 1 and (has_group(user, "MiembroGTI") or has_group(user, "MiembroConectate")) \
+        else False
+
