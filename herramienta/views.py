@@ -9,7 +9,6 @@ import models
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseNotFound
 from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm
-from django.shortcuts import render
 from django.views.generic import ListView
 import json
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,8 +21,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta
+from herramienta.templatetags import filters
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import BaseFormView, FormView
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -57,9 +56,11 @@ def addCategoria(request):
     return HttpResponse(json.dumps({"error": mensaje}),status=404,
                         content_type='application/json')
 
+
 def in_admin_group(user):
     group = Group.objects.get(name="Administrador")
     return True if group in user.groups.all() else False
+
 
 @csrf_exempt
 def editCategoria(request, id):
@@ -161,6 +162,7 @@ def addHerramienta(request):
     mensaje = "Metodo no permitido"
     return HttpResponse(json.dumps({"error": mensaje}),status=404,
                         content_type='application/json')
+
 
 @csrf_exempt
 def editHerramienta(request, id):
@@ -279,8 +281,12 @@ def editHerramientaView(request, id):
         mensaje = "<h1>Esta herramienta no existe</h1>"
         return HttpResponseNotFound(mensaje)
 
-    url = "/herramienta/api/herramientas/form/%d/" % (int(id))
-    return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(instance=edicion), "url":url})
+    if filters.is_herramienta_owner(request.user, edicion) or in_admin_group(request.user):
+        url = "/herramienta/api/herramientas/form/%d/" % (int(id))
+        return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(instance=edicion), "url":url})
+    else:
+        mensaje = "<h1>No tiene acceso a esta herramienta</h1>"
+        return HttpResponseNotFound(mensaje)
 
 
 #vista de ediciones de herramienta

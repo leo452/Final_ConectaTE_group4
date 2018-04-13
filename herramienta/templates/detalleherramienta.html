@@ -50,6 +50,22 @@
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
 
+            {% if herramienta.owner.username == request.user.username  %}
+                <div class="text-center">
+                {% if herramienta.estado == 0 %}
+                    <a href="{% url 'herramienta-edit' herramienta.id %}" class="btn btn-secondary" role="button">Editar</a>
+                {% elif herramienta.estado == 1 %}
+                    <a href="" class="btn btn-secondary" role="button">Comenzar Edición</a>
+                {% endif %}
+                </div>
+            {% elif herramienta.estado == 2 %}
+                {% if True %}  <!-- Si no ha marcado esta herramienta como lista para publicar -->
+                    <a href="" class="btn btn-secondary" role="button">Enviar Postulación a Publicación</a>
+                {% else %}
+                    <a href="" class="btn btn-secondary" role="button">Postulación Enviada</a>
+                {% endif %}
+            {% endif %}
+
           <!-- Side Widget -->
           <div class="card my-4">
             <h5 class="card-header">Usos de la Herramienta</h5>
