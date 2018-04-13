@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load filters %}
 
 {% block content %}
 
@@ -54,16 +55,19 @@
                 <div class="text-center">
                 {% if herramienta.estado == 0 %}
                     <a href="{% url 'herramienta-edit' herramienta.id %}" class="btn btn-secondary" role="button">Editar</a>
+                    <a href="{% url 'edit_state' herramienta.id 1 %}" class="btn btn-secondary" role="button">Solicitar Revisión de Pares</a>
                 {% elif herramienta.estado == 1 %}
-                    <a href="" class="btn btn-secondary" role="button">Comenzar Edición</a>
+                    <a href="{% url 'edit_state' herramienta.id 0 %}" class="btn btn-secondary" role="button">Comenzar Edición</a>
                 {% endif %}
                 </div>
-            {% elif herramienta.estado == 2 %}
-                {% if True %}  <!-- Si no ha marcado esta herramienta como lista para publicar -->
-                    <a href="" class="btn btn-secondary" role="button">Enviar Postulación a Publicación</a>
+            {% elif herramienta.estado == 1 %}
+                <div class="text-center">
+                {% if not request.user|is_herramienta_posted_by_user:herramienta %}  <!-- Si no ha marcado esta herramienta como lista para publicar -->
+                    <a href="{% url 'add_herramienta_por_revision' herramienta.id %}" class="btn btn-secondary" role="button">Enviar Postulación a Publicación</a>
                 {% else %}
-                    <a href="" class="btn btn-secondary" role="button">Postulación Enviada</a>
+                    <button type="button" class="btn btn-success" disabled>Postulación Enviada</button>
                 {% endif %}
+                </div>
             {% endif %}
 
           <!-- Side Widget -->

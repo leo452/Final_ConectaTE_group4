@@ -20,7 +20,7 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
-from herramienta.models import Herramienta
+from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -186,6 +186,53 @@ def editHerramienta(request, id):
     mensaje = "Metodo no permitido"
     return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
                         content_type='application/json')
+
+
+def editHerramientaField(request, id, estado):
+    try:
+        herramienta = models.Herramienta.objects.get(id=id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Herramienta no encontrada')
+        return redirect('home')
+
+    if filters.is_herramienta_owner(request.user, herramienta):
+        if estado == "0" or estado == "1":
+            herramienta.estado = estado
+            herramienta.save()
+
+            if estado == "0":
+                text = "Borrador"
+            else:
+                text = "En Revisión"
+
+            messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+    # Add tool to the on revision table.
+    return redirect('tool_detail', index=herramienta.id)
+
+
+def addHerramientaParaPublicacion (request, id):
+    try:
+        herramienta = models.Herramienta.objects.get(id=id)
+    except ObjectDoesNotExist:
+        messages.error(request, 'Herramienta no encontrada')
+        return redirect('home')
+
+    if not filters.is_herramienta_owner(request.user, herramienta):
+        list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+
+        for revision in list_revisiones:
+            if revision.owner.username == request.user.username:
+                messages.error(request, 'Herramienta ya ha sido postulada por ti')
+                return redirect('tool_detail', id)
+
+        HerramientaPorAprobar.objects.create(herramienta=herramienta, owner=request.user)
+
+        messages.success(request, 'Herramienta Postulada Correctamente')
+        return redirect('tool_detail', id)
+
+    messages.error(request, 'Error de Permisos')
+    return redirect('tool_detail', id)
 
 
 class ListHerramienta(AJAXListMixin, ListView):

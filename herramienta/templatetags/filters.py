@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.auth.models import Group
+from herramienta.models import HerramientaPorAprobar
 
 register = template.Library()
 
@@ -25,6 +26,18 @@ def has_revision_access(user, herramienta):
     return True if herramienta.estado == 1 and (has_group(user, "MiembroGTI") or has_group(user, "MiembroConectate")) \
         else False
 
+
 @register.filter (name='is_herramienta_owner')
 def is_herramienta_owner(user, herramienta):
     return True if herramienta.owner.username == user.username else False
+
+
+@register.filter(name='is_herramienta_posted_by_user')
+def is_herramienta_posted_by_user(user, herramienta):
+    list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+
+    for revision in list_revisiones:
+        if revision.owner.username == user.username:
+            return True
+
+    return False

@@ -114,7 +114,7 @@
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <div class="MyAlert-bottom alert alert-success alert-dismissible fixed-bottom" role="alert" style="width: 300px">
+                    <div class="MyAlert-bottom alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fixed-bottom" role="alert" style="width: 300px">
                         {{ message }}
                     </div>
                 {% endfor %}
