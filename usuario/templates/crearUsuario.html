@@ -4,7 +4,7 @@
 {% block content %}
 <script>
       //metodo encargado de añadir al formulario los grupos/perfiles que estan creados en la base de datos para que al nuevo usuario pueda asignarsele su perfil.
-       $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/getgroups").done(function(data) {
+       $.getJSON("/usuario/getgroups").done(function(data) {
       //$.getJSON("http://localhost:8000/usuario/getgroups").done(function(data) {
               $.each(data, function(i,item) {
                 $("#perfil").append(
@@ -26,7 +26,7 @@
         </div>
         <div id="error" class="alert alert-danger" hidden>
         </div>
-        <form id="formUsuario" method="post" action="https://final-conectate-group4.herokuapp.com/usuario/crearusuario" enctype="multipart/form-data"    >
+        <form id="formUsuario" method="post" action="/usuario/crearusuario" enctype="multipart/form-data"    >
             <label class="control-label">Nombre de usuario</label>
             <input id="username" name="username" type="text" placeholder="username" class="form-control input-md" required=""><br>
             <label class="control-label">Nombre</label>
@@ -45,7 +45,7 @@
             <input id="password2" name="password2" type="password" placeholder="password2" class="form-control input-md" required=""><br>
 
             <input type="submit" value="Crear" class="btn btn-primary"/>
-            <a href="" class="btn btn-secondary"/>Cancelar</a>
+            <a href="/herramientas" class="btn btn-secondary"/>Cancelar</a>
         </form>
     </div>
     <script>
