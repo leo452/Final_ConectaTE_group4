@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^getgroups', views.get_groups,name='getgroups'),
     url(r'^editarperfiles$', views.edicion_perfiles_list),
     url(r'^editarperfilesview/', views.edicion_perfiles_view, name="editarPerfilesview"),
-    url(r'^cambiagrupo/', views.admin_cambia_grupo),
+    url(r'^cambiagrupo/', views.admin_cambia_grupo, name="cambiarGrupo"),
     url(r'^usuarios/', views.usuarios),
     url(r'^grupos/', views.grupos),
     url(r'^grupo/(?P<id>\d+)', views.grupo),
