@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^lista/$', views.listHerramienta, name='herramientas'),
     url(r'^herramienta/add/$', views.addHerramientaView, name='herramienta-v'),
     url(r'^herramienta/edit/(?P<id>\d+)/$', views.editHerramientaView, name='herramienta-edit'),
+    url(r'^herramienta/delete/(?P<id>\d+)', views.deleteHerramienta, name='herramienta-delete'),
     url(r'^listaedicion/$', views.listRevisiones, name='ediciones'),
     url(r'^edicion/add/$', views.addRevisionView, name='ediciones-v'),
    # url(r'^edicion/edit/(?P<id>\d+)/$', views.editRevisionView, name='ediciones-edit'),
