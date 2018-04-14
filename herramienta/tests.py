@@ -18,6 +18,7 @@ def getRealPath(rel_path):
 
 class Test(TestCase):
 
+#test para validar el funcionamiento del servicio para eliminar herramientas
     def test_HerramintaDelete(self):
         herramienta = models.Herramienta.objects.create(nombre='Herramienta test', descripcion='')
         if herramienta:
@@ -32,7 +33,7 @@ clave_prueba = "admin123456"
 
 
 class AtoTest(TestCase):
-
+    # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
         self.browser = webdriver.Chrome(getRealPath('../extra/chromedriver'))
         self.browser.set_window_size(1024, 786)

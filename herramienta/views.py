@@ -188,6 +188,10 @@ def editHerramienta(request, id):
                         content_type='application/json')
 
 
+# esta vista se llama usando la url herramienta/delete/#, se encarga de procesar la peticion tipo DELETE
+# y elimina la herramienta que es pasada como parametro
+# recive un parametro que es el id de la herramienta a eliminar
+# retorna un JSON que indica el resultado de la operacion
 @csrf_exempt
 def deleteHerramienta(request, id):
     try:
