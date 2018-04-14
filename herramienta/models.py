@@ -53,6 +53,22 @@ class Herramienta(ChangesMixin, models.Model):
         verbose_name = 'Herramienta'
         verbose_name_plural = 'Herramientas'
 
+
+class HerramientaPorAprobar(ChangesMixin, models.Model):
+    herramienta = models.ForeignKey(Herramienta, null=False, blank=False)
+    owner = CurrentUserField(add_only=True, related_name="herramienta_owner")
+
+    def __unicode__(self):
+        return '%s' % self.herramienta.nombre
+
+    def __str__(self):
+        return '%s' % self.herramienta.nombre
+
+    class Meta:
+        verbose_name = 'Herramienta por Aprobar'
+        verbose_name_plural = 'Herramientas por Aprobar'
+
+
 #modelo del estado de la revision
 class Revision (models.Model):
     nombre = models.CharField(max_length=100)

@@ -7,7 +7,7 @@ from django.dispatch import receiver
 def write_update(sender, instance, **kwarg):
     values={'herramienta':instance}
     for key ,value  in instance.changes().items():
-        if not key == 'owner_id' and key != 'id':
+        if not key == 'owner_id' and key != 'id' and key!='estado':
             values.update({key:value[0]})
     models.HerramientaEdicion.objects.create(**values)
 

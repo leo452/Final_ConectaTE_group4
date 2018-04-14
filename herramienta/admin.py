@@ -24,16 +24,27 @@ class EdicionHerramientaInline(admin.TabularInline):
             readonly_fields.remove('is_submitted')
         return readonly_fields
 
+
 #fomrulario de categoria
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion']
     search_fields = list_display
     form = forms.CategoriaForm
+
+
+#formulario de Herramientas por Aprobar
+class HerramientaPorAprobarAdmin(admin.ModelAdmin):
+    list_display = ['herramienta', 'owner']
+    search_fields = list_display
+
+
 #formulario para los estados de revision
 class RevisionAdmin(admin.ModelAdmin):
     list_display = ['nombre', 'descripcion']
     search_fields = list_display
     form = forms.RevisioForm
+
+
 #formulario para la herramienta
 class HerramientaAdmin(admin.ModelAdmin):
     inlines = [EdicionHerramientaInline]
@@ -41,11 +52,13 @@ class HerramientaAdmin(admin.ModelAdmin):
     search_fields = ['owner__first_name','owner__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'estado', 'licencia']
     form = forms.HerramientaForm
 
+
 #formulario para edicion de herramienta
 class HerramientaEdicionAdmin(admin.ModelAdmin):
     list_display = ['editor','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
     search_fields = ['usuarioHerramienta__usuario__first_name', 'usuarioHerramienta__usuario__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
     form = forms.HerramientaEdicionForm
+
 
 #registro de los formularios en django admin y para usarlos en las vistas
 admin.site.register(models.Revision, RevisionAdmin)
@@ -53,3 +66,4 @@ admin.site.register(models.Categoria, CategoriaAdmin)
 admin.site.register(models.Herramienta, HerramientaAdmin)
 admin.site.register(models.HerramientaEdicion, HerramientaEdicionAdmin)
 admin.site.register(models.FileUser)
+admin.site.register(models.HerramientaPorAprobar, HerramientaPorAprobarAdmin)
