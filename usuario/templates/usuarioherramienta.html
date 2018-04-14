@@ -19,12 +19,10 @@
     };
     (function () {
         if(getUrlParameter("page")){
-            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page="+getUrlParameter("page");
-            //var request="http://localhost:8000/usuario/usuarioherramienta?page="+getUrlParameter("page");
+            var request="/usuario/usuarioherramienta?page="+getUrlParameter("page");
         }
         else{
-            var request="https://final-conectate-group4.herokuapp.com/usuario/usuarioherramienta?page=1";
-            //var request="http://localhost:8000/usuario/usuarioherramienta?page=1";
+            var request="/usuario/usuarioherramienta?page=1";
         }
         $.get(request).done(function(data,textstatus, jqXHR) {
             if (jqXHR.getResponseHeader('previous') && jqXHR.getResponseHeader('next')) {
@@ -80,8 +78,7 @@
                         '</div>'+
                     '</div>';
                 $("#usuarios").append(div);
-                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
-                //$.getJSON("http://localhost:8000/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
+                $.getJSON("/usuario/usuarioherramientas/"+item.pk).done(function(data1) {
                     $("#u_"+item.pk).append('<tr>'+
                                         '<th>Herramienta</th>'+
                                         '<th>Estado</th>'+
@@ -108,8 +105,7 @@
                         $("#u_"+item.pk).append(div);
                     });
                 });
-                $.getJSON("https://final-conectate-group4.herokuapp.com/usuario/edicionherramientas/"+item.pk).done(function(data2) {
-                //$.getJSON("http://localhost:8000/usuario/edicionherramientas/"+item.pk).done(function(data2) {
+                $.getJSON("/usuario/edicionherramientas/"+item.pk).done(function(data2) {
                     $("#eu_"+item.pk).append('<tr>'+
                                         '<th>Herramienta</th>'+
                                         '<th>Detalle</th>'+
@@ -125,8 +121,7 @@
                         );
                     });
                 });
-                $.get("https://final-conectate-group4.herokuapp.com/usuario/usuarioproyectos/"+item.pk).done(function(data3,textstatus1, jqXHR1) {
-                //$.get("http://localhost:8000/usuario/usuarioproyectos/"+item.pk).done(function(data3,textstatus1, jqXHR1) {
+                $.get("/usuario/usuarioproyectos/"+item.pk).done(function(data3,textstatus1, jqXHR1) {
                     var div = '<tr>';
                     if (data3 == "" || data3 == "null" || data3 == "None")
                         div += '<td>Sin Proyectos</td>';

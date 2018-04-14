@@ -70,11 +70,11 @@
                         </li>
                         {% if request.user|has_group:"Administrador" %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a id="menuHerramientas" class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Gestión de Herramientas
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-                                <a class="dropdown-item" href="{% url 'herramientas' %}">Lista de Herramientas</a>
+                                <a id="itemListaHerrramienta" class="dropdown-item" href="{% url 'herramientas' %}">Lista de Herramientas</a>
                                 <a class="dropdown-item" href="{% url 'importer' %}">Subir Herramienta en Bloque</a>
                                 <a class="dropdown-item" href="{% url 'categoria-v' %}">Agregar Categoría</a>
                                 <a class="dropdown-item" href="{% url 'ediciones' %}">Revisiones</a>
@@ -82,7 +82,7 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a id="menuUsuarios" class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Gestión de Usuarios
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
@@ -94,7 +94,7 @@
                         {% endif %}
                         {% if not user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'loginview' %}">Login</a>
+                            <a id="login" class="nav-link" href="{% url 'loginview' %}">Login</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
@@ -111,15 +111,17 @@
 
         {% block content %}{% endblock %}
 
+
+        <ul id="messages" class="messages">
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <div class="MyAlert-bottom alert alert-success alert-dismissible fixed-bottom" role="alert" style="width: 300px">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </ul>
+            {% for message in messages %}
+                <div class="MyAlert-bottom alert alert-success alert-dismissible fixed-bottom" role="alert" style="width: 300px">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
+        </ul>
+
 
 
     </body>
