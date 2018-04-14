@@ -22,14 +22,16 @@ def login_rest(request):
         try:
             usuario=UserModel.objects.get(email=email)
         except UserModel.DoesNotExist:
-            mensaje = 'Nombre de usuario o clave no valido'
+            mensaje = 'Nombre de usuario no valido'
             raise Http404(mensaje)
         else:
             if usuario.check_password(password):
+                print("aqui no entra")
                 login(request, usuario)
                 return HttpResponse(serializers.serialize("json", [usuario]))
             else:
-                mensaje = 'Nombre de usuario o clave no valido'
+                mensaje = 'clave no valida'
+                print(mensaje)
                 raise Http404(mensaje)
 
 #metodo encargado de renderizar la pantalla de login
@@ -52,13 +54,14 @@ def crear_usuario_rest(request):
         last_name=request.POST.get("last_name")
         perfiles=request.POST.getlist("perfiles")
         proyectos = request.POST.get("proyectos")
-
+        print(password)
         if Usuario.objects.filter(email=email).exists():
             mensaje = 'Email ya existe'
             raise Http404(mensaje)
         try:
-            usuario = Usuario.objects.create(email=email, password=password, username=username, first_name=first_name,
+            usuario = Usuario.objects.create(email=email, username=username, first_name=first_name,
                                              last_name=last_name, proyectos=proyectos)
+            usuario.set_password(password)
             for perfil in perfiles:
                 my_group = Group.objects.get(name=perfil)
                 my_group.user_set.add(usuario)

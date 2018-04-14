@@ -16,7 +16,7 @@
         </div>
         <div id="error" class="alert alert-danger" hidden>
         </div>
-        <form id="formUsuario" method="post" action="https://final-conectate-group4.herokuapp.com/usuario/login">
+        <form id="formUsuario" method="post" action="/usuario/login">
 
             <div class="form-group">
                 <label class="control-label" for="email">Email</label>
@@ -28,7 +28,8 @@
             </div>
             <div style="padding-top: 3%;">
                 <button id="btn_login" type="submit" class="btn btn-primary">Login</button>
-                <a href="https://final-conectate-group4.herokuapp.com/herramientas/" class="btn btn-secondary"/>Cancelar</a>
+                <a href="/herramientas/" class="btn btn-secondary"/>Cancelar</a>
+
             </div>
         </form>
     </div>
@@ -64,7 +65,7 @@ $('form').submit( function(e) {
             processData: false,
             success: function() {
                 //window.location.href = "http://localhost:8000/herramientas/";
-                       window.location.href = "https://final-conectate-group4.herokuapp.com/herramientas/";
+                       window.location.href = "/herramientas/";
                      },
             error: function(xhr, status, error) {
 
