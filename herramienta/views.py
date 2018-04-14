@@ -188,6 +188,25 @@ def editHerramienta(request, id):
                         content_type='application/json')
 
 
+@csrf_exempt
+def deleteHerramienta(request, id):
+    try:
+        herramienta = models.Herramienta.objects.get(id=id)
+    except ObjectDoesNotExist:
+        mensaje = "La Herramienta No Existe"
+        return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                            content_type='application/json')
+    if request.method == "DELETE":
+        herramienta.delete()
+        mensaje = {"mensaje": "Herramienta eliminada"}
+        return HttpResponse(json.dumps(mensaje), status=200,
+                            content_type='application/json')
+
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"mensaje": mensaje}), status=404,
+                        content_type='application/json')
+
+
 def editHerramientaField(request, id, estado):
     try:
         herramienta = models.Herramienta.objects.get(id=id)

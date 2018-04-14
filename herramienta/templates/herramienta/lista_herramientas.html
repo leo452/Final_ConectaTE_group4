@@ -10,7 +10,7 @@
                 <thead>
                     <tr>
                         <th>
-                            Editar
+                            Accion
                         </th>
                         <th>
                             Owner
@@ -19,7 +19,7 @@
                             Nombre
                         </th>
                         <th>
-                            Descripción
+                            Descripciòn
                         </th>
                         <th>
                             Estado
@@ -30,7 +30,8 @@
                     {% for herramienta in herramientas %}
                         <tr>
                             <td>
-                                <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a>
+                                <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
+                                <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
                             </td>
                             <td>
                                 {{ herramienta.owner }}
@@ -74,4 +75,25 @@
         </div>
     </div>
 </div>
+<script>
+function validate(idDel, nombre) {
+    if(confirm("Esta seguro de eliminar la herramienta " + nombre)){
+        var url = "/herramientas/herramienta/delete/"+idDel;
+        $.ajax({
+            url:url,
+            type: 'DELETE',
+            dataType: 'html',
+            success:function(data, textStatus, jqXHR) {
+                var info = JSON.parse(data);
+                var div = '<div id="id_success" class="MyAlert-bottom alert alert-success alert-dismissible fixed-bottom" role="alert" style="width: 300px">';
+                div += info.mensaje;
+                div +='</div>';
+                $("#messages").prepend(div);
+                //window.location.reload();
+                window.setTimeout(function(){location.reload()},5000)
+            }
+        })
+    }
+}
+</script>
 {% endblock %}
