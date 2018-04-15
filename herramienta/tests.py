@@ -18,20 +18,22 @@ def getRealPath(rel_path):
 
 class Test(TestCase):
 
+#test para validar el funcionamiento del servicio para eliminar herramientas
     def test_HerramintaDelete(self):
-        herramientas = models.Herramienta.objects.all()
-        if herramientas:
-            response = self.client.delete(reverse('herramienta-delete', id=[herramientas[0].id]))
+        herramienta = models.Herramienta.objects.create(nombre='Herramienta test', descripcion='')
+        if herramienta:
+            url = reverse('herramienta-delete', args=[herramienta.id])
+            response = self.client.delete(url)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response['content-type'], 'application/json')
 
 
-usuario_prueba = "tj.marrugo@uniandes.edu.co"
-clave_prueba = "admin1234"
+usuario_prueba = "admin@uniandes.edu.co"
+clave_prueba = "admin123456"
 
 
 class AtoTest(TestCase):
-
+    # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
         self.browser = webdriver.Chrome(getRealPath('../extra/chromedriver'))
         self.browser.set_window_size(1024, 786)
@@ -43,8 +45,8 @@ class AtoTest(TestCase):
 
 
     def test_EliminarHerramienta(self):
-        herramientas = models.Herramienta.objects.all()
-        self.browser.get(reverse('home'))
+        #self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(3)
@@ -61,7 +63,7 @@ class AtoTest(TestCase):
         l3 = self.browser.find_element_by_id('itemListaHerrramienta')
         l3.click()
         self.browser.implicitly_wait(3)
-        l4 = self.browser.find_element_by_id('del_' + herramientas[0].id)
+        l4 = self.browser.find_element_by_id('del_2')
         l4.click()
         self.browser.implicitly_wait(3)
         alert = self.driver.browser.switch_to_alert()
