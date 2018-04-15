@@ -152,9 +152,11 @@ def addHerramienta(request):
         form = HerramientaForm(request.POST)
         if form.is_valid():
             form.save()
-            mensaje = {"mensaje": "Guardado exitoso"}
-            return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
-                                content_type='application/json')
+            messages.success(request, 'Herramienta agregada con Éxito!')
+            return redirect('home')
+            #mensaje = {"mensaje": "Guardado exitoso"}
+            #return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
+             #                   content_type='application/json')
 
         erros = form.errors.items()
         return HttpResponse(json.dumps(erros), status=400,
@@ -177,9 +179,11 @@ def editHerramienta(request, id):
         form = HerramientaForm(request.POST, instance=herramienta)
         if form.is_valid():
             form.save()
-            mensaje = {"mensaje": "edicion de herramienta exitoso"}
-            return HttpResponse(json.dumps(mensaje), status=200,
-                                content_type='application/json')
+            messages.success(request, 'Herramienta editada con Éxito!')
+            return redirect('home')
+            #mensaje = {"mensaje": "edicion de herramienta exitoso"}
+            #return HttpResponse(json.dumps(mensaje), status=200,
+             #                   content_type='application/json')
         erros = form.errors.items()
         return HttpResponse(json.dumps(erros), status=400,
                             content_type='application/json')
@@ -273,9 +277,11 @@ def addHerramientaEdicion(request):
         form = HerramientaEdicionForm(request.POST)
         if form.is_valid():
             form.save()
-            mensaje = {"mensaje": "Guardado exitoso"}
-            return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
-                                content_type='application/json')
+            messages.success(request, 'Revision de Herramienta creada con Éxito!')
+            return redirect('home')
+            #mensaje = {"mensaje": "Guardado exitoso"}
+            #return HttpResponse(json.dumps({"mensaje": "Guardado exitoso"}),status=200,
+                                #content_type='application/json')
 
         erros = form.errors.items()
         return HttpResponse(json.dumps(erros), status=400,
