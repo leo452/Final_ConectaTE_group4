@@ -28,8 +28,8 @@ function showRequest(formData, jqForm, options) {
     // jqForm is a jQuery object encapsulating the form element.  To access the
     // DOM element for the form do this:
     // var formElement = jqForm[0];
-
-    alert('About to submit: \n\n' + queryString);
+    window.location="/herramienta";
+    //alert('About to submit: \n\n' + queryString);
 
     // here we could return false to prevent the form from being submitted;
     // returning anything other than false will allow the form submit to continue

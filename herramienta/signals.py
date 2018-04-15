@@ -5,10 +5,29 @@ from django.dispatch import receiver
 #senales para guardar la herramienta y las ediciones de la misma y tenerla en estado de borrador
 @receiver(post_save, sender=models.Herramienta)
 def write_update(sender, instance, **kwarg):
-    values={'herramienta':instance}
-    for key ,value  in instance.changes().items():
-        if not key == 'owner_id' and key != 'id' and key!='estado':
-            values.update({key:value[0]})
+    if kwarg["created"]:
+        values = {
+            'herramienta': instance,
+            'nombre':instance.nombre,
+            'descripcion':instance.descripcion,
+            'licencia':instance.licencia,
+            'usos':instance.usos,
+            'enlaces':instance.enlaces,
+            'descarga_url':instance.descarga_url,
+            'sistema_operativo':instance.sistema_operativo,
+            'version':instance.version,
+            'integracion_lms':instance.integracion_lms,
+            'informacion':instance.informacion,
+            'documentacion':instance.documentacion,
+            'tipo':instance.tipo
+
+        }
+
+    else:
+        values={'herramienta':instance}
+        for key ,value  in instance.changes().items():
+            if not key == 'owner_id' and key != 'id' and key!='estado':
+                values.update({key:value[0]})
     models.HerramientaEdicion.objects.create(**values)
 
 @receiver(post_save, sender=models.HerramientaEdicion)

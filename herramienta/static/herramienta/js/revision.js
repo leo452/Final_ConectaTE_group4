@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     var options = {
         target:        '#output2',   // target element(s) to be updated with server response
         beforeSubmit:  showRequest,  // pre-submit callback
@@ -17,8 +18,15 @@ $(document).ready(function() {
 
     // bind to the form's submit event
     $('#formRevision').ajaxForm(options);
+    selectHerramienta();
+
 });
 
+function selectHerramienta(){
+    $('#id_herramienta').change(function() {
+        $('#id_nombre').val($("#id_herramienta option:selected").text());
+    });
+}
 // pre-submit callback
 function showRequest(formData, jqForm, options) {
     // formData is an array; here we use $.param to convert it to a string to display it

@@ -111,7 +111,6 @@
 
         {% block content %}{% endblock %}
 
-
         <ul id="messages" class="messages">
         {% if messages %}
             {% for message in messages %}
@@ -123,7 +122,8 @@
         </ul>
 
 
-
+    {% block script %}
+    {% endblock %}
     </body>
 
 </html>
