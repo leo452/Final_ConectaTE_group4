@@ -11,7 +11,6 @@
     <div class="row">
 
         {% for currentHerramienta in lista_herramientas %}
-            {% if currentHerramienta.estado == 2 or request.user|has_group:"Administrador" or request.user|has_borrador_access:currentHerramienta or request.user|has_revision_access:currentHerramienta %}
             <div class="col-sm-4 py-2">
               <div class="card" style="height: 235px;">
                   <div class="card-header text-center"><a href="{% url 'tool_detail' currentHerramienta.id %}"> {{ currentHerramienta.nombre }}</a></div>
@@ -22,7 +21,6 @@
                   </div>
               </div>
             </div>
-            {% endif %}
         {% endfor %}
 
     </div>

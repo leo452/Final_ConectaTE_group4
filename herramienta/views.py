@@ -220,26 +220,31 @@ def deleteHerramienta(request, id):
                         content_type='application/json')
 
 
-def editHerramientaField(request, id, estado):
+def editHerramientaField(request, id):
     try:
         herramienta = models.Herramienta.objects.get(id=id)
     except ObjectDoesNotExist:
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if filters.is_herramienta_owner(request.user, herramienta):
-        if estado == "0" or estado == "1":
-            herramienta.estado = estado
-            herramienta.save()
+    if herramienta.estado == 0:
+        herramienta.estado = 1
+        herramienta.save()
 
-            if estado == "0":
-                text = "Borrador"
-            else:
-                text = "En Revisión"
+    elif herramienta.estado == 1:
+        herramienta.estado = 0
+        herramienta.owner = request.user
+        herramienta.save()
 
-            messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+    if herramienta.estado == 0:
+        text = "Borrador"
+    else:
+        text = "En Revisión"
 
-    # Add tool to the on revision table.
+    messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+    # TODO: Add tool to the on revision table.
+
     return redirect('tool_detail', index=herramienta.id)
 
 
@@ -412,6 +417,16 @@ def addRevisionEstadoView(request):
 
 def home(request):
     lista_herramientas = Herramienta.objects.all()
+
+    if filters.has_group(request.user, "MiembroGTI"):
+        ownTools = lista_herramientas.filter(estado=0, owner=request.user)
+        lista_herramientas = lista_herramientas.exclude(estado=0)
+        lista_herramientas = lista_herramientas | ownTools
+    elif filters.has_group(request.user, "MiembroConectate"):
+        lista_herramientas = lista_herramientas.exclude(estado=0)
+    elif not filters.has_group(request.user, "Administrador"):
+        lista_herramientas = lista_herramientas.filter(estado=2)
+
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
