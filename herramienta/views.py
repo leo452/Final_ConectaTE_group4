@@ -57,6 +57,23 @@ def addCategoria(request):
                         content_type='application/json')
 
 
+#
+def getCategoria(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        if id:
+            categoria = models.Categoria.objects.get(id=id)
+        else:
+            categoria = models.Categoria.objects.all()
+
+        data = serializers.serialize('json', categoria)
+        return HttpResponse(data, status=200,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                        content_type='application/json')
+
+
 def in_admin_group(user):
     group = Group.objects.get(name="Administrador")
     return True if group in user.groups.all() else False
@@ -400,7 +417,13 @@ def addRevisionEstadoView(request):
 
 
 def home(request):
-    lista_herramientas = Herramienta.objects.all()
+    #validar filtro
+    categoria = request.GET.get('categoria',False)
+    if categoria:
+        cat =int(categoria)
+        lista_herramientas = Herramienta.objects.filter(tipo=cat)
+    else:
+        lista_herramientas = Herramienta.objects.all()
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
