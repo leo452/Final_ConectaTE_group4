@@ -448,9 +448,7 @@ def home(request):
     categoria = request.GET.get('categoria',False)
     if categoria:
         cat =int(categoria)
-        lista_herramientas = Herramienta.objects.filter(tipo=cat)
-    else:
-        lista_herramientas = Herramienta.objects.all()
+        lista_herramientas = lista_herramientas.objects.filter(tipo=cat)
 
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
