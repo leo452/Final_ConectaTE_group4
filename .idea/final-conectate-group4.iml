@@ -13,7 +13,11 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 2.7" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="Python 2.7 (final-conectate-group4)" jdkType="Python SDK" />
+>>>>>>> 166d178945a7e9c3f3c73268dfea7c184721ee90
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="R User Library" level="project" />
     <orderEntry type="library" name="R Skeletons" level="application" />
