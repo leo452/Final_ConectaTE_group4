@@ -101,7 +101,7 @@
                             <a class="nav-link" >{{ request.user.username }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+                            <a id="cerrar_sesion" class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
                         </li>
                         {% endif %}
                     </ul>

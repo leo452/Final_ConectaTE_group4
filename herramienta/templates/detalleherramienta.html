@@ -55,7 +55,7 @@
                 <div class="text-center">
                 {% if herramienta.estado == 0 and herramienta.owner.username == request.user.username %}
                     <a href="{% url 'herramienta-edit' herramienta.id %}" class="btn btn-secondary" role="button">Editar</a>
-                    <a href="{% url 'edit_state' herramienta.id%}" class="btn btn-secondary" role="button">Solicitar Revisión de Pares</a>
+                    <a id="solicitar_revision_pares" href="{% url 'edit_state' herramienta.id%}" class="btn btn-secondary" role="button">Solicitar Revisión de Pares</a>
                 {% elif herramienta.estado == 1 %}
                     <a id="comenzar_edicion" href="{% url 'edit_state' herramienta.id %}" class="btn btn-secondary" role="button">Comenzar Edición</a>
                     {% if not request.user|is_herramienta_owner:herramienta %}
