@@ -439,7 +439,7 @@ def home(request):
         ownTools = lista_herramientas.filter(estado=0, owner=request.user)
         lista_herramientas = lista_herramientas.exclude(estado=0)
         lista_herramientas = lista_herramientas | ownTools
-    elif filters.has_group(request.user, "MiembroConectate"):
+    elif filters.has_group(request.user, "ConectaTE"):
         lista_herramientas = lista_herramientas.exclude(estado=0)
     elif not filters.has_group(request.user, "Administrador"):
         lista_herramientas = lista_herramientas.filter(estado=2)

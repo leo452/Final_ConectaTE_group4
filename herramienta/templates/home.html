@@ -13,7 +13,7 @@
     <h1 for="categorias">Realizar búsqueda</h1>
     <form method="get">
         <div class="row">
-            {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"MiembroConectate" %}
+            {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"ConectaTE" %}
             <div class="form-group col-3" id="sel_categoria">
                     <label for="categorias">Categorias</label>
                     <select id="categorias" class="form-control" name="categoria">
