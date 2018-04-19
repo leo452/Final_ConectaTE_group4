@@ -60,9 +60,9 @@
                     <a href="{% url 'edit_state' herramienta.id %}" class="btn btn-secondary" role="button">Comenzar Edición</a>
                     {% if not request.user|is_herramienta_owner:herramienta %}
                         {% if not request.user|is_herramienta_posted_by_user:herramienta %}  <!-- Si no ha marcado esta herramienta como lista para publicar -->
-                            <a href="{% url 'add_herramienta_por_revision' herramienta.id %}" class="btn btn-secondary" role="button">Enviar Postulación a Publicación</a>
+                            <a id="postular_a_publicacion" href="{% url 'add_herramienta_por_revision' herramienta.id %}" class="btn btn-secondary" role="button">Postular a Publicación</a>
                         {% else %}
-                            <button type="button" class="btn btn-success" disabled>Postulación Enviada</button>
+                            <button id="postulacion_enviada" type="button" class="btn btn-success" disabled>Postulación Enviada</button>
                         {% endif %}
                     {% endif %}
                 {% endif %}

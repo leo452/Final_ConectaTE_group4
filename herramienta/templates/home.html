@@ -13,7 +13,7 @@
         {% for currentHerramienta in lista_herramientas %}
             <div class="col-sm-4 py-2">
               <div class="card" style="height: 235px;">
-                  <div class="card-header text-center"><a href="{% url 'tool_detail' currentHerramienta.id %}"> {{ currentHerramienta.nombre }}</a></div>
+                  <div id="herramienta_{{ currentHerramienta.id }}_nombre" class="card-header text-center"><a href="{% url 'tool_detail' currentHerramienta.id %}"> {{ currentHerramienta.nombre }}</a></div>
                   <div class="card-body" >
                     <h6>{{ currentHerramienta.tipo }}</h6>
                     <hr />
