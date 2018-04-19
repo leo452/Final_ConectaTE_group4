@@ -57,7 +57,7 @@
                     <a href="{% url 'herramienta-edit' herramienta.id %}" class="btn btn-secondary" role="button">Editar</a>
                     <a href="{% url 'edit_state' herramienta.id%}" class="btn btn-secondary" role="button">Solicitar Revisión de Pares</a>
                 {% elif herramienta.estado == 1 %}
-                    <a href="{% url 'edit_state' herramienta.id %}" class="btn btn-secondary" role="button">Comenzar Edición</a>
+                    <a id="comenzar_edicion" href="{% url 'edit_state' herramienta.id %}" class="btn btn-secondary" role="button">Comenzar Edición</a>
                     {% if not request.user|is_herramienta_owner:herramienta %}
                         {% if not request.user|is_herramienta_posted_by_user:herramienta %}  <!-- Si no ha marcado esta herramienta como lista para publicar -->
                             <a id="postular_a_publicacion" href="{% url 'add_herramienta_por_revision' herramienta.id %}" class="btn btn-secondary" role="button">Postular a Publicación</a>
