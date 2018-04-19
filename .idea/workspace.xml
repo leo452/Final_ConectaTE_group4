@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7db05f5-7876-42f0-b784-93ad43abe2ad" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/herramienta/templates/home.html" afterPath="$PROJECT_DIR$/herramienta/templates/home.html" />
-      <change beforePath="$PROJECT_DIR$/herramienta/views.py" afterPath="$PROJECT_DIR$/herramienta/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,7 +14,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/herramienta/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="148">
@@ -25,12 +24,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="home.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/herramienta/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-13">
-              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="311">
+              <caret line="23" column="71" lean-forward="false" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
+              <folding>
+                <element signature="e#1020#1043#0#HTML" expanded="true" />
+                <element signature="e#1123#1144#0#HTML" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,8 +50,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/herramienta/templates/home.html" />
         <option value="$PROJECT_DIR$/herramienta/views.py" />
+        <option value="$PROJECT_DIR$/herramienta/templates/home.html" />
       </list>
     </option>
   </component>
@@ -200,19 +202,22 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/herramienta/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/herramienta/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148">
           <caret line="441" column="51" lean-forward="false" selection-start-line="441" selection-start-column="51" selection-end-line="441" selection-end-column="51" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herramienta/templates/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="23" column="71" lean-forward="false" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
+          <folding>
+            <element signature="e#1020#1043#0#HTML" expanded="true" />
+            <element signature="e#1123#1144#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
