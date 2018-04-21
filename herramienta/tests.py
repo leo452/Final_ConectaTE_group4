@@ -8,6 +8,8 @@ import os
 
 from django.test import TestCase
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+
 from selenium.webdriver.common import alert
 
 
@@ -27,10 +29,18 @@ class Test(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response['content-type'], 'application/json')
 
+#test para el metodo de filtrar herramientas por sistema opeativo en la home. PC19
+    def test_filtrar_herramienta_metodo(self):
+        lista_herramientas = models.Herramienta.objects.filter(sistema_operativo__icontains='windows')
+        if lista_herramientas:
+            url = reverse('home')
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response['content-type'], 'application/json')
 
 usuario_prueba = "admin@uniandes.edu.co"
 clave_prueba = "admin123456"
-
+sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
@@ -71,3 +81,19 @@ class AtoTest(TestCase):
         self.browser.implicitly_wait(3)
         success = self.browser.find_element_by_id("id_success")
         self.assertIsNotNone(success)
+
+    #Prueba unitaria automatica para PC19
+    def test_filtrar_sistema_operativo(self):
+        #self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        input_sistema_operativo = self.browser.find_element_by_id('sistema_operativo')
+        input_sistema_operativo.send_keys(sistema_operativo_prueba)
+        btn_filtrar = self.browser.find_element_by_id("btnFiltrar")
+        btn_filtrar.click()
+        titulo= self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-header.text-center > a')
+        self.assertIn('TUTORIAL PYTHON',titulo.text)
+        categoria = self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > h6')
+        self.assertIn("documento de word",categoria.text)
+        descripcion=self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > p')
+        self.assertIn("lorem ipsum",descripcion.text)
+        self.browser.implicitly_wait(60)
