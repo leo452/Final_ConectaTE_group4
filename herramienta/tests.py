@@ -79,17 +79,20 @@ class AtoTest(TestCase):
         input.send_keys('asd')
         submit=self.browser.find_element_by_id('btn_filtrar')
         submit.click()
-        self.browser.implicitly_wait(1000)
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertIsNotNone(herramientas,"no hay herramientas cuando deberian haber")
         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
-        self.assertIsNotNone(h2)
+        self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
 
         input = self.browser.find_element_by_id('tipo_licencia')
         input.clear()
         input.send_keys('pruebaerror')
         submit = self.browser.find_element_by_id('btn_filtrar')
         submit.click()
-        h2 = self.browser.find_element(By.XPATH, '//div[not(.//a[text()="Herramienta Publica"])]')
-        self.assertIsNotNone(h2)
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertIsNotNone(herramientas,"existen herramientas cuando no deberian haber")
 
 
 

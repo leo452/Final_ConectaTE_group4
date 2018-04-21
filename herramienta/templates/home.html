@@ -50,7 +50,7 @@
     </div>
     <div class="container">
 
-        <div class="row">
+        <div id="herramientas" class="row">
 
             {% for currentHerramienta in lista_herramientas %}
                 {% if currentHerramienta.estado == 2 or request.user|has_group:"Administrador" or request.user|has_borrador_access:currentHerramienta or request.user|has_revision_access:currentHerramienta %}
