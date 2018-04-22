@@ -37,7 +37,7 @@ class Test(TestCase):
         models.Categoria.objects.create(nombre='categoria test', descripcion='cat1')
         models.Categoria.objects.create(nombre='categoria test1', descripcion='cat2')
         url = reverse('categoria')
-        response = self.client.get('/herramientas/')
+        response = self.client.get(url)
         arr = json.loads(response.content)
         self.assertEqual(arr[0]['fields']['nombre'], 'categoria test')
 
@@ -75,151 +75,169 @@ clave_prueba = "admin123456"
 clave_prueba_local="administrador"
 sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 
-# class AtoTest(TestCase):
-#     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
-#     def setUp(self):
-#         #Windows
-#         #self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
-#         #ubuntu
-#         self.browser= webdriver.Chrome()
-#         self.browser.set_window_size(1024, 786)
-#         self.browser.implicitly_wait(2)
-#
-#
-#     def tearDown(self):
-#         self.browser.quit()
-#
-#
-#     def test_EliminarHerramienta(self):
-#         self.browser.get('http://localhost:8000/herramientas')
-#         #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-#         link = self.browser.find_element_by_id('login')
-#         link.click()
-#         self.browser.implicitly_wait(10)
-#         input_email = self.browser.find_element_by_id('email')
-#         input_email.send_keys(usuario_prueba)
-#         input_pass = self.browser.find_element_by_id('password')
-#         input_pass.send_keys(clave_prueba)
-#         btn_login = self.browser.find_element_by_id('btn_login')
-#         btn_login.click()
-#         self.browser.implicitly_wait(10)
-#         l2 = self.browser.find_element_by_id('menuHerramientas')
-#         l2.click()
-#         self.browser.implicitly_wait(10)
-#         l3 = self.browser.find_element_by_id('itemListaHerrramienta')
-#         l3.click()
-#         self.browser.implicitly_wait(10)
-#         l4 = self.browser.find_element_by_id('del_2')
-#         l4.click()
-#         self.browser.implicitly_wait(10)
-#         alert = self.driver.browser.switch_to_alert()
-#         alert.accept()
-#         self.browser.implicitly_wait(10)
-#         success = self.browser.find_element_by_id("id_success")
-#         self.assertIsNotNone(success)
-#
-#     # prueba unitaria  automatica para PC20
-#     def test_FiltroTipolicencia(self):
-#         self.browser.get('http://localhost:8000/herramientas')
-#         input=self.browser.find_element_by_id('tipo_licencia')
-#         input.send_keys('asd')
-#         submit=self.browser.find_element_by_id('btnFiltrar')
-#         submit.click()
-#         self.browser.implicitly_wait(2)
-#         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-#         self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
-#         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
-#         self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
-#
-#         input = self.browser.find_element_by_id('tipo_licencia')
-#         input.clear()
-#         input.send_keys('pruebaerror')
-#         submit = self.browser.find_element_by_id('btnFiltrar')
-#         submit.click()
-#         self.browser.implicitly_wait(2)
-#         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-#         self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
-#
-#
-#
-#     def test_FiltroCategoria(self):
-#         #self.browser.get('http://localhost:8000/herramientas')
-#         self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-#         link = self.browser.find_element_by_id('login')
-#         link.click()
-#         self.browser.implicitly_wait(10)
-#         input_email = self.browser.find_element_by_id('email')
-#         input_email.send_keys(usuario_prueba)
-#         input_pass = self.browser.find_element_by_id('password')
-#         input_pass.send_keys(clave_prueba)
-#         btn_login = self.browser.find_element_by_id('btn_login')
-#         btn_login.click()
-#         self.browser.implicitly_wait(10)
-#         select = Select(self.browser.find_element_by_id('categorias'))
-#         #self.browser.implicitly_wait(5)
-#         select.select_by_index(1)
-#         btn_Filtrar = self.browser.find_element_by_id('btnFiltrar')
-#         btn_Filtrar.click()
-#         self.browser.implicitly_wait(10)
-#         ele = self.browser.find_elements_by_xpath("//div[@class='card-header text-center']")
-#         self.assertEqual(ele[1].text,'Herramienta En Revision')
-#
-#     #prueba unitaria  automatica para PC14
-#     def test_FitroPorUso(self):
-#         self.browser.get('http://localhost:8000/herramientas')
-#         link=self.browser.find_element_by_id('login')
-#         link.click()
-#         self.browser.implicitly_wait(10)
-#         input_email = self.browser.find_element_by_id('email')
-#         input_email.send_keys(usuario_prueba_local)
-#         input_pass = self.browser.find_element_by_id('password')
-#         input_pass.send_keys(clave_prueba_local)
-#         btn_login = self.browser.find_element_by_id('btn_login')
-#         btn_login.click()
-#         self.browser.implicitly_wait(2)
-#         input = self.browser.find_element_by_id('uso')
-#         input.send_keys('Educativo')
-#         submit = self.browser.find_element_by_id('btnFiltrar')
-#         submit.click()
-#         self.browser.implicitly_wait(2)
-#         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-#         self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
-#         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta En Revision"]')
-#         self.assertIsNotNone(h2, "no existe la herramienta que deberia estar")
-#
-#         input = self.browser.find_element_by_id('uso')
-#         input.clear()
-#         input.send_keys('pruebaerror')
-#         submit = self.browser.find_element_by_id('btnFiltrar')
-#         submit.click()
-#         self.browser.implicitly_wait(2)
-#         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-#         self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
-#
-#     #Prueba unitaria automatica para PC19
-#     def test_filtrar_sistema_operativo(self):
-#         #self.browser.get('http://localhost:8000/herramientas')
-#         self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-#         input_sistema_operativo = self.browser.find_element_by_id('sistema_operativo')
-#         input_sistema_operativo.send_keys(sistema_operativo_prueba)
-#         btn_filtrar = self.browser.find_element_by_id("btnFiltrar")
-#         btn_filtrar.click()
-#         titulo= self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-header.text-center > a')
-#         self.assertIn('TUTORIAL PYTHON',titulo.text)
-#         categoria = self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > h6')
-#         self.assertIn("documento de word",categoria.text)
-#         descripcion=self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > p')
-#         self.assertIn("lorem ipsum",descripcion.text)
-#         self.browser.implicitly_wait(60)
-#
-#     #prueba unitaria automatica para PC15
-#     def test_detalle_herramienta_publica(self):
-#         self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
-#         span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
-#         span.click()
-#         self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/detail/26/')
-#         h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
-#
-#         self.assertIn('TUTORIAL PYTHON', h2.text)
-#
-#         self.browser.implicitly_wait(3)
+class AtoTest(TestCase):
+    # test automatico para validar el funcionamiento del servicio para eliminar herramientas
+    def setUp(self):
+        self.browser = webdriver.Chrome()
+        self.browser.set_window_size(1024, 786)
+        self.browser.implicitly_wait(2)
+
+
+    def tearDown(self):
+        self.browser.quit()
+
+
+    def test_EliminarHerramienta(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        link = self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(10)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usuario_prueba)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(clave_prueba)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        self.browser.implicitly_wait(10)
+        l2 = self.browser.find_element_by_id('menuHerramientas')
+        l2.click()
+        self.browser.implicitly_wait(10)
+        l3 = self.browser.find_element_by_id('itemListaHerrramienta')
+        l3.click()
+        self.browser.implicitly_wait(10)
+        l4 = self.browser.find_element_by_id('del_2')
+        l4.click()
+        self.browser.implicitly_wait(10)
+        alert = self.driver.browser.switch_to_alert()
+        alert.accept()
+        self.browser.implicitly_wait(10)
+        success = self.browser.find_element_by_id("id_success")
+        self.assertIsNotNone(success)
+
+
+    # prueba unitaria  automatica para PC20
+    def test_FiltroTipolicencia(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        input=self.browser.find_element_by_id('tipo_licencia')
+        input.send_keys('asd')
+        submit=self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
+        self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
+        input = self.browser.find_element_by_id('tipo_licencia')
+        input.clear()
+        input.send_keys('pruebaerror')
+        submit = self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
+
+    #prueba unitaria  automatica para PC14
+    def test_FitroPorUso(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        link=self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(10)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usuario_prueba_local)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(clave_prueba_local)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        self.browser.implicitly_wait(2)
+        input = self.browser.find_element_by_id('uso')
+        input.send_keys('Educativo')
+        submit = self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta En Revision"]')
+        self.assertIsNotNone(h2, "no existe la herramienta que deberia estar")
+
+        input = self.browser.find_element_by_id('uso')
+        input.clear()
+        input.send_keys('pruebaerror')
+        submit = self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
+
+
+    def test_FiltroCategoria(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        link = self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(10)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usuario_prueba)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(clave_prueba)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        self.browser.implicitly_wait(10)
+        select = Select(self.browser.find_element_by_id('categorias'))
+        #self.browser.implicitly_wait(5)
+        select.select_by_index(1)
+        btn_Filtrar = self.browser.find_element_by_id('btnFiltrar')
+        btn_Filtrar.click()
+        self.browser.implicitly_wait(10)
+        ele = self.browser.find_elements_by_xpath("//div[@class='card-header text-center']")
+        self.assertEqual(ele[1].text,'Herramienta En Revision')
+
+    #Prueba unitaria automatica para PC19
+    def test_filtrar_sistema_operativo(self):
+        #self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        input_sistema_operativo = self.browser.find_element_by_id('sistema_operativo')
+        input_sistema_operativo.send_keys(sistema_operativo_prueba)
+        btn_filtrar = self.browser.find_element_by_id("btnFiltrar")
+        btn_filtrar.click()
+        titulo= self.browser.find_element(By.XPATH,'//*[@id="herramienta_26_nombre"]/a')
+        self.assertIn('TUTORIAL PYTHON',titulo.text)
+        categoria = self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div[2]/div/div[2]/h6')
+        self.assertIn("documento de word",categoria.text)
+        descripcion=self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div[2]/div/div[2]/p')
+
+        self.assertIn("Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como p...",descripcion.text)
+        self.browser.implicitly_wait(60)
+
+    #prueba unitaria automatica para PC15
+    def test_detalle_herramienta_publica(self):
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
+        span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
+        span.click()
+        h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
+        self.assertIn('TUTORIAL PYTHON', h2.text)
+        h3=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[1]')
+        self.assertIn('Estado: Público',h3.text)
+        h4=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[2]')
+        self.assertIn('Versión: 1',h4.text)
+        h5=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[3]')
+        self.assertIn('Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como plataforma de desarrollo debido a que incluyen funcionalidades muy beneficiosas para hacer desarrollo en menos tiempo',h5.text)
+        h6=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[4]')
+        self.assertIn('GPL',h6.text)
+        h7=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[5]')
+        self.assertIn('Curso en Moodle',h7.text)
+        h8=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[6]')
+        self.assertIn('http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',h8.text)
+        h9=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[7]')
+        self.assertIn(
+            'http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',
+            h9.text)
+        h10=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[1]/div')
+        self.assertIn('Academico',h10.text)
+        h11=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[2]/div')
+        self.assertIn('windows',h11.text)
+        h12=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[3]/div')
+        self.assertIn('pertenece al curso MISO 4101',h12.text)
+        h13=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[4]/div')
+        self.assertIn('http://moodleinstitucional.uniandes.edu.co/course/view.php?id=1242&section=24',h13.text)
+        self.browser.implicitly_wait(10)
