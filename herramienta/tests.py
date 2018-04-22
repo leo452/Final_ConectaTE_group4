@@ -57,7 +57,7 @@ sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -155,3 +155,15 @@ class AtoTest(TestCase):
         descripcion=self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > p')
         self.assertIn("lorem ipsum",descripcion.text)
         self.browser.implicitly_wait(60)
+
+    #prueba unitaria automatica para PC15
+    def test_detalle_herramienta_publica(self):
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
+        span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
+        span.click()
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/detail/26/')
+        h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
+
+        self.assertIn('TUTORIAL PYTHON', h2.text)
+
+        self.browser.implicitly_wait(3)
