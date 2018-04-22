@@ -453,6 +453,10 @@ def home(request):
     tipo_licencia = request.GET.get('tipo_licencia', False)
     if tipo_licencia:
         lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
+    uso= request.GET.get('uso',False)
+    print uso
+    if uso:
+        lista_herramientas=lista_herramientas.filter(usos__icontains=uso)
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 

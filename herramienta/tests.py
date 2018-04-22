@@ -51,14 +51,18 @@ class Test(TestCase):
             self.assertEqual(response['content-type'], 'application/json')
 
 usuario_prueba = "tj.marrugo10@uniandes.edu.co"
-usuario_prueba_local= "admin@uniandes.edu.co"
+usuario_prueba_local= "pruebabug5@uniandes.edu.co"
 clave_prueba = "admin123456"
+clave_prueba_local="administrador"
 sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
+        #Windows
+        #self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
+        #ubuntu
+        self.browser= webdriver.Chrome()
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -104,7 +108,6 @@ class AtoTest(TestCase):
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-        print herramientas
         self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
         self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
@@ -150,7 +153,7 @@ class AtoTest(TestCase):
         input_email = self.browser.find_element_by_id('email')
         input_email.send_keys(usuario_prueba_local)
         input_pass = self.browser.find_element_by_id('password')
-        input_pass.send_keys(clave_prueba)
+        input_pass.send_keys(clave_prueba_local)
         btn_login = self.browser.find_element_by_id('btn_login')
         btn_login.click()
         self.browser.implicitly_wait(2)
@@ -160,7 +163,7 @@ class AtoTest(TestCase):
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-        self.assertIsNotNone(herramientas, "no hay herramientas cuando deberian haber")
+        self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
         self.assertIsNotNone(h2, "no existe la herramienta que deberia estar")
 
@@ -171,7 +174,7 @@ class AtoTest(TestCase):
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-        self.assertIsNone(herramientas, "existen herramientas cuando no deberian haber")
+        self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
 
     #Prueba unitaria automatica para PC19
     def test_filtrar_sistema_operativo(self):
