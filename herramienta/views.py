@@ -400,7 +400,11 @@ def addRevisionEstadoView(request):
 
 
 def home(request):
-    lista_herramientas = Herramienta.objects.all()
+    sistema_operativo = request.GET.get('sistema_operativo', False)
+    if(sistema_operativo):
+        lista_herramientas = Herramienta.objects.filter(sistema_operativo__icontains=sistema_operativo)
+    else:
+        lista_herramientas = Herramienta.objects.all()
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
