@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c7db05f5-7876-42f0-b784-93ad43abe2ad" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/herramienta/CicloPublicacionTests.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/final-conectate-group4.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herramienta/templates/detalleherramienta.html" afterPath="$PROJECT_DIR$/herramienta/templates/detalleherramienta.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herramienta/templates/home.html" afterPath="$PROJECT_DIR$/herramienta/templates/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herramienta/tests.py" afterPath="$PROJECT_DIR$/herramienta/tests.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herramienta/urls.py" afterPath="$PROJECT_DIR$/herramienta/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herramienta/views.py" afterPath="$PROJECT_DIR$/herramienta/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/usuario/templates/base.html" afterPath="$PROJECT_DIR$/usuario/templates/base.html" />
-    </list>
+    <list default="true" id="c7db05f5-7876-42f0-b784-93ad43abe2ad" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
