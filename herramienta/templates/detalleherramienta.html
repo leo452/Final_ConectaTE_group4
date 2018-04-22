@@ -51,6 +51,7 @@
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
 
+        {% if not request.user|has_group:"Administrador" %}
             <div class="text-center">
             {% if herramienta.estado == 0 and herramienta.owner.username == request.user.username %}
                 <a href="{% url 'herramienta-edit' herramienta.id %}" class="btn btn-secondary" role="button">Editar</a>
@@ -66,6 +67,7 @@
                 {% endif %}
             {% endif %}
             </div>
+        {% endif %}
 
           <!-- Side Widget -->
           <div class="card my-4">

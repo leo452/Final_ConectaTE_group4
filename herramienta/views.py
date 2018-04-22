@@ -197,7 +197,7 @@ def editHerramienta(request, id):
         return HttpResponse(json.dumps({"error": mensaje}), status=404,
                             content_type='application/json')
 
-    if filters.is_herramienta_owner(request.user, herramienta):
+    if filters.is_herramienta_owner(request.user, herramienta) or in_admin_group(request.user):
         if request.method == "POST":
             form = HerramientaForm(request.POST, instance=herramienta)
             if form.is_valid():
@@ -244,25 +244,28 @@ def editHerramientaField(request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if herramienta.estado == 0:
-        herramienta.estado = 1
-        herramienta.save()
+    if not filters.has_group(request.user, "Administrador"):
+        if herramienta.estado == 0 and filters.is_herramienta_owner(request.user, herramienta):
+            herramienta.estado = 1
+            herramienta.save()
 
-    elif herramienta.estado == 1:
-        herramienta.estado = 0
-        herramienta.owner = request.user
-        herramienta.save()
+        elif herramienta.estado == 1:
+            herramienta.estado = 0
+            herramienta.owner = request.user
+            herramienta.save()
 
-    if herramienta.estado == 0:
-        text = "Borrador"
+        if herramienta.estado == 0:
+            text = "Borrador"
+        else:
+            text = "En Revisión"
+
+        messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+        # TODO: Add tool to the on revision table.
+
+        return redirect('tool_detail', index=herramienta.id)
     else:
-        text = "En Revisión"
-
-    messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-    # TODO: Add tool to the on revision table.
-
-    return redirect('tool_detail', index=herramienta.id)
+        return redirect('home')
 
 
 def addHerramientaParaPublicacion (request, id):
@@ -272,7 +275,7 @@ def addHerramientaParaPublicacion (request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if not filters.is_herramienta_owner(request.user, herramienta):
+    if not filters.is_herramienta_owner(request.user, herramienta) and not filters.has_group(request.user, "Administrador"):
         list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
 
         for revision in list_revisiones:
@@ -384,7 +387,7 @@ def editHerramientaView(request, id):
         mensaje = "<h1>Esta herramienta no existe</h1>"
         return HttpResponseNotFound(mensaje)
 
-    if filters.is_herramienta_owner(request.user, edicion):
+    if filters.is_herramienta_owner(request.user, edicion) or in_admin_group(request.user):
         url = "/herramienta/api/herramientas/form/%d/" % (int(id))
         return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(instance=edicion), "url":url})
     else:
