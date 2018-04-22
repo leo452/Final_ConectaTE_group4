@@ -114,3 +114,30 @@ class Test(TestCase):
         btn_tool = self.browser.find_element_by_id('herramienta_7_nombre')  # Herramienta en estado de revision
         btn_tool.click()
 
+    def test_publicar_herramienta (self):
+        self.browser.get('http://localhost:8080/herramientas')
+        # self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+
+        self.browser.implicitly_wait(10000)
+
+        link = self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(3000)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usr_admin)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(pwd_admin)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+
+        btn_desplegable = self.browser.find_element_by_id('menuHerramientas')
+        btn_desplegable.click()
+
+        btn_lista_por_publicacion = self.browser.find_element_by_id('listaPorPublicacion')
+        btn_lista_por_publicacion.click()
+
+        btn_aceptar = self.browser.find_element_by_id('aceptarHerramienta-1')
+        btn_aceptar.click()
+
+        btn_rechazar = self.browser.find_element_by_id('rechazarHerramienta-1')
+        btn_rechazar.click()
