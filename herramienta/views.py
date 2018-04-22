@@ -59,6 +59,23 @@ def addCategoria(request):
                         content_type='application/json')
 
 
+#
+def getCategoria(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        if id:
+            categoria = models.Categoria.objects.get(id=id)
+        else:
+            categoria = models.Categoria.objects.all()
+
+        data = serializers.serialize('json', categoria)
+        return HttpResponse(data, status=200,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                        content_type='application/json')
+
+
 def in_admin_group(user):
     group = Group.objects.get(name="Administrador")
     return True if group in user.groups.all() else False
@@ -220,26 +237,31 @@ def deleteHerramienta(request, id):
                         content_type='application/json')
 
 
-def editHerramientaField(request, id, estado):
+def editHerramientaField(request, id):
     try:
         herramienta = models.Herramienta.objects.get(id=id)
     except ObjectDoesNotExist:
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if filters.is_herramienta_owner(request.user, herramienta):
-        if estado == "0" or estado == "1":
-            herramienta.estado = estado
-            herramienta.save()
+    if herramienta.estado == 0:
+        herramienta.estado = 1
+        herramienta.save()
 
-            if estado == "0":
-                text = "Borrador"
-            else:
-                text = "En Revisión"
+    elif herramienta.estado == 1:
+        herramienta.estado = 0
+        herramienta.owner = request.user
+        herramienta.save()
 
-            messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+    if herramienta.estado == 0:
+        text = "Borrador"
+    else:
+        text = "En Revisión"
 
-    # Add tool to the on revision table.
+    messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+    # TODO: Add tool to the on revision table.
+
     return redirect('tool_detail', index=herramienta.id)
 
 
@@ -411,16 +433,29 @@ def addRevisionEstadoView(request):
 
 
 def home(request):
+
+    lista_herramientas = Herramienta.objects.all()
+    if filters.has_group(request.user, "MiembroGTI"):
+        ownTools = lista_herramientas.filter(estado=0, owner=request.user)
+        lista_herramientas = lista_herramientas.exclude(estado=0)
+        lista_herramientas = lista_herramientas | ownTools
+    elif filters.has_group(request.user, "ConectaTE"):
+        lista_herramientas = lista_herramientas.exclude(estado=0)
+    elif not filters.has_group(request.user, "Administrador"):
+        lista_herramientas = lista_herramientas.filter(estado=2)
+
+    #validar filtro
+    categoria = request.GET.get('categoria',False)
+    if categoria:
+        cat =int(categoria)
+        lista_herramientas = lista_herramientas.objects.filter(tipo=cat)
     sistema_operativo = request.GET.get('sistema_operativo', False)
+    if sistema_operativo:
+        lista_herramientas = lista_herramientas.filter(sistema_operativo__icontains=sistema_operativo)
     tipo_licencia = request.GET.get('tipo_licencia', False)
-    if(sistema_operativo and tipo_licencia):
-        lista_herramientas = Herramienta.objects.filter(sistema_operativo__icontains=sistema_operativo).filter(licencia__icontains=tipo_licencia)
-    elif sistema_operativo:
-        lista_herramientas = Herramienta.objects.filter(sistema_operativo__icontains=sistema_operativo)
-    elif tipo_licencia:
-        lista_herramientas = Herramienta.objects.filter(licencia__icontains=tipo_licencia)
-    else:
-        lista_herramientas = Herramienta.objects.all()
+    if tipo_licencia:
+        lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
+
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
