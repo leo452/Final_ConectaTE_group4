@@ -448,7 +448,8 @@ def home(request):
     categoria = request.GET.get('categoria',False)
     if categoria:
         cat =int(categoria)
-        lista_herramientas = lista_herramientas.objects.filter(tipo=cat)
+        lista_herramientas = lista_herramientas.filter(tipo=cat,estado=1)
+
     sistema_operativo = request.GET.get('sistema_operativo', False)
     if sistema_operativo:
         lista_herramientas = lista_herramientas.filter(sistema_operativo__icontains=sistema_operativo)
