@@ -35,4 +35,6 @@ urlpatterns = [
     url(r'^herramientas/editState/(?P<id>\d+)/$', views.editHerramientaField, name='edit_state'),
     url(r'^herramientas/addHerramientaPorRevision/(?P<id>\d+)/$', views.addHerramientaParaPublicacion, name='add_herramienta_por_revision'),
     url(r'^herramientas/listaPublicaciones/$', views.lista_herramientas_por_publicar, name='lista_publicaciones'),
+    url(r'^herramientas/aceptarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_aceptar, name='aceptar_postulacion'),
+    url(r'^herramientas/rechazarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_rechazar, name='rechazar_postulacion'),
 ]

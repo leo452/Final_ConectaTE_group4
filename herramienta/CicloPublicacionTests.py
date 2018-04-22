@@ -15,7 +15,7 @@ pwd_admin = "admin123456"
 class Test(TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome("C:\\Users\\Cristian\\Documents\\Python Projects\\chromedriver.exe")
         self.browser.set_window_size(1024, 768)
         self.browser.implicitly_wait(5000)
 

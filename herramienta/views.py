@@ -482,6 +482,42 @@ def lista_herramientas_por_publicar (request):
     else:
         return redirect('home')
 
+def lista_postulaciones_aceptar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramienta.estado = 2
+        herramienta.save()
+
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
+
+def lista_postulaciones_rechazar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):

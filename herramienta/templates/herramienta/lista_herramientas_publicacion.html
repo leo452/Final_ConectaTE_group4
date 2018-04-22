@@ -19,11 +19,12 @@
             <td>{{ postulacion.owner }}</td>
             <td>{{ postulacion.herramienta.nombre }}</td>
             <td>{{ postulacion.herramienta.descripcion }}</td>
-            <td class="text-center" ><a id="aceptarHerramienta-{{ postulacion.herramienta.id }}" href="" class="btn btn-secondary" role="button">Aceptar</a>
-                <a id="rechazarHerramienta-{{ postulacion.herramienta.id }}" href="" class="btn btn-secondary" role="button">Rechazar</a></td>
+            <td class="text-center" ><a id="aceptarHerramienta-{{ postulacion.herramienta.id }}" href="{% url 'aceptar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Aceptar</a>
+                <a id="rechazarHerramienta-{{ postulacion.herramienta.id }}" href="{% url 'rechazar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Rechazar</a></td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
+    {% if not lista_postulaciones %} <h6 class="text-center">No hay herramientas postuladas para publicación</h6>{% endif %}
     </div>
 {% endblock %}
