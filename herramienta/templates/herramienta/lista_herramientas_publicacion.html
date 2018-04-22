@@ -19,8 +19,8 @@
             <td>{{ postulacion.owner }}</td>
             <td>{{ postulacion.herramienta.nombre }}</td>
             <td>{{ postulacion.herramienta.descripcion }}</td>
-            <td class="text-center" ><a id="aceptarHerramienta-{{ postulacion.herramienta.id }}" href="{% url 'aceptar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Aceptar</a>
-                <a id="rechazarHerramienta-{{ postulacion.herramienta.id }}" href="{% url 'rechazar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Rechazar</a></td>
+            <td class="text-center" ><a id="aceptarHerramienta-{{ postulacion.id }}" href="{% url 'aceptar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Aceptar</a>
+                <a id="rechazarHerramienta-{{ postulacion.id }}" href="{% url 'rechazar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Rechazar</a></td>
           </tr>
         {% endfor %}
         </tbody>
