@@ -433,7 +433,6 @@ def addRevisionEstadoView(request):
 
 
 def home(request):
-
     lista_herramientas = Herramienta.objects.all()
     if filters.has_group(request.user, "MiembroGTI"):
         ownTools = lista_herramientas.filter(estado=0, owner=request.user)
@@ -443,19 +442,21 @@ def home(request):
         lista_herramientas = lista_herramientas.exclude(estado=0)
     elif not filters.has_group(request.user, "Administrador"):
         lista_herramientas = lista_herramientas.filter(estado=2)
-
     #validar filtro
     categoria = request.GET.get('categoria',False)
     if categoria:
         cat =int(categoria)
-        lista_herramientas = lista_herramientas.objects.filter(tipo=cat)
+        lista_herramientas = lista_herramientas.filter(tipo=cat,estado=1)
     sistema_operativo = request.GET.get('sistema_operativo', False)
     if sistema_operativo:
         lista_herramientas = lista_herramientas.filter(sistema_operativo__icontains=sistema_operativo)
     tipo_licencia = request.GET.get('tipo_licencia', False)
     if tipo_licencia:
         lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
-
+    uso= request.GET.get('uso',False)
+    print uso
+    if uso:
+        lista_herramientas=lista_herramientas.filter(usos__icontains=uso, estado=1)
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
