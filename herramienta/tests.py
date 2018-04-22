@@ -9,6 +9,7 @@ import json
 
 from django.test import TestCase
 from selenium import webdriver
+
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common import alert
 from selenium.webdriver.common.by import By
@@ -30,6 +31,7 @@ class Test(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response['content-type'], 'application/json')
 
+
 #test para validar el funcionamiento del servicio que permite obtener todas las categorias
     def test_getCategorias(self):
         models.Categoria.objects.create(nombre='categoria test', descripcion='cat1')
@@ -39,18 +41,24 @@ class Test(TestCase):
         arr = json.loads(response.content)
         self.assertEqual(arr[0]['fields']['nombre'], 'categoria test')
 
-
-
+#test para el metodo de filtrar herramientas por sistema opeativo en la home. PC19
+    def test_filtrar_herramienta_metodo(self):
+        lista_herramientas = models.Herramienta.objects.filter(sistema_operativo__icontains='windows')
+        if lista_herramientas:
+            url = reverse('home')
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response['content-type'], 'application/json')
 
 usuario_prueba = "tj.marrugo10@uniandes.edu.co"
 usuario_prueba_local= "admin@uniandes.edu.co"
 clave_prueba = "admin123456"
-
+sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -86,6 +94,7 @@ class AtoTest(TestCase):
         self.browser.implicitly_wait(10)
         success = self.browser.find_element_by_id("id_success")
         self.assertIsNotNone(success)
+
 
     def test_FiltroTipolicencia(self):
         self.browser.get('http://localhost:8000/herramientas')
@@ -164,6 +173,30 @@ class AtoTest(TestCase):
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
         self.assertIsNone(herramientas, "existen herramientas cuando no deberian haber")
 
+    #Prueba unitaria automatica para PC19
+    def test_filtrar_sistema_operativo(self):
+        #self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        input_sistema_operativo = self.browser.find_element_by_id('sistema_operativo')
+        input_sistema_operativo.send_keys(sistema_operativo_prueba)
+        btn_filtrar = self.browser.find_element_by_id("btnFiltrar")
+        btn_filtrar.click()
+        titulo= self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-header.text-center > a')
+        self.assertIn('TUTORIAL PYTHON',titulo.text)
+        categoria = self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > h6')
+        self.assertIn("documento de word",categoria.text)
+        descripcion=self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > p')
+        self.assertIn("lorem ipsum",descripcion.text)
+        self.browser.implicitly_wait(60)
 
+    #prueba unitaria automatica para PC15
+    def test_detalle_herramienta_publica(self):
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
+        span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
+        span.click()
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/detail/26/')
+        h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
 
+        self.assertIn('TUTORIAL PYTHON', h2.text)
 
+        self.browser.implicitly_wait(3)
