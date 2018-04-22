@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^importer/$', views.Importer.as_view(), name='importer'),
     url(r'^importer/save/$', views.SaveImporter.as_view(), name='importer_save'),
-    url(r'^herramientas/editState/(?P<id>\d+)/(?P<estado>\d+)/$', views.editHerramientaField, name='edit_state'),
+    url(r'^herramientas/editState/(?P<id>\d+)/$', views.editHerramientaField, name='edit_state'),
     url(r'^herramientas/addHerramientaPorRevision/(?P<id>\d+)/$', views.addHerramientaParaPublicacion, name='add_herramienta_por_revision'),
 ]
