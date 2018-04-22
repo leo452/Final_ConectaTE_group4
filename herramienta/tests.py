@@ -148,12 +148,13 @@ class AtoTest(TestCase):
         input_sistema_operativo.send_keys(sistema_operativo_prueba)
         btn_filtrar = self.browser.find_element_by_id("btnFiltrar")
         btn_filtrar.click()
-        titulo= self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-header.text-center > a')
+        titulo= self.browser.find_element(By.XPATH,'//*[@id="herramienta_26_nombre"]/a')
         self.assertIn('TUTORIAL PYTHON',titulo.text)
-        categoria = self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > h6')
+        categoria = self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div[2]/div/div[2]/h6')
         self.assertIn("documento de word",categoria.text)
-        descripcion=self.browser.find_element_by_css_selector('body > div:nth-child(9) > div.row > div:nth-child(1) > div > div.card-body > p')
-        self.assertIn("lorem ipsum",descripcion.text)
+        descripcion=self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div[2]/div/div[2]/p')
+
+        self.assertIn("Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como p...",descripcion.text)
         self.browser.implicitly_wait(60)
 
     #prueba unitaria automatica para PC15
