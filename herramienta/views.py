@@ -197,21 +197,25 @@ def editHerramienta(request, id):
         return HttpResponse(json.dumps({"error": mensaje}), status=404,
                             content_type='application/json')
 
-    if request.method == "POST":
-        form = HerramientaForm(request.POST, instance=herramienta)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Herramienta editada con Éxito!')
-            #return redirect('home')
-            mensaje = {"mensaje": "edicion de herramienta exitoso"}
-            return HttpResponse(json.dumps(mensaje), status=200,
+    if filters.is_herramienta_owner(request.user, herramienta):
+        if request.method == "POST":
+            form = HerramientaForm(request.POST, instance=herramienta)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Herramienta editada con Éxito!')
+                #return redirect('home')
+                mensaje = {"mensaje": "edicion de herramienta exitoso"}
+                return HttpResponse(json.dumps(mensaje), status=200,
+                                    content_type='application/json')
+            erros = form.errors.items()
+            return HttpResponse(json.dumps(erros), status=400,
                                 content_type='application/json')
-        erros = form.errors.items()
-        return HttpResponse(json.dumps(erros), status=400,
+        mensaje = "Metodo no permitido"
+        return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
                             content_type='application/json')
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
-                        content_type='application/json')
+
+    else:
+        return redirect('home')
 
 
 # esta vista se llama usando la url herramienta/delete/#, se encarga de procesar la peticion tipo DELETE
@@ -229,12 +233,8 @@ def deleteHerramienta(request, id):
     if request.method == "DELETE":
         herramienta.delete()
         mensaje = {"mensaje": "Herramienta eliminada"}
-        return HttpResponse(json.dumps(mensaje), status=200,
-                            content_type='application/json')
-
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}), status=404,
-                        content_type='application/json')
+        return HttpResponse(json.dumps(mensaje), status=200, content_type='application/json')
+    return redirect('home')
 
 
 def editHerramientaField(request, id):
@@ -384,7 +384,7 @@ def editHerramientaView(request, id):
         mensaje = "<h1>Esta herramienta no existe</h1>"
         return HttpResponseNotFound(mensaje)
 
-    if filters.is_herramienta_owner(request.user, edicion) or in_admin_group(request.user):
+    if filters.is_herramienta_owner(request.user, edicion):
         url = "/herramienta/api/herramientas/form/%d/" % (int(id))
         return render(request,'herramienta/add_herramienta.html',{"form": HerramientaForm(instance=edicion), "url":url})
     else:
@@ -462,8 +462,15 @@ def home(request):
 
 def details(request, index=None):
     instance = get_object_or_404(Herramienta, id=index)
-    context = {'herramienta': instance}
-    return render(request, 'detalleherramienta.html', context)
+
+    if (filters.has_group(request.user, "Administrador") or instance.estado == 2 or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 1) or
+    (filters.has_group(request.user, "ConectaTE") and instance.estado == 1) or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 0 and instance.owner == request.user)):
+        context = {'herramienta': instance}
+        return render(request, 'detalleherramienta.html', context)
+    else:
+        return redirect('home')
 
 
 class SaveImporter(View):
