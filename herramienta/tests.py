@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import models
 import views
@@ -11,6 +11,7 @@ from django.test import TestCase
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common import alert
+from selenium.webdriver.common.by import By
 
 
 def getRealPath(rel_path):
@@ -20,7 +21,7 @@ def getRealPath(rel_path):
 
 class Test(TestCase):
 
-#test para validar el funcionamiento del servicio para eliminar herramientas
+# test para validar el funcionamiento del servicio para eliminar herramientas
     def test_HerramintaDelete(self):
         herramienta = models.Herramienta.objects.create(nombre='Herramienta test', descripcion='')
         if herramienta:
@@ -41,14 +42,14 @@ class Test(TestCase):
 
 
 
-usuario_prueba = "admin@uniandes.edu.co"
+usuario_prueba = "tj.marrugo10@uniandes.edu.co"
 clave_prueba = "admin123456"
 
 
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome(getRealPath('../extra/chromedriver'))
+        self.browser = webdriver.Chrome()
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -84,6 +85,28 @@ class AtoTest(TestCase):
         self.browser.implicitly_wait(10)
         success = self.browser.find_element_by_id("id_success")
         self.assertIsNotNone(success)
+
+    def test_FiltroTipolicencia(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        input=self.browser.find_element_by_id('tipo_licencia')
+        input.send_keys('asd')
+        submit=self.browser.find_element_by_id('btn_filtrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertIsNotNone(herramientas,"no hay herramientas cuando deberian haber")
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
+        self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
+
+        input = self.browser.find_element_by_id('tipo_licencia')
+        input.clear()
+        input.send_keys('pruebaerror')
+        submit = self.browser.find_element_by_id('btn_filtrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertIsNotNone(herramientas,"existen herramientas cuando no deberian haber")
+
 
 
     def test_FiltroCategoria(self):
