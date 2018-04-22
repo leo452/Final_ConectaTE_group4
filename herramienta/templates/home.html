@@ -8,40 +8,52 @@
 
 
 <!-- Page Content -->
-
-<div class="container" >
+<div class="row">
+<div class="container col-2" >
     <form method="get">
         <div class="row">
+
+            <div class="form-group row" id="sel_sistema_operativo">
+                <label for="sistema_operativo"><b>Sistema operativo</b></label>
+                <input type="text" name="sistema_operativo" id="sistema_operativo" class="form-control" placeholder="Ejemplo: Windows">
+            </div>
+            <div class="w-100"></div>
+            <div class="form-group row" id="sel_tipo_licencia">
+                <label for="tipo_licencia"><b>Tipo de licencia</b></label>
+                    <input type="text" name="tipo_licencia" id="tipo_licencia" class="form-control" placeholder="Ejemplo: Open source">
+
+            </div>
+            <div class="w-100"></div>
+            <div class="form-group row">
+            <h5></h5>
+            </div>
+
             {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"ConectaTE" %}
-            <div class="form-group col-3" id="sel_categoria">
+            <div class="form-group row">
+            <h5>Herramientas en revision:</h5>
+            </div>
+            <div class="form-group row" id="sel_categoria">
                 <label for="categorias"><b>Categorias</b></label>
                     <select id="categorias" class="form-control" name="categoria">
                         <option value="">Todas las categorias</option>
                     </select>
             </div>
-            <div class="form-group col-3" id="sel_uso">
+            <div class="w-100"></div>
+            <div class="form-group row" id="sel_uso">
                 <label for="uso"><b>Uso de la herramienta</b></label>
                     <input type="text" name="uso" id="uso" class="form-control" placeholder="Ejemplo: Educativo">
 
             </div>
+            <div class="w-100"></div>
            {% endif %}
-            <div class="form-group col-3" id="sel_sistema_operativo">
-                <label for="sistema_operativo"><b>Sistema operativo</b></label>
-                <input type="text" name="sistema_operativo" id="sistema_operativo" class="form-control" placeholder="Ejemplo: Windows">
-            </div>
-            <div class="form-group col-3" id="sel_tipo_licencia">
-                <label for="tipo_licencia"><b>Tipo de licencia</b></label>
-                    <input type="text" name="tipo_licencia" id="tipo_licencia" class="form-control" placeholder="Ejemplo: Open source">
-
-            </div>
-            <div class ="form-group col-3" style="padding-top: 2%">
+            <div class ="form-group row" style="padding-top: 2%">
                 <button id="btnFiltrar" type="submit" class="btn btn-default" style="height: 40px;">Filtrar</button>
             </div>
+
         </div>
     </form>
 </div>
-<div class="container">
-
+<div class="container col-8">
     <div id="herramientas" class="row">
 
         {% for currentHerramienta in lista_herramientas %}
@@ -65,6 +77,7 @@
 
 </div>
 <!-- /.container -->
+</div>
 
 <script>
 $( document ).ready(function() {

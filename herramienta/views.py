@@ -456,7 +456,7 @@ def home(request):
     uso= request.GET.get('uso',False)
     print uso
     if uso:
-        lista_herramientas=lista_herramientas.filter(usos__icontains=uso)
+        lista_herramientas=lista_herramientas.filter(usos__icontains=uso, estado=1)
     context = {'lista_herramientas': lista_herramientas}
     return render(request, 'home.html', context)
 
