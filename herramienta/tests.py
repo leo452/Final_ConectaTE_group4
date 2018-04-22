@@ -50,14 +50,35 @@ class Test(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response['content-type'], 'application/json')
 
+#test para el metodo de filtrar herramientas por tipo de licencia en la home. PC20
+    def test_filtrar_herramienta_metodo_licencia(self):
+        lista_herramientas = models.Herramienta.objects.filter(licencia__icontains='asd')
+        if lista_herramientas:
+            url = reverse('home')
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response['content-type'], 'application/json')
+
+#test para el metodo de filtrar herramientas por tipo de licencia en la home. PC14
+    def test_filtrar_herramienta_metodo_uso(self):
+        lista_herramientas = models.Herramienta.objects.all()
+        print lista_herramientas
+        if lista_herramientas:
+            url = reverse('home')
+            response = self.client.delete(url)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response['content-type'], 'application/json')
+
 usuario_prueba = "tj.marrugo10@uniandes.edu.co"
+usuario_prueba_local= "pruebabug5@uniandes.edu.co"
 clave_prueba = "admin123456"
+clave_prueba_local="administrador"
 sistema_operativo_prueba="windows"# valor para prueba selenium PC19
 
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
+        self.browser = webdriver.Chrome()
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -95,27 +116,58 @@ class AtoTest(TestCase):
         self.assertIsNotNone(success)
 
 
+    # prueba unitaria  automatica para PC20
     def test_FiltroTipolicencia(self):
         self.browser.get('http://localhost:8000/herramientas')
         input=self.browser.find_element_by_id('tipo_licencia')
         input.send_keys('asd')
-        submit=self.browser.find_element_by_id('btn_filtrar')
+        submit=self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-        self.assertIsNotNone(herramientas,"no hay herramientas cuando deberian haber")
+        self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
         h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
         self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
-
         input = self.browser.find_element_by_id('tipo_licencia')
         input.clear()
         input.send_keys('pruebaerror')
-        submit = self.browser.find_element_by_id('btn_filtrar')
+        submit = self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
-        self.assertIsNotNone(herramientas,"existen herramientas cuando no deberian haber")
+        self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
 
+    #prueba unitaria  automatica para PC14
+    def test_FitroPorUso(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        link=self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(10)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usuario_prueba_local)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(clave_prueba_local)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        self.browser.implicitly_wait(2)
+        input = self.browser.find_element_by_id('uso')
+        input.send_keys('Educativo')
+        submit = self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta En Revision"]')
+        self.assertIsNotNone(h2, "no existe la herramienta que deberia estar")
+
+        input = self.browser.find_element_by_id('uso')
+        input.clear()
+        input.send_keys('pruebaerror')
+        submit = self.browser.find_element_by_id('btnFiltrar')
+        submit.click()
+        self.browser.implicitly_wait(2)
+        herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
+        self.assertEqual(len(herramientas),0,"existen herramientas cuando no deberian haber")
 
 
     def test_FiltroCategoria(self):

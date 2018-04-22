@@ -43,7 +43,13 @@
                                 {{ herramienta.descripcion }}
                             </td>
                             <td>
-                                {{ herramienta.estado }}
+                                {% if herramienta.estado == 0 %}
+                                    Borrador
+                                {% elif herramienta.estado == 1 %}
+                                    Revisión
+                                {% else %}
+                                    Publica
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
