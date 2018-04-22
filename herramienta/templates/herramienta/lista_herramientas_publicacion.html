@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+      <h2>Herramientas Postuladas a Publicación</h2>
+      <p>Las siguientes herramientas fueron postuladas por Miembros GTI para ser publicadas. </p>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 10%">Dueño</th>
+            <th class="text-center" style="width: 25%">Nombre</th>
+            <th class="text-center" style="width: 45%">Descripción</th>
+            <th class="text-center" style="width: 20%">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for postulacion in lista_postulaciones %}
+          <tr>
+            <td>{{ postulacion.owner }}</td>
+            <td>{{ postulacion.herramienta.nombre }}</td>
+            <td>{{ postulacion.herramienta.descripcion }}</td>
+            <td class="text-center" ><a id="aceptarHerramienta-{{ postulacion.id }}" href="{% url 'aceptar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Aceptar</a>
+                <a id="rechazarHerramienta-{{ postulacion.id }}" href="{% url 'rechazar_postulacion' postulacion.id %}" class="btn btn-secondary" role="button">Rechazar</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% if not lista_postulaciones %} <h6 class="text-center">No hay herramientas postuladas para publicación</h6>{% endif %}
+    </div>
+{% endblock %}
