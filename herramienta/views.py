@@ -473,6 +473,16 @@ def details(request, index=None):
         return redirect('home')
 
 
+def lista_herramientas_por_publicar (request):
+    if(filters.has_group(request.user, "Administrador")):
+        lista_postulaciones = HerramientaPorAprobar.objects.all()
+
+        context = {'lista_postulaciones': lista_postulaciones}
+        return render(request, 'herramienta/lista_herramientas_publicacion.html', context)
+    else:
+        return redirect('home')
+
+
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         rows = request.POST.getlist('rows[]', False)
