@@ -197,21 +197,25 @@ def editHerramienta(request, id):
         return HttpResponse(json.dumps({"error": mensaje}), status=404,
                             content_type='application/json')
 
-    if request.method == "POST":
-        form = HerramientaForm(request.POST, instance=herramienta)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Herramienta editada con Éxito!')
-            #return redirect('home')
-            mensaje = {"mensaje": "edicion de herramienta exitoso"}
-            return HttpResponse(json.dumps(mensaje), status=200,
+    if filters.is_herramienta_owner(request.user, herramienta) or in_admin_group(request.user):
+        if request.method == "POST":
+            form = HerramientaForm(request.POST, instance=herramienta)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Herramienta editada con Éxito!')
+                #return redirect('home')
+                mensaje = {"mensaje": "edicion de herramienta exitoso"}
+                return HttpResponse(json.dumps(mensaje), status=200,
+                                    content_type='application/json')
+            erros = form.errors.items()
+            return HttpResponse(json.dumps(erros), status=400,
                                 content_type='application/json')
-        erros = form.errors.items()
-        return HttpResponse(json.dumps(erros), status=400,
+        mensaje = "Metodo no permitido"
+        return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
                             content_type='application/json')
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
-                        content_type='application/json')
+
+    else:
+        return redirect('home')
 
 
 # esta vista se llama usando la url herramienta/delete/#, se encarga de procesar la peticion tipo DELETE
@@ -229,12 +233,8 @@ def deleteHerramienta(request, id):
     if request.method == "DELETE":
         herramienta.delete()
         mensaje = {"mensaje": "Herramienta eliminada"}
-        return HttpResponse(json.dumps(mensaje), status=200,
-                            content_type='application/json')
-
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}), status=404,
-                        content_type='application/json')
+        return HttpResponse(json.dumps(mensaje), status=200, content_type='application/json')
+    return redirect('home')
 
 
 def editHerramientaField(request, id):
@@ -244,25 +244,28 @@ def editHerramientaField(request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if herramienta.estado == 0:
-        herramienta.estado = 1
-        herramienta.save()
+    if not filters.has_group(request.user, "Administrador"):
+        if herramienta.estado == 0 and filters.is_herramienta_owner(request.user, herramienta):
+            herramienta.estado = 1
+            herramienta.save()
 
-    elif herramienta.estado == 1:
-        herramienta.estado = 0
-        herramienta.owner = request.user
-        herramienta.save()
+        elif herramienta.estado == 1:
+            herramienta.estado = 0
+            herramienta.owner = request.user
+            herramienta.save()
 
-    if herramienta.estado == 0:
-        text = "Borrador"
+        if herramienta.estado == 0:
+            text = "Borrador"
+        else:
+            text = "En Revisión"
+
+        messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+        # TODO: Add tool to the on revision table.
+
+        return redirect('tool_detail', index=herramienta.id)
     else:
-        text = "En Revisión"
-
-    messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-    # TODO: Add tool to the on revision table.
-
-    return redirect('tool_detail', index=herramienta.id)
+        return redirect('home')
 
 
 def addHerramientaParaPublicacion (request, id):
@@ -272,7 +275,7 @@ def addHerramientaParaPublicacion (request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if not filters.is_herramienta_owner(request.user, herramienta):
+    if not filters.is_herramienta_owner(request.user, herramienta) and not filters.has_group(request.user, "Administrador"):
         list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
 
         for revision in list_revisiones:
@@ -462,9 +465,62 @@ def home(request):
 
 def details(request, index=None):
     instance = get_object_or_404(Herramienta, id=index)
-    context = {'herramienta': instance}
-    return render(request, 'detalleherramienta.html', context)
 
+    if (filters.has_group(request.user, "Administrador") or instance.estado == 2 or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 1) or
+    (filters.has_group(request.user, "ConectaTE") and instance.estado == 1) or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 0 and instance.owner == request.user)):
+        context = {'herramienta': instance}
+        return render(request, 'detalleherramienta.html', context)
+    else:
+        return redirect('home')
+
+
+def lista_herramientas_por_publicar (request):
+    if(filters.has_group(request.user, "Administrador")):
+        lista_postulaciones = HerramientaPorAprobar.objects.all()
+
+        context = {'lista_postulaciones': lista_postulaciones}
+        return render(request, 'herramienta/lista_herramientas_publicacion.html', context)
+    else:
+        return redirect('home')
+
+def lista_postulaciones_aceptar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramienta.estado = 2
+        herramienta.save()
+
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
+
+def lista_postulaciones_rechazar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
