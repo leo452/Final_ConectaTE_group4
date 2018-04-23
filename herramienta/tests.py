@@ -70,6 +70,7 @@ class Test(TestCase):
             self.assertEqual(response['content-type'], 'application/json')
 
 usuario_prueba = "tj.marrugo10@uniandes.edu.co"
+usuario_gti_prueba="pruebabuglogin@uniandes.edu.co"
 usuario_prueba_local= "pruebabug5@uniandes.edu.co"
 clave_prueba = "admin123456"
 clave_prueba_local="administrador"
@@ -122,19 +123,19 @@ class AtoTest(TestCase):
 
     # prueba unitaria  automatica para PC20
     def test_FiltroTipolicencia(self):
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         input=self.browser.find_element_by_id('tipo_licencia')
-        input.send_keys('asd')
+        input.send_keys('GPL')
         submit=self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
         self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
-        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta Publica"]')
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" TUTORIAL PYTHON"]')
         self.assertIsNotNone(h2,"no existe la herramienta que deberia estar")
         input = self.browser.find_element_by_id('tipo_licencia')
         input.clear()
-        input.send_keys('pruebaerror')
+        input.send_keys('pruebavacio')
         submit = self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
@@ -143,30 +144,30 @@ class AtoTest(TestCase):
 
     #prueba unitaria  automatica para PC14
     def test_FitroPorUso(self):
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link=self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)
         input_email = self.browser.find_element_by_id('email')
-        input_email.send_keys(usuario_prueba_local)
+        input_email.send_keys(usuario_gti_prueba)
         input_pass = self.browser.find_element_by_id('password')
         input_pass.send_keys(clave_prueba_local)
         btn_login = self.browser.find_element_by_id('btn_login')
         btn_login.click()
         self.browser.implicitly_wait(2)
         input = self.browser.find_element_by_id('uso')
-        input.send_keys('Educativo')
+        input.send_keys('Educación')
         submit = self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
         herramientas = self.browser.find_element_by_id('herramientas').find_elements_by_xpath(".//*")
         self.assertNotEqual(len(herramientas),0,"no hay herramientas cuando deberian haber")
-        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta En Revision"]')
+        h2 = self.browser.find_element(By.XPATH, '//a[text()=" Plataforma de Programacion"]')
         self.assertIsNotNone(h2, "no existe la herramienta que deberia estar")
 
         input = self.browser.find_element_by_id('uso')
         input.clear()
-        input.send_keys('pruebaerror')
+        input.send_keys('pruebavacio')
         submit = self.browser.find_element_by_id('btnFiltrar')
         submit.click()
         self.browser.implicitly_wait(2)
