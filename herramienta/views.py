@@ -434,7 +434,7 @@ def addRevisionView(request):
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
-
+#metodo encargado de dirigir al home y suministrarle la lista de herramientas respectiva segun los filtros
 def home(request):
     lista_herramientas = Herramienta.objects.all()
     if filters.has_group(request.user, "MiembroGTI"):
