@@ -434,7 +434,7 @@ def addRevisionView(request):
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
-
+#metodo encargado de dirigir al home y suministrarle la lista de herramientas respectiva segun los filtros
 def home(request):
     lista_herramientas = Herramienta.objects.all()
     if filters.has_group(request.user, "MiembroGTI"):
@@ -524,34 +524,31 @@ def lista_postulaciones_rechazar (request, index=None):
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
-        rows = request.POST.getlist('rows[]', False)
-        file = request.POST.get('file', False)
-        print '************** ',file
-        if rows and file:
-            data = cache.get(request.user.username)
-            if data:
-                rows = map(int, rows)
-                datos = data['files']
-                for x in datos:
-                    if x['id_file'] == int(file):
-                        for y in x['data']:
-                            if y['row'] in rows:
-                                fields = {}
-                                del y['row']
-                                for key, value in y.items():
-                                    if value != '':
-                                        fields.update({key:value})
-                                if fields:
-                                    herrami = models.Herramienta.objects.filter(nombre=fields['nombre'])
-                                    if herrami:
-                                        herrami.update(**fields)
-                                    else:
-                                        models.Herramienta.objects.create(**fields)
-        return HttpResponse('{}', content_type='application/json', status=201)
+        data = json.loads(request.POST.get('data', '[]'))
+        if data:
+            for y in data:
+                fields = {}
+                for key, value in y.items():
+                    if value != '':
+                        fields.update({key:value})
+                if fields:
+                    try:
+                        del fields['row']
+                    except KeyError:
+                        pass
+                    herrami = models.Herramienta.objects.filter(nombre=fields['nombre'])
+                    if herrami:
+                        herrami.update(**fields)
+                    else:
+                        models.Herramienta.objects.create(**fields)
+            return HttpResponse(json.dumps({"mensaje": "Actualizacion exitosa", "respuesta": True}),
+                                content_type='application/json', status=201)
+        return HttpResponse(json.dumps({"mensaje": "Error en el envio del archivo", "respuesta":False}), content_type='application/json', status=201)
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
+
 
 
 class Importer(LoginRequiredMixin, View):
@@ -566,7 +563,6 @@ class Importer(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            print 'Formulario valido'
             file_user = models.FileUser(file=request.FILES['file'])
             file_user.save()
             impor = self.importer(source=file_user.file, id_file=file_user.id)
@@ -578,5 +574,4 @@ class Importer(LoginRequiredMixin, View):
             else:
                 mensaje = {"mensaje": "La plantilla no tiene el numero de campos requeridos.", "respuesta": False}
                 return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
-        print form.errors.as_json()
         return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)

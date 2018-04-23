@@ -39,7 +39,7 @@ def write_update_herramienta(sender, instance, **kwarg):
 
             if key != 'observacion' and key != 'creacion' and key != 'usuarioHerramienta_id' and key != 'herramienta_id' and key != 'revision_id' and key != 'id':
                 values.update({key: value[1]})
-        print "values  ", values, "herramienta id", herramienta[0].id
+
         herramienta.update(**values)
 
 
