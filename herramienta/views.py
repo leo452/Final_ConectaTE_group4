@@ -445,6 +445,7 @@ def home(request):
         lista_herramientas = lista_herramientas.exclude(estado=0)
     elif not filters.has_group(request.user, "Administrador"):
         lista_herramientas = lista_herramientas.filter(estado=2)
+
     #validar filtro
     categoria = request.GET.get('categoria',False)
     if categoria:
