@@ -33,10 +33,6 @@ class CSVImporterTool(CSVImporter):
                     return False
 
     def save(self, instance=None):
-        user = CuserMiddleware.get_user()
-        if not cache.get(user.username):
-            cache.set(user.username, {'files':[]}, 120*60)
-        data = cache.get(user.username)
         list_data = []
         for row, values in self.cleaned_data:
             resp={'row': row}
@@ -46,9 +42,6 @@ class CSVImporterTool(CSVImporter):
             else:
                 resp.update({'nombre': 'Debe registrar un nombre'})
             list_data.append(resp)
-        datos = data['files']
-        datos.append({'id_file': self.id_file, 'data':list_data})
-        cache.set(user.username, {'files':datos}, 120*60)
         return list_data
 
     def process_row(self, row, values):

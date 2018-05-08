@@ -19,6 +19,9 @@
             border-top-width: 10px;
             margin-top: 30px;
         }
+    body{
+        padding-top: 0px;
+    }
     </style>
 {% endblock %}
 {% block script %}
@@ -48,6 +51,13 @@
                     <div class="col-md-4">
                         <h2></h2><a class="btn btn-success " href="{% static 'herramienta/file/plantilla2.csv' %}">plantilla</a></h2>
                     </div>
+                </div>
+                <div class="row">
+                    <ul>
+                        <li>1. Presiona el boton plantilla y descargue e larchivo CSV para llenar las herramientas a cargar y guarde los cambios</li>
+                        <li>2. Presiona el boton browse y buscar el archivo editado en el paso 1 y seleccionalo</li>
+                        <li>3. Presiona el boton Upload para cargar masivamente las herramientas</li>
+                    </ul>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
