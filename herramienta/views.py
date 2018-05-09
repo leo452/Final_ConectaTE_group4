@@ -525,7 +525,8 @@ def lista_postulaciones_rechazar (request, index=None):
 
 def reporteHerramientas(request):
 
-    return redirect('hime')
+    return render(request, 'herramienta/reporte_herramienta.html')
+
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
