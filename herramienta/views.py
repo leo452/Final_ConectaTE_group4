@@ -522,6 +522,11 @@ def lista_postulaciones_rechazar (request, index=None):
     else:
         return redirect('home')
 
+
+def reporteHerramientas(request):
+
+    return redirect('hime')
+
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data', '[]'))

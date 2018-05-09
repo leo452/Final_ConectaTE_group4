@@ -37,4 +37,5 @@ urlpatterns = [
     url(r'^herramientas/listaPublicaciones/$', views.lista_herramientas_por_publicar, name='lista_publicaciones'),
     url(r'^herramientas/aceptarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_aceptar, name='aceptar_postulacion'),
     url(r'^herramientas/rechazarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_rechazar, name='rechazar_postulacion'),
+    url(r'^herramientas/reporte/', views.reporteHerramientas, name='reporteHerramientas'),
 ]
