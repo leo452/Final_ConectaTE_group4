@@ -58,12 +58,12 @@
         {
           error="el email debe ser uniandes";
         }
-        if($('#formUsuario input[type=checkbox]:checked').length==0)
+        else if($('#formUsuario input[type=checkbox]:checked').length==0)
         {
           error="Debe escoger al menos un perfil";
         }
 
-        if($("#password")[0].value!==$("#password2")[0].value)
+        else if($("#password")[0].value!==$("#password2")[0].value)
         {
           error="las contraseñas deben coincidir";
         }
