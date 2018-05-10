@@ -41,11 +41,12 @@ $('form').submit( function(e) {
 
         $("#error").empty();
         var error= '';
+        var domain= $("#email")[0].value.split("@")[1];
         if($("#email")[0].value=='')
         {
+          console.log("entra")
           error="el email no debe estar vacio";
         }
-        var domain= $("#email")[0].value.split("@")[1];
         else if(domain!=="uniandes.edu.co")
         {
           error="el email debe ser uniandes";
