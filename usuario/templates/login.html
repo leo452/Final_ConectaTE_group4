@@ -46,7 +46,7 @@ $('form').submit( function(e) {
           error="el email no debe estar vacio";
         }
         var domain= $("#email")[0].value.split("@")[1];
-        if(domain!=="uniandes.edu.co")
+        else if(domain!=="uniandes.edu.co")
         {
           error="el email debe ser uniandes";
         }
