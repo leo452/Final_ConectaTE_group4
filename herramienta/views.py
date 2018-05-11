@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.cache import cache
-from data_importer.views import DataImporterForm
 from django.utils.decorators import method_decorator
 from django.views import View
 
