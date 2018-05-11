@@ -52,33 +52,24 @@
     //metodo encargado de validar que la información del formulario sea correcta y de enviar la petición post para utilizar el servicio rest de crear usuario
     $('form').submit( function(e) {
         var domain= $("#email")[0].value.split("@")[1];
+        $("#error").empty();
+        var error= '';
         if(domain!=="uniandes.edu.co")
         {
-          $("#error").empty();
-          $("#error").append("el email debe ser uniandes");
-          $("#error").removeAttr("hidden");
-          window.scrollTo(0,0);
-          return false;
+          error="el email debe ser uniandes";
         }
-        if($('#formUsuario input[type=checkbox]:checked').length==0)
+        else if($('#formUsuario input[type=checkbox]:checked').length==0)
         {
-          $("#error").empty();
-          $("#error").append("Debe escoger al menos un perfil");
-          $("#error").removeAttr("hidden");
-          window.scrollTo(0,0);
-          return false;
+          error="Debe escoger al menos un perfil";
         }
-        if($('#formUsuario input[type=checkbox]:checked').length==0)
+
+        else if($("#password")[0].value!==$("#password2")[0].value)
         {
-          $("#error").empty();
-          $("#error").append("Debe escoger al menos un perfil");
-          $("#error").removeAttr("hidden");
-          window.scrollTo(0,0);
-          return false;
+          error="las contraseñas deben coincidir";
         }
-        if($("#password")[0].value!==$("#password2")[0].value){
-          $("#error").empty();
-          $("#error").append("las contraseñas deben coincidir");
+        if(error !== '')
+        {
+          $("#error").append(error);
           $("#error").removeAttr("hidden");
           window.scrollTo(0,0);
           return false;
