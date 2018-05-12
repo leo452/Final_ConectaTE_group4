@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(blank=True, default='', max_length=100, null=True)),
                 ('descripcion', models.CharField(blank=True, default='', max_length=1000, null=True)),
-                ('links', models.CharField(blank=True, default='', max_length=1000, null=True)),
+                ('link_recurso', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('herramienta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='herramienta.Herramienta')),
             ],
             options={
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(blank=True, default='', max_length=100, null=True)),
                 ('descripcion', models.CharField(blank=True, default='', max_length=1000, null=True)),
-                ('links', models.CharField(blank=True, default='', max_length=1000, null=True)),
+                ('link_recurso', models.CharField(blank=True, default='', max_length=1000, null=True)),
                 ('herramienta', models.ManyToManyField(to='herramienta.Herramienta')),
             ],
             options={
