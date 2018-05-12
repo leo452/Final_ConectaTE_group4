@@ -19,13 +19,13 @@
                     <tbody id="usuarios">
                     {% for obj in lista %}
                         <tr>
-                            <td>{{ obj.herramienta }}</td>
-                            <td>{{ obj.creado }}</td>
-                            <td>{{ obj.edicion }}</td>
-                            <td>{{ obj.usuario }}</td>
-                            <td><a href="" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
-                            <td><a href="" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
-                            <td><a href="" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
+                            <td align="center">{{ obj.herramienta }}</td>
+                            <td align="center">{{ obj.creado }}</td>
+                            <td align="center">{{ obj.edicion }}</td>
+                            <td align="center">{{ obj.usuario }}</td>
+                            <td align="center"><a href="" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
+                            <td align="center"><a href="" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
+                            <td align="center"><a href="" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
