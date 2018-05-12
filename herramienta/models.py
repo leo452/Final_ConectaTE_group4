@@ -10,6 +10,9 @@ from django.db import models
 from django_model_changes import ChangesMixin
 
 from usuario.models import Usuario
+
+
+
 #modelo de categoria de la herramienta
 class Categoria (models.Model):
     nombre=models.CharField(max_length=100)
@@ -139,3 +142,21 @@ class FileUser(models.Model):
     class Meta:
         verbose_name = 'Archivo a cargar'
         verbose_name_plural = 'Archivos cargados'
+
+
+#modelo de tutorial de la herramienta
+class Tutorial (models.Model):
+    nombre=models.CharField(max_length=100)
+    descripcion=models.CharField(max_length=100)
+    link_recurso=models.CharField(max_length=100)
+    herramienta = models.ForeignKey(Herramienta, null=False, blank=False)
+
+    def __unicode__(self):
+        return '%s'%self.nombre
+
+    def __str__(self):
+        return '%s' % self.nombre
+
+    class Meta:
+        verbose_name = 'Tutorial'
+        verbose_name_plural = 'Tutoriales'
