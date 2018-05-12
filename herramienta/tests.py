@@ -83,7 +83,7 @@ usuario_pruebaGTI_clave = "admin123456"
 class AtoTest(TestCase):
     # test automatico para validar el funcionamiento del servicio para eliminar herramientas
     def setUp(self):
-        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
+        self.browser = webdriver.Chrome()
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 

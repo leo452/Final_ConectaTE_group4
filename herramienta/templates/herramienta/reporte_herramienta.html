@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Reporte de Herramientas</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="reporteHerramienta" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Herramienta</td>
+                            <td>Fecha Ingreso</td>
+                            <td>Fecha Ultima Modificación</td>
+                            <td>Autor</td>
+                            <td>Cantidad Ediciones</td>
+                            <td>Cantidad Ejemplo</td>
+                            <td>Cantidad Tutoriales</td>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios">
+                    {% for obj in lista %}
+                        <td>{{ obj.herramienta }}</td>
+                        <td>{{ obj.creado }}</td>
+                        <td>{{ obj.edicion }}</td>
+                        <td>{{ obj.usuario }}</td>
+                        <td><a onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
+                        <td><a onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
+                        <td><a onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="pagination pagination-right">
+        <span id="paginacion">
+
+        </span>
+    </div>
+<script>
+function ListaEdiciones(id) {
+
+}
+
+function ListaEjemplos(id) {
+
+}
+
+function ListaTutorial(id) {
+
+}
+</script>
+{% endblock %}

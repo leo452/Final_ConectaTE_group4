@@ -23,6 +23,7 @@ from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
 from django.contrib.auth.mixins import LoginRequiredMixin
+import usuario.models
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -521,6 +522,40 @@ def lista_postulaciones_rechazar (request, index=None):
         return redirect('tool_detail', index=herramienta.id)
     else:
         return redirect('home')
+
+
+def reporteHerramientas(request):
+    herramienta_list = models.Herramienta.objects.all()
+    paginator = Paginator(herramienta_list, 5)
+
+    page = request.GET.get('page')
+    try:
+        herramientas = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        herramientas = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        herramientas = paginator.page(paginator.num_pages)
+
+    ret = []
+    for obj in herramientas:
+        h_nombre = obj.nombre
+        h_fecha = obj.creacion
+        edicion  = models.HerramientaEdicion.objects.filter(herramienta=obj.id).order_by('-creacion')[0]
+        e_fecha = edicion.creacion
+        u = obj.owner
+        u_nombre = u.username
+        n_ediciones = models.HerramientaEdicion.objects.filter(herramienta=obj.id).count()
+        n_tutorial = models.Tutorial.objects.filter(herramienta=obj).count()
+        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj).count()
+
+        ret.append({'herramienta': h_nombre, 'creado': h_fecha, 'edicion': e_fecha, 'usuario': u_nombre,
+                    'ediciones': n_ediciones, 'ejemplos': n_ejemplo, 'tutoriales': n_tutorial,
+                    'herramientaid': obj.id})
+
+    return render(request, 'herramienta/reporte_herramienta.html', {'lista': ret})
+
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):

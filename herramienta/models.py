@@ -25,6 +25,7 @@ class Categoria (models.Model):
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
 
+
 #modelo de la herramienta
 class Herramienta(ChangesMixin, models.Model):
     nombre= models.CharField(max_length=100, default='', null=True, blank=True)
@@ -52,6 +53,40 @@ class Herramienta(ChangesMixin, models.Model):
     class Meta:
         verbose_name = 'Herramienta'
         verbose_name_plural = 'Herramientas'
+
+
+class Ejemplo(models.Model):
+    nombre = models.CharField(max_length=100, default='', null=True, blank=True)
+    descripcion = models.CharField(max_length=1000, default='', null=True, blank=True)
+    links = models.CharField(max_length=1000, default='', null=True, blank=True)
+    herramienta = models.ForeignKey(Herramienta, on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return '%s' % self.nombre
+
+    def __str__(self):
+        return '%s' % self.nombre
+
+    class Meta:
+        verbose_name = 'Ejemplo'
+        verbose_name_plural = 'Ejemplos'
+
+
+class Tutorial(models.Model):
+    nombre = models.CharField(max_length=100, default='', null=True, blank=True)
+    descripcion = models.CharField(max_length=1000, default='', null=True, blank=True)
+    link_recurso = models.CharField(max_length=1000, default='', null=True, blank=True)
+    herramienta = models.ManyToManyField(Herramienta)
+
+    def __unicode__(self):
+        return '%s' % self.nombre
+
+    def __str__(self):
+        return '%s' % self.nombre
+
+    class Meta:
+        verbose_name = 'Tutorial'
+        verbose_name_plural = 'Tutoriales'
 
 
 class HerramientaPorAprobar(ChangesMixin, models.Model):
