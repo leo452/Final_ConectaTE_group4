@@ -7,16 +7,16 @@
                 <table id="reporteHerramienta" class="table table-striped">
                     <thead>
                         <tr>
-                            <td>Herramienta</td>
-                            <td>Fecha Ingreso</td>
-                            <td>Fecha Ultima Modificación</td>
-                            <td>Autor</td>
-                            <td>Cantidad Ediciones</td>
-                            <td>Cantidad Ejemplo</td>
-                            <td>Cantidad Tutoriales</td>
+                            <th>Herramienta</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Fecha Ultima Modificación</th>
+                            <th>Autor</th>
+                            <th>Cantidad Ediciones</th>
+                            <th>Cantidad Ejemplo</th>
+                            <th>Cantidad Tutoriales</th>
                         </tr>
                     </thead>
-                    <tbody id="usuarios">
+                    <tbody id="herramientas">
                     {% for obj in lista %}
                         <tr>
                             <td align="center">{{ obj.herramienta }}</td>
