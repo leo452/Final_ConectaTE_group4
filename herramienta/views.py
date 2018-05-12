@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.cache import cache
-from data_importer.views import DataImporterForm
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -446,6 +444,7 @@ def home(request):
         lista_herramientas = lista_herramientas.exclude(estado=0)
     elif not filters.has_group(request.user, "Administrador"):
         lista_herramientas = lista_herramientas.filter(estado=2)
+
     #validar filtro
     categoria = request.GET.get('categoria',False)
     if categoria:
