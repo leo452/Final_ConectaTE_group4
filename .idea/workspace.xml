@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c7db05f5-7876-42f0-b784-93ad43abe2ad" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/herramienta/migrations/0014_ejemplo_tutorial.py" beforeDir="false" afterPath="$PROJECT_DIR$/herramienta/migrations/0014_ejemplo_tutorial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/herramienta/migrations/0014_tutorial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/herramienta/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/herramienta/models.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -41,20 +40,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="0014_ejemplo_tutorial.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="0014_ejemplo_tutorial.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/herramienta/migrations/0014_ejemplo_tutorial.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
+            <state relative-caret-position="391">
+              <caret line="29" column="31" lean-forward="true" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/herramienta/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="174" lean-forward="true" selection-start-line="174" selection-end-line="174" />
+            <state relative-caret-position="348">
+              <caret line="158" column="33" lean-forward="true" selection-start-line="158" selection-start-column="33" selection-end-line="158" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -154,8 +153,8 @@
         <option value="$PROJECT_DIR$/herramienta/admin.py" />
         <option value="$PROJECT_DIR$/herramienta/templates/herramienta/reporte_herramienta.html" />
         <option value="$PROJECT_DIR$/herramienta/reporteTest.py" />
-        <option value="$PROJECT_DIR$/herramienta/models.py" />
         <option value="$PROJECT_DIR$/herramienta/migrations/0014_ejemplo_tutorial.py" />
+        <option value="$PROJECT_DIR$/herramienta/models.py" />
       </list>
     </option>
   </component>
@@ -568,7 +567,14 @@
       <option name="project" value="LOCAL" />
       <updated>1526166650090</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="modelos">
+      <created>1526167203945</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1526167203945</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -614,8 +620,8 @@
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32897604" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32897604" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.32897604" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.2167756" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16897655" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.2167756" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.16897655" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -632,25 +638,26 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16897655" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32897604" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32897604" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16897655" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.32897604" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32972136" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32897604" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49946696" weight="0.39978212" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" visible="true" weight="0.2167756" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053304" side_tool="true" weight="0.39978212" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="TODO" order="7" />
+      <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="3" sideWeight="0.49946696" weight="0.32897604" />
+      <window_info anchor="bottom" id="Find" order="2" weight="0.32972136" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32897604" />
+      <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.49946696" weight="0.33442265" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.2167756" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50053304" side_tool="true" weight="0.39978212" />
+      <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
+      <window_info anchor="right" id="SciView" order="4" />
+      <window_info anchor="bottom" id="Message" order="1" />
+      <window_info anchor="bottom" id="Messages" order="0" />
       <window_info id="Favorites" order="2" side_tool="true" />
     </layout-to-restore>
   </component>
@@ -696,7 +703,8 @@
     <MESSAGE value="tablas de tutoriales y ejemplos" />
     <MESSAGE value="merge master y pc141" />
     <MESSAGE value="comentario para modelo de ejemplos" />
-    <option name="LAST_COMMIT_MESSAGE" value="comentario para modelo de ejemplos" />
+    <MESSAGE value="modelos" />
+    <option name="LAST_COMMIT_MESSAGE" value="modelos" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1042,13 +1050,6 @@
         <state relative-caret-position="-255" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/herramienta/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="174" lean-forward="true" selection-start-line="174" selection-end-line="174" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/herramienta/templates/herramienta/reporte_herramienta.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-51">
@@ -1072,8 +1073,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/herramienta/migrations/0014_ejemplo_tutorial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
+        <state relative-caret-position="391">
+          <caret line="29" column="31" lean-forward="true" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herramienta/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="158" column="33" lean-forward="true" selection-start-line="158" selection-start-column="33" selection-end-line="158" selection-end-column="33" />
         </state>
       </provider>
     </entry>

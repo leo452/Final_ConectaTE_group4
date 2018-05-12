@@ -147,9 +147,9 @@ class FileUser(models.Model):
 
 #modelo de tutorial de la herramienta
 class Tutorial (models.Model):
-    nombre=models.CharField(max_length=100)
-    descripcion=models.CharField(max_length=100)
-    link_recurso=models.CharField(max_length=100)
+    nombre=models.CharField(max_length=100,default='',null=True, blank=True)
+    descripcion=models.CharField(max_length=1000,default='',null=True, blank=True)
+    link_recurso=models.CharField(max_length=1000,default='',null=True, blank=True)
     herramienta = models.ForeignKey(Herramienta, null=False, blank=False)
 
     def __unicode__(self):
@@ -165,10 +165,10 @@ class Tutorial (models.Model):
 
 #modelo de ejemplo de la herramienta
 class Ejemplo(models.Model):
-    nombre = models.CharField(max_length=100, default='', null=True, blank=True)
-    descripcion = models.CharField(max_length=1000, default='', null=True, blank=True)
-    link_recurso = models.CharField(max_length=1000, default='', null=True, blank=True)
-    herramienta = models.ForeignKey(Herramienta, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=100,default='',null=True, blank=True)
+    descripcion = models.CharField(max_length=1000,default='',null=True, blank=True)
+    link_recurso = models.CharField(max_length=1000,default='',null=True, blank=True)
+    herramienta = models.ForeignKey(Herramienta, null=False, blank=False)
 
     def __unicode__(self):
         return '%s' % self.nombre
