@@ -24,7 +24,6 @@ class ReporteTest(TestCase):
     def tearDown(self):
         self.browser.quit()
 
-
     def test_MenuReporte(self):
         #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         self.browser.get('http://localhost:8000/herramientas')
@@ -43,7 +42,6 @@ class ReporteTest(TestCase):
         self.browser.implicitly_wait(10)
         success = self.browser.find_element_by_id("reporteHerramientas")
         self.assertIsNotNone(success)
-
 
     def test_PaginaReporte(self):
         #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
