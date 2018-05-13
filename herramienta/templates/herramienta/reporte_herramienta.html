@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Reporte de Herramientas</h1>
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+        <h1>Reporte de Herramientas</h1>
+            <div class="col-sm-30">
                 <table id="reporteHerramienta" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Herramienta</th>
                             <th>Fecha Ingreso</th>
-                            <th>Fecha Ultima Modificación</th>
+                            <th>Ultima Modificación</th>
                             <th>Autor</th>
                             <th>Cantidad Ediciones</th>
-                            <th>Cantidad Ejemplo</th>
+                            <th>Cantidad Ejemplos</th>
                             <th>Cantidad Tutoriales</th>
                         </tr>
                     </thead>
                     <tbody id="herramientas">
                     {% for obj in lista %}
                         <tr>
-                            <td align="center">{{ obj.herramienta }}</td>
-                            <td align="center">{{ obj.creado }}</td>
-                            <td align="center">{{ obj.edicion }}</td>
-                            <td align="center">{{ obj.usuario }}</td>
+                            <td>{{ obj.herramienta }}</td>
+                            <td>{{ obj.creado }}</td>
+                            <td>{{ obj.edicion }}</td>
+                            <td>{{ obj.usuario }}</td>
                             <td align="center"><a href="" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
                             <td align="center"><a href="" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
                             <td align="center"><a href="" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
@@ -32,11 +32,38 @@
                 </table>
             </div>
         </div>
-    </div>
-    <div class="pagination pagination-right">
-        <span id="paginacion">
 
-        </span>
+        <div class="col-sm-12">
+            <div class="pagination pagination-right">
+                <span id="paginacion">
+                {% if herramientas.has_other_pages %}
+                    <ul class="pagination">
+                    {% if herramientas.has_previous %}
+                      <li><a href="{% url 'reporteHerramientas' %}?page={{ herramientas.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                      <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in herramientas.paginator.page_range %}
+                      {% if herramientas.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                      {% else %}
+                        <li><a href="{% url 'reporteHerramientas' %}?page={{ i }}">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if herramientas.has_next %}
+                      <li><a href="{% url 'reporteHerramientas' %}?page={{ herramientas.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                      <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                    </ul>
+                {% endif %}
+                </span>
+            </div>
+        </div>
+        <div style="padding-top: 3%;" align="center">
+            <a href="{% url 'home' %}" class="btn btn-primary"><span
+                class="glyphicon glyphicon-step-backward">Volver</span></a>
+        </div>
     </div>
 <script>
 function ListaEdiciones(id) {

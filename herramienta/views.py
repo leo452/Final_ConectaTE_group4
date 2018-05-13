@@ -525,7 +525,7 @@ def lista_postulaciones_rechazar (request, index=None):
 
 def reporteHerramientas(request):
     herramienta_list = models.Herramienta.objects.all()
-    paginator = Paginator(herramienta_list, 5)
+    paginator = Paginator(herramienta_list, 10)
 
     page = request.GET.get('page')
     try:
@@ -553,7 +553,7 @@ def reporteHerramientas(request):
                     'ediciones': n_ediciones, 'ejemplos': n_ejemplo, 'tutoriales': n_tutorial,
                     'herramientaid': obj.id})
 
-    return render(request, 'herramienta/reporte_herramienta.html', {'lista': ret})
+    return render(request, 'herramienta/reporte_herramienta.html', {'lista': ret, 'herramientas': herramientas})
 
 
 class SaveImporter(View):
