@@ -215,35 +215,50 @@ class AtoTest(TestCase):
 
     #prueba unitaria automatica para PC15
     def test_detalle_herramienta_publica(self):
-        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
-        span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
-        span.click()
+        inicializacion(self)
+        datos_parte1(self)
+        datos_laterales(self)
 
-        h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
-        self.assertIn('TUTORIAL PYTHON', h2.text)
-        h3=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[1]')
-        self.assertIn('Estado: Público',h3.text)
-        h4=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[2]')
-        self.assertIn('Versión: 1',h4.text)
-        h5=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[3]')
-        self.assertIn('Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como plataforma de desarrollo debido a que incluyen funcionalidades muy beneficiosas para hacer desarrollo en menos tiempo',h5.text)
-        h6=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[4]')
-        self.assertIn('GPL',h6.text)
-        h7=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[5]')
-        self.assertIn('Curso en Moodle',h7.text)
-        h8=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[6]')
-        self.assertIn('http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',h8.text)
-        h9=self.browser.find_element(By.XPATH,'/html/body/div/div/div[1]/p[7]')
-        self.assertIn(
-            'http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',
-            h9.text)
-        h10=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[2]/div')
 
-        self.assertIn('Academico',h10.text)
-        h11=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[3]/div')
-        self.assertIn('windows',h11.text)
-        h12=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[4]/div')
-        self.assertIn('pertenece al curso MISO 4101',h12.text)
-        h13=self.browser.find_element(By.XPATH,'/html/body/div/div/div[2]/div[5]/div')
-        self.assertIn('http://moodleinstitucional.uniandes.edu.co/course/view.php?id=1242&section=24',h13.text)
-        self.browser.implicitly_wait(10)
+
+#refactor PC194
+def inicializacion(self):
+    self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas/')
+    span = self.browser.find_element(By.XPATH, '//*[@id="herramienta_26_nombre"]/a')
+    span.click()
+
+def datos_parte1(self):
+    h2 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/h1')
+    self.assertIn('TUTORIAL PYTHON', h2.text)
+    h3 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[1]')
+    self.assertIn('Estado: Público', h3.text)
+    h4 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[2]')
+    self.assertIn('Versión: 1', h4.text)
+    h5 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[3]')
+    self.assertIn(
+        'Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como plataforma de desarrollo debido a que incluyen funcionalidades muy beneficiosas para hacer desarrollo en menos tiempo',
+        h5.text)
+    h6 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[4]')
+    self.assertIn('GPL', h6.text)
+
+def datos_laterales(self):
+    h7 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[5]')
+    self.assertIn('Curso en Moodle', h7.text)
+    h8 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[6]')
+    self.assertIn(
+        'http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',
+        h8.text)
+    h9 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[1]/p[7]')
+    self.assertIn(
+        'http://moodleinstitucional.uniandes.edu.co/pluginfile.php/157272/mod_label/intro/TutorialDjangoGuia1.pdf',
+        h9.text)
+    h10 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[2]/div[2]/div')
+
+    self.assertIn('Academico', h10.text)
+    h11 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[2]/div[3]/div')
+    self.assertIn('windows', h11.text)
+    h12 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[2]/div[4]/div')
+    self.assertIn('pertenece al curso MISO 4101', h12.text)
+    h13 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[2]/div[5]/div')
+    self.assertIn('http://moodleinstitucional.uniandes.edu.co/course/view.php?id=1242&section=24', h13.text)
+    self.browser.implicitly_wait(10)
