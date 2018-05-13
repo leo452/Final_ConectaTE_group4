@@ -188,13 +188,11 @@ class AtoTest(TestCase):
         btn_login.click()
         self.browser.implicitly_wait(10)
         select = Select(self.browser.find_element_by_id('categorias'))
-        #self.browser.implicitly_wait(5)
         select.select_by_visible_text('documento de word')
         btn_Filtrar = self.browser.find_element_by_id('btnFiltrar')
         btn_Filtrar.click()
         self.browser.implicitly_wait(10)
         ele = self.browser.find_element(By.XPATH, '//a[text()=" Herramienta En Revision"]')
-        #ele = self.browser.find_elements_by_xpath("//div[@class='card-header text-center']")
         self.assertEqual(ele.text,'Herramienta En Revision')
 
     #Prueba unitaria automatica para PC19
@@ -209,8 +207,6 @@ class AtoTest(TestCase):
         self.assertIn('TUTORIAL PYTHON',titulo.text)
         categoria = self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div/div/div[2]/h6')
         self.assertIn("documento de word",categoria.text)
-        #descripcion=self.browser.find_element(By.XPATH,'//*[@id="herramientas"]/div/div/div[2]/p')
-        #self.assertIn("Mediante el presente tutorial se presente hacer una aplicación básica en donde se creara la estructura de una galería de imágenes, se usará Python+Django como p...",descripcion.text)
         self.browser.implicitly_wait(60)
 
     #prueba unitaria automatica para PC15
