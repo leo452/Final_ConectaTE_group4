@@ -37,3 +37,9 @@ class Test(TestCase):
         input_pass.send_keys(pwd_miembroGti2)
         btn_login = self.browser.find_element_by_id('btn_login')
         btn_login.click()
+
+        btn_tool = self.browser.find_element_by_id('herramienta_14_nombre') #Herramienta en estado en Borrador propia
+        btn_tool.click()
+
+        btn_revision = self.browser.find_element_by_id('solicitar_revision_pares')
+        btn_revision.click()
