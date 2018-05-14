@@ -258,14 +258,16 @@ def editHerramientaField(request, id):
             herramienta.owner = request.user
             herramienta.save()
 
+            herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+            for current_postulacion in herramientas_por_borrar:
+                current_postulacion.delete()
+
         if herramienta.estado == 0:
             text = "Borrador"
         else:
             text = "En Revisión"
 
         messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-        # TODO: Add tool to the on revision table.
 
         return redirect('tool_detail', index=herramienta.id)
     else:
@@ -285,9 +287,14 @@ def addHerramientaParaPublicacion (request, id):
         for revision in list_revisiones:
             if revision.owner.username == request.user.username:
                 messages.error(request, 'Herramienta ya ha sido postulada por ti')
+
                 return redirect('tool_detail', id)
 
         HerramientaPorAprobar.objects.create(herramienta=herramienta, owner=request.user)
+
+        # Send Confirmation Email
+        admins = User.objects.filter(groups__name="Administrador")
+        EmailHandler.send_email_to_publish_tool(admins, herramienta.owner, herramienta)
 
         messages.success(request, 'Herramienta Postulada Correctamente')
         return redirect('tool_detail', id)

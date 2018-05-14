@@ -1,0 +1,13 @@
+<html>
+<head>
+</head>
+<body>
+    <h1 style="color:black;">Un contenido ha sido postulado a publicación</h1>
+    <h3 style="color:black;">Buenas {{ user_name }},</h3>
+    <p style="color:black;">Una herramienta en revisón editada por {{ editors_name }} ha sido marcada como lista
+    para ser publicada y necesita tu aprobación. Te invitamos a revisar
+    su contenido y hacerla disponible al público si consideras que está lista. </p>
+
+    <p style="color:black;">Puedes acceder a dicha herramienta ingresando a este <a href="https://final-conectate-group4.herokuapp.com{% url 'tool_detail' herramienta.id %}">link</a></p>
+</body>
+</html>
