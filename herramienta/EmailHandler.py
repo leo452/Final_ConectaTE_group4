@@ -21,13 +21,13 @@ def send_email_miembro(miembros_list, usuario_editor, herramienta):
         msg['To'] = miembro.email
         text = loader.render_to_string('HTMLEmails/notification_miembroGTI_text.html',
                                   {
-                                        'user_name': miembro.name,
+                                        'user_name': miembro.first_name,
                                         'editors_name': usuario_editor,
                                         'herramienta':  herramienta
                                   }).encode('utf-8').strip()
         html = loader.render_to_string('HTMLEmails/notification_miembroGTI.html',
                                   {
-                                        'user_name': miembro.name,
+                                        'user_name': miembro.first_name,
                                         'editors_name': usuario_editor,
                                         'herramienta':  herramienta
                                   }).encode('utf-8').strip()

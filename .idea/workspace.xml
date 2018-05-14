@@ -364,17 +364,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/herramienta/tests.py</url>
+          <url />
           <line>195</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/herramienta/views.py</url>
+          <url />
           <line>526</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/herramienta/reporteTest.py</url>
+          <url />
           <line>69</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
