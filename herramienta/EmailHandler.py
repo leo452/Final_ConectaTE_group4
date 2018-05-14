@@ -1,22 +1,43 @@
-import sendgrid
-import os
-from sendgrid.helpers.mail import *
+import smtplib
+import string
+from django.template import loader
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-from_email_address = 'app91642978@heroku.com'
-from_email_password = 'ddz0wkcz3463'
-sg_key = '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'
+from_email_address = 'herramientasconectate@gmail.com'
+from_email_password = 'conectate123'
 
 
-def send_email (to_email_address, subject, body):
-    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get(sg_key))
-    from_email = Email(from_email_address)
-    to_email = Email(to_email_address)
+def send_email_miembro(miembros_list, usuario_editor, herramienta):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(from_email_address, from_email_password)
 
-    content = Content("text/plain", body)
-    final_mail = Mail(from_email, subject, to_email, content)
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = 'Nueva herramienta a la espera de ser revisada'
+    msg['From'] = from_email_address
 
-    response = sg.client.mail.send.post(request_body=final_mail.get())
+    for miembro in miembros_list:
+        msg['To'] = miembro.email
+        text = loader.render_to_string('HTMLEmails/notification_miembroGTI_text.html',
+                                  {
+                                        'user_name': miembro.username,
+                                        'editors_name': usuario_editor,
+                                        'herramienta':  herramienta
+                                  }).encode('utf-8').strip()
+        html = loader.render_to_string('HTMLEmails/notification_miembroGTI.html',
+                                  {
+                                        'user_name': miembro.username,
+                                        'editors_name': usuario_editor,
+                                        'herramienta':  herramienta
+                                  }).encode('utf-8').strip()
 
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
+        part1 = MIMEText(text, 'plain')
+        part2 = MIMEText(html, 'html')
+
+        msg.attach(part1)
+        msg.attach(part2)
+
+        server.sendmail(from_email_address, [miembro.email], msg.as_string())
+
+    server.quit()

@@ -1,0 +1,14 @@
+<html>
+<head>
+</head>
+<body>
+    <h1 style="color:black;">Un contenido solicita revisón de pares</h1>
+    <h3 style="color:black;">Buenas {{ user_name }},</h3>
+    <p style="color:black;">Una herramienta editada por {{ editors_name }} ha sido marcada como lista
+    para ser revisada por los demás Miembros GTI. Si te interesa, te invitamos a revisar
+    su contenido y postularla a publicación si consideras que está en un estado listo para
+    el público. </p>
+
+    <p style="color:black;">Puedes acceder a dicha herramienta ingresando a este <a href="http://localhost:8080{% url 'tool_detail' herramienta.id %}">link</a></p>
+</body>
+</html>

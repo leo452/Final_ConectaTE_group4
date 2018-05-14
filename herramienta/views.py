@@ -20,6 +20,8 @@ from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
+from herramienta import EmailHandler
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -246,6 +248,9 @@ def editHerramientaField(request, id):
         if herramienta.estado == 0 and filters.is_herramienta_owner(request.user, herramienta):
             herramienta.estado = 1
             herramienta.save()
+
+            miembros = User.objects.filter(groups__name="MiembroGTI").exclude(username=request.user.username)
+            EmailHandler.send_email_miembro(miembros, request.user, herramienta)
 
         elif herramienta.estado == 1:
             herramienta.estado = 0
