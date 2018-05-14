@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -23,7 +24,7 @@
                             <td>{{ obj.creado }}</td>
                             <td>{{ obj.edicion }}</td>
                             <td>{{ obj.usuario }}</td>
-                            <td align="center"><a href="" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
+                            <td align="center"><a href="#" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
                             <td align="center"><a href="" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
                             <td align="center"><a href="" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
                         </tr>
@@ -65,17 +66,44 @@
                 class="glyphicon glyphicon-step-backward">Volver</span></a>
         </div>
     </div>
-<script>
-function ListaEdiciones(id) {
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Ediciones de la herramienta</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-}
+      </div>
+      <div class="modal-body">
+
+          <table class="table table-striped" id="tabla_ediciones">
+              <thead>
+              <tr>
+                  <td>Fecha</td>
+                  <td>Autor</td>
+              </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+
 
 function ListaEjemplos(id) {
 
 }
 
-function ListaTutorial(id) {
 
-}
 </script>
+<script type="text/javascript" src="{% static 'herramienta/js/reporte_herramienta.js' %}"></script>
 {% endblock %}
