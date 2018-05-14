@@ -609,3 +609,11 @@ class Importer(LoginRequiredMixin, View):
                 mensaje = {"mensaje": "La plantilla no tiene el numero de campos requeridos.", "respuesta": False}
                 return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
         return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)
+
+from django.core.serializers.json import DjangoJSONEncoder
+#pc171 reporte ediciones
+def listarEdicionesHerramienta(request,id):
+    herramientasEdicion = models.HerramientaEdicion.objects.filter(herramienta=id).values('id', 'usuarioHerramienta__username', 'creacion')
+    context = {'lista_ediciones': list(herramientasEdicion)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
