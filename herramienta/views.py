@@ -20,6 +20,8 @@ from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
+from herramienta import EmailHandler
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 import usuario.models
 
@@ -248,10 +250,17 @@ def editHerramientaField(request, id):
             herramienta.estado = 1
             herramienta.save()
 
+            miembros = User.objects.filter(groups__name="MiembroGTI").exclude(username=request.user.username)
+            EmailHandler.send_email_miembro(miembros, request.user, herramienta)
+
         elif herramienta.estado == 1:
             herramienta.estado = 0
             herramienta.owner = request.user
             herramienta.save()
+
+            herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+            for current_postulacion in herramientas_por_borrar:
+                current_postulacion.delete()
 
         if herramienta.estado == 0:
             text = "Borrador"
@@ -259,8 +268,6 @@ def editHerramientaField(request, id):
             text = "En Revisión"
 
         messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-        # TODO: Add tool to the on revision table.
 
         return redirect('tool_detail', index=herramienta.id)
     else:
@@ -280,9 +287,14 @@ def addHerramientaParaPublicacion (request, id):
         for revision in list_revisiones:
             if revision.owner.username == request.user.username:
                 messages.error(request, 'Herramienta ya ha sido postulada por ti')
+
                 return redirect('tool_detail', id)
 
         HerramientaPorAprobar.objects.create(herramienta=herramienta, owner=request.user)
+
+        # Send Confirmation Email
+        admins = User.objects.filter(groups__name="Administrador")
+        EmailHandler.send_email_to_publish_tool(admins, herramienta.owner, herramienta)
 
         messages.success(request, 'Herramienta Postulada Correctamente')
         return redirect('tool_detail', id)
