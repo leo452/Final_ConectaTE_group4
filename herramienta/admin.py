@@ -61,8 +61,8 @@ class HerramientaEdicionAdmin(admin.ModelAdmin):
 
 #formulario de tutorial
 class TutorialAdmin(admin.ModelAdmin):
-    list_display = ['nombre','descripcion','herramienta']
-    search_fields = ['nombre','descripcion']
+    list_display = ['nombre', 'descripcion','link_recurso','herramienta']
+    search_fields = ['nombre', 'descripcion','link_recurso','herramienta']
     form = forms.TutorialForm
 
 #registro de los formularios en django admin y para usarlos en las vistas
@@ -72,4 +72,4 @@ admin.site.register(models.Herramienta, HerramientaAdmin)
 admin.site.register(models.HerramientaEdicion, HerramientaEdicionAdmin)
 admin.site.register(models.FileUser)
 admin.site.register(models.HerramientaPorAprobar, HerramientaPorAprobarAdmin)
-admin.site.register(models.Tutorial)
+admin.site.register(models.Tutorial, TutorialAdmin)

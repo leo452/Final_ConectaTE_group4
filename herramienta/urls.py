@@ -39,4 +39,8 @@ urlpatterns = [
     url(r'^herramientas/rechazarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_rechazar, name='rechazar_postulacion'),
     url(r'^reporte/$', views.reporteHerramientas, name='reporteHerramientas'),
     url(r'^reporte/(?P<id>\d+)/$', views.listarEdicionesHerramienta, name="ediciones_herramienta"),
+    url(r'^api/tutoriales/$', views.ListTutoriales.as_view(), name='tutorial'),
+    url(r'^api/tutorial/form/$', views.addTutorial, name='tutorial-form'),
+    url(r'^api/tutorial/form/(?P<id>\d+)/$', views.editTutorial, name='tutorial-form-edit'),
+    url(r'^tutorial/add/$', views.addTutorialView, name='tutorial-v'),
 ]

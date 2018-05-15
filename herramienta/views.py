@@ -6,7 +6,7 @@ from django.views import View
 import models
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseNotFound
-from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm
+from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm, TutorialForm
 from django.views.generic import ListView
 import json
 from django.core.exceptions import ObjectDoesNotExist
@@ -629,3 +629,72 @@ def listarEdicionesHerramienta(request,id):
     context = {'lista_ediciones': list(herramientasEdicion)}
     return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
                         content_type='application/json')
+
+#pc173 reporte de tutoriales
+@csrf_exempt
+def addTutorial(request):
+    if request.method == "POST":
+        form = TutorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Tutorial agregado con Éxito!"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}),status=404,
+                        content_type='application/json')
+
+def getTutorial(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        if id:
+            tutorial = models.Tutorial.objects.get(id=id)
+        else:
+            Tutorial = models.Tutorial.objects.all()
+
+        data = serializers.serialize('json', tutorial)
+        return HttpResponse(data, status=200,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                        content_type='application/json')
+
+@csrf_exempt
+def editTutorial(request, id):
+    try:
+        tutorial = models.Tutorial.objects.get(id=id)
+    except ObjectDoesNotExist:
+        mensaje = "Este tutorial no existe"
+        return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                            content_type='application/json')
+
+    if request.method == "POST":
+        form = TutorialForm(request.POST, instance=tutorial)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Guardado exitoso"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
+                        content_type='application/json')
+
+
+class ListTutoriales(AJAXListMixin, ListView):
+    model = models.Tutorial
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        querysert = super(AJAXListMixin, self).get_queryset()
+        return querysert.filter(nombre__icontains=q)
+
+
+def addTutorialView(request):
+    return render(request,'herramienta/add_tutorial.html',{"form": TutorialForm()})

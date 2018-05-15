@@ -10,7 +10,7 @@ class TutorialForm(forms.ModelForm):
     class Meta:
         model = models.Tutorial
 
-        fields = ['nombre', 'descripcion','herramienta']
+        fields = ['nombre', 'descripcion','link_recurso','herramienta']
 
 #creacion del formulario de categoria
 class CategoriaForm(forms.ModelForm):
