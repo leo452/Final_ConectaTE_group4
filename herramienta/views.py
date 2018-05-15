@@ -623,9 +623,23 @@ class Importer(LoginRequiredMixin, View):
         return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)
 
 from django.core.serializers.json import DjangoJSONEncoder
+
 #pc171 reporte ediciones
 def listarEdicionesHerramienta(request,id):
     herramientasEdicion = models.HerramientaEdicion.objects.filter(herramienta=id).values('id', 'usuarioHerramienta__username', 'creacion')
     context = {'lista_ediciones': list(herramientasEdicion)}
     return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
                         content_type='application/json')
+#pc172 reporte ejemplos
+def listarEjemplosHerramienta(request,id):
+    ejemplos = models.Ejemplo.objects.filter(herramienta=id).values('id','nombre')
+    context = {'lista_ejemplos': list(ejemplos)}
+    return HttpResponse(json.dumps(context, cls=DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+#pc172 ver el detalle de un ejemplo
+def ejemplo(request, id):
+    ejemplo= models.Ejemplo.objects.get(pk=id)
+    herramientas= models.Herramienta.objects.filter(ejemplo=ejemplo)
+    print herramientas
+    return render(request, 'herramienta/detalleEjemplo.html', {'ejemplo': ejemplo, 'herramientas': herramientas})

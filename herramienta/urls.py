@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^herramientas/rechazarPostulacion/(?P<index>\d+)/$', views.lista_postulaciones_rechazar, name='rechazar_postulacion'),
     url(r'^reporte/$', views.reporteHerramientas, name='reporteHerramientas'),
     url(r'^reporte/(?P<id>\d+)/$', views.listarEdicionesHerramienta, name="ediciones_herramienta"),
+    url(r'^reporte/ejemplos/(?P<id>\d+)/$', views.listarEjemplosHerramienta, name="ejemplos_herramienta"),
+    url(r'^ejemplo/(?P<id>\d+)/$', views.ejemplo,name="ejemplo")
 ]

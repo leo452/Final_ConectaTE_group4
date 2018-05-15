@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load filters %}
+
+{% block content %}
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+        <!-- Post Content Column -->
+        <div class="col-lg-8">
+
+            <!-- Title -->
+            <h1 class="mt-4">{{ ejemplo.nombre }}</h1>
+
+            <hr>
+
+            <!-- Date/Time -->
+            <p>Herramientas:</p>
+            {% for obj in herramientas %}
+            <p><a href="/herramientas/detail/{{obj.id}}">{{obj.nombre }}</a></p>
+            {% endfor %}
+
+            <hr>
+
+            <!-- Post Content -->
+            <h3>Descripción</h3>
+            <p class="lead"> {{ ejemplo.descripcion }}</p>
+
+
+
+            <hr>
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+
+
+          <!-- Side Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Recurso</h5>
+            <div class="card-body">
+                <a href="">{{ ejemplo.link_recurso }}</a>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+{% endblock %}
