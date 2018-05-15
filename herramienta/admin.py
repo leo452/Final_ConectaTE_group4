@@ -55,8 +55,8 @@ class HerramientaAdmin(admin.ModelAdmin):
 
 #formulario para edicion de herramienta
 class HerramientaEdicionAdmin(admin.ModelAdmin):
-    list_display = ['editor','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
-    search_fields = ['usuarioHerramienta__usuario__first_name', 'usuarioHerramienta__usuario__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
+    list_display = ['editor','herramienta','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
+    search_fields = ['herramienta__nombre','usuarioHerramienta__usuario__first_name', 'usuarioHerramienta__usuario__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
     form = forms.HerramientaEdicionForm
 
 #formulario de tutorial
