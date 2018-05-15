@@ -31,7 +31,6 @@ def has_revision_access(user, herramienta):
 def is_herramienta_owner(user, herramienta):
     return True if herramienta.owner.username == user.username else False
 
-
 @register.filter(name='is_herramienta_posted_by_user')
 def is_herramienta_posted_by_user(user, herramienta):
     list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)

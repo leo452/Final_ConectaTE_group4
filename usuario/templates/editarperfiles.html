@@ -19,12 +19,9 @@
     (function () {
         if(getUrlParameter("page")){
             var request="/usuario/editarperfiles?page="+getUrlParameter("page");
-            //var request="https://final-conectate-group4.herokuapp.com/usuario/editarperfiles?page="+getUrlParameter("page");
-            //var request="http://localhost:8000/usuario/editarperfiles?page="+getUrlParameter("page");
         }
         else{
             var request="/usuario/editarperfiles?page=1";
-            //var request="http://localhost:8000/usuario/editarperfiles?page=1";
         }
         $.get(request).done(function(data,textstatus, jqXHR) {
             if (jqXHR.getResponseHeader('previous') && jqXHR.getResponseHeader('next')) {
@@ -77,16 +74,13 @@
                         '</tr>';
 
                 $("#usuarios").append(div);
-                //$.getJSON("https://final-conectate-group4.herokuapp.com/usuario/grupo/"+item.pk).done(function(data1) {
                 $.getJSON("/usuario/grupo/"+item.pk).done(function(data1) {
-                //$.getJSON("http://localhost:8000/usuario/grupo/"+item.pk).done(function(data1) {
                     $.each(data1, function (v, ite) {
                         var opt1 = ite.fields.name;
                         $('#gu_'+item.pk).append(opt1);
                     });
                 });
                 $.getJSON("/usuario/grupos").done(function(data1) {
-                //$.getJSON("http://localhost:8000/usuario/grupos").done(function(data1) {
                     $.each(data1, function (v, ite) {
                         var opt;
                         if (item.fields.groups[0] == ite.pk)
@@ -102,16 +96,16 @@
     })();
     </script>
 
-    <h1>Editar Perfiles de Usuarios</h1>
     <div class="container">
         <div class="row">
+            <h1>Editar Perfiles de Usuarios</h1>
             <div class="col-sm-12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <td>Nombres</td>
-                            <td>Perfil Actual</td>
-                            <td colspan="2">Perfiles Disponibles</td>
+                            <th>Nombres</th>
+                            <th>Perfil Actual</th>
+                            <th colspan="2">Perfiles Disponibles</th>
                         </tr>
                     </thead>
                     <tbody id="usuarios">
@@ -120,15 +114,18 @@
                 </table>
             </div>
         </div>
-    </div>
-    <div class="pagination pagination-right">
-        <span id="paginacion">
 
-        </span>
-    </div>
-    <div style="padding-top: 3%;" align="center">
-        <a href="{% url 'home' %}" class="btn btn-primary"><span
-            class="glyphicon glyphicon-step-backward">Volver</span></a>
+        <div class="col-sm-12">
+            <div class="pagination pagination-right">
+                <span id="paginacion">
+
+                </span>
+            </div>
+        </div>
+        <div style="padding-top: 3%;" align="center">
+            <a href="{% url 'home' %}" class="btn btn-primary"><span
+                class="glyphicon glyphicon-step-backward">Volver</span></a>
+        </div>
     </div>
 
 <script>
@@ -136,8 +133,6 @@ function cambiar(id) {
     var usuario = id;
     var grupo = $('#u_'+usuario)[0].value;
     var url = "{% url 'cambiarGrupo' %}";
-    //var url = "https://final-conectate-group4.herokuapp.com/usuario/cambiagrupo/";
-    //var url = "http://localhost:8000/usuario/cambiagrupo/";
     var arr = {id:usuario,grupo:grupo};
     var data = JSON.stringify(arr);
 
@@ -150,22 +145,3 @@ function cambiar(id) {
 }
 </script>
 {% endblock %}
-{% comment %}
-{% block pagination %}
-  {% if is_paginated %}
-      <div class="pagination">
-          <span class="page-links">
-              {% if page_obj.has_previous %}
-                  <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-              {% endif %}
-              <span class="page-current">
-                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-              </span>
-              {% if page_obj.has_next %}
-                  <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-              {% endif %}
-          </span>
-      </div>
-  {% endif %}
-{% endblock %}
-{% endcomment %}
