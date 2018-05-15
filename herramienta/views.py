@@ -698,3 +698,14 @@ class ListTutoriales(AJAXListMixin, ListView):
 
 def addTutorialView(request):
     return render(request,'herramienta/add_tutorial.html',{"form": TutorialForm()})
+
+def listarTutorialesHerramienta(request,id):
+    herramientasTutorial = models.Tutorial.objects.filter(herramienta=id).values('id', 'nombre')
+    context = {'lista_tutoriales': list(herramientasTutorial)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+def detailTutorial(request, id=None):
+    instance = get_object_or_404(models.Tutorial, id=id)
+    context = {'tutorial': instance}
+    return render(request, 'detalletutorial.html', context)
