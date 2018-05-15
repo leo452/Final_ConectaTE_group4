@@ -23,3 +23,7 @@ function ListaEdiciones(id) {
 function ListaTutorial(id) {
 
 }
+
+function ListaEjemplos(id) {
+
+}

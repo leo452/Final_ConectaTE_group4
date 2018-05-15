@@ -236,7 +236,12 @@ class AtoTest(TestCase):
         self.browser.implicitly_wait(3)
         cantidadEjemplos = self.browser.find_element_by_id('herramientas').find_element(By.XPATH,'//tr/td[6]/a')
         cantidadEjemplos.click()
-x
+        self.browser.implicitly_wait(3)
+        primerejemplo= self.browser.find_element_by_id('tabla_ejemplos').find_element(By.XPATH, '//tr/td/a')
+        primerejemplo.click()
+        self.browser.implicitly_wait(3)
+        tituloejemplo = self.browser.find_elemen(By.XPATH,'//h1[text()="Ejemplo 1"]')
+        self.assertIsNotNone(tituloejemplo, "no existe el titulo del ejemplo que se consulto")
 
 
 #refactor PC194
