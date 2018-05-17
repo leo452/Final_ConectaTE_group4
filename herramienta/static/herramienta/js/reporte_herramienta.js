@@ -21,6 +21,7 @@ function ListaEdiciones(id) {
 }
 
 function ListaTutorial(id) {
+<<<<<<< HEAD
 
 }
 
@@ -43,4 +44,27 @@ function ListaEjemplos(id) {
             $('#myModal1').modal('show')
         }
     })
+=======
+$.ajax({
+        url:'/herramientas/reporte/tutoriales/'+id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(response){
+            var data = response.lista_tutoriales;
+            var modal = $("#tabla_tutoriales tbody");
+            var html;
+            data.forEach(function (element) {
+                html +=`<tr>
+                    <td ><a href="#" onclick="openDetailTutorial(${element.id})"> ${element.nombre} </a></td>
+                </tr>`;
+            });
+            modal.html("");
+            modal.append(html);
+            $('#myModal2').modal('show')
+        }
+    })
+}
+function  openDetailTutorial(id) {
+    window.location='/herramientas/reporte/tutoriales/detail/'+id
+>>>>>>> 336a0200052aeb3576206ccad29308aae132f63f
 }

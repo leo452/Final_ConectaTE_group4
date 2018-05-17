@@ -41,4 +41,10 @@ urlpatterns = [
     url(r'^reporte/(?P<id>\d+)/$', views.listarEdicionesHerramienta, name="ediciones_herramienta"),
     url(r'^reporte/ejemplos/(?P<id>\d+)/$', views.listarEjemplosHerramienta, name="ejemplos_herramienta"),
     url(r'^ejemplo/(?P<id>\d+)/$', views.ejemplo,name="ejemplo")
+    url(r'^reporte/tutoriales/(?P<id>\d+)/$', views.listarTutorialesHerramienta, name="tutoriales_herramienta"),
+    url(r'^reporte/tutoriales/detail/(?P<id>\d+)/$', views.detailTutorial, name="tutorial_detail"),
+    url(r'^api/tutoriales/$', views.ListTutoriales.as_view(), name='tutorial'),
+    url(r'^api/tutorial/form/$', views.addTutorial, name='tutorial-form'),
+    url(r'^api/tutorial/form/(?P<id>\d+)/$', views.editTutorial, name='tutorial-form-edit'),
+    url(r'^tutorial/add/$', views.addTutorialView, name='tutorial-v'),
 ]
