@@ -133,7 +133,7 @@ def edicion_perfiles_list(request):
     if request.method == "GET":
         page = request.GET.get('page')
         user_li = User.objects.all().filter(is_staff=False)
-        user_list = user_li.filter(groups__isnull=False)
+        user_list = user_li.filter(groups__isnull=False).order_by('username')
         pag = Paginator(user_list, 10)
 
         try:
