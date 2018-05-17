@@ -559,7 +559,7 @@ def reporteHerramientas(request):
         u_nombre = u.username
         n_ediciones = models.HerramientaEdicion.objects.filter(herramienta=obj.id).count()
         n_tutorial = models.Tutorial.objects.filter(herramienta=obj).count()
-        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj).count()
+        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj.id).count()
 
         ret.append({'herramienta': h_nombre, 'creado': h_fecha, 'edicion': e_fecha, 'usuario': u_nombre,
                     'ediciones': n_ediciones, 'ejemplos': n_ejemplo, 'tutoriales': n_tutorial,
