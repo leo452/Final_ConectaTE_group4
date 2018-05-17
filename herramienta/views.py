@@ -6,7 +6,7 @@ from django.views import View
 import models
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseNotFound
-from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm
+from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm, TutorialForm
 from django.views.generic import ListView
 import json
 from django.core.exceptions import ObjectDoesNotExist
@@ -20,6 +20,8 @@ from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
+from herramienta import EmailHandler
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 import usuario.models
 
@@ -248,10 +250,17 @@ def editHerramientaField(request, id):
             herramienta.estado = 1
             herramienta.save()
 
+            miembros = User.objects.filter(groups__name="MiembroGTI").exclude(username=request.user.username)
+            EmailHandler.send_email_miembro(miembros, request.user, herramienta)
+
         elif herramienta.estado == 1:
             herramienta.estado = 0
             herramienta.owner = request.user
             herramienta.save()
+
+            herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+            for current_postulacion in herramientas_por_borrar:
+                current_postulacion.delete()
 
         if herramienta.estado == 0:
             text = "Borrador"
@@ -259,8 +268,6 @@ def editHerramientaField(request, id):
             text = "En Revisión"
 
         messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-        # TODO: Add tool to the on revision table.
 
         return redirect('tool_detail', index=herramienta.id)
     else:
@@ -280,9 +287,14 @@ def addHerramientaParaPublicacion (request, id):
         for revision in list_revisiones:
             if revision.owner.username == request.user.username:
                 messages.error(request, 'Herramienta ya ha sido postulada por ti')
+
                 return redirect('tool_detail', id)
 
         HerramientaPorAprobar.objects.create(herramienta=herramienta, owner=request.user)
+
+        # Send Confirmation Email
+        admins = User.objects.filter(groups__name="Administrador")
+        EmailHandler.send_email_to_publish_tool(admins, herramienta.owner, herramienta)
 
         messages.success(request, 'Herramienta Postulada Correctamente')
         return redirect('tool_detail', id)
@@ -617,3 +629,83 @@ def listarEdicionesHerramienta(request,id):
     context = {'lista_ediciones': list(herramientasEdicion)}
     return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
                         content_type='application/json')
+
+#pc173 reporte de tutoriales
+@csrf_exempt
+def addTutorial(request):
+    if request.method == "POST":
+        form = TutorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Tutorial agregado con Éxito!"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}),status=404,
+                        content_type='application/json')
+
+def getTutorial(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        if id:
+            tutorial = models.Tutorial.objects.get(id=id)
+        else:
+            Tutorial = models.Tutorial.objects.all()
+
+        data = serializers.serialize('json', tutorial)
+        return HttpResponse(data, status=200,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                        content_type='application/json')
+
+@csrf_exempt
+def editTutorial(request, id):
+    try:
+        tutorial = models.Tutorial.objects.get(id=id)
+    except ObjectDoesNotExist:
+        mensaje = "Este tutorial no existe"
+        return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                            content_type='application/json')
+
+    if request.method == "POST":
+        form = TutorialForm(request.POST, instance=tutorial)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Guardado exitoso"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
+                        content_type='application/json')
+
+
+class ListTutoriales(AJAXListMixin, ListView):
+    model = models.Tutorial
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        querysert = super(AJAXListMixin, self).get_queryset()
+        return querysert.filter(nombre__icontains=q)
+
+
+def addTutorialView(request):
+    return render(request,'herramienta/add_tutorial.html',{"form": TutorialForm()})
+
+def listarTutorialesHerramienta(request,id):
+    herramientasTutorial = models.Tutorial.objects.filter(herramienta=id).values('id', 'nombre')
+    context = {'lista_tutoriales': list(herramientasTutorial)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+def detailTutorial(request, id=None):
+    instance = get_object_or_404(models.Tutorial, id=id)
+    context = {'tutorial': instance}
+    return render(request, 'detalletutorial.html', context)

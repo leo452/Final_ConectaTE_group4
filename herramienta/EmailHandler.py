@@ -1,22 +1,56 @@
-import sendgrid
-import os
-from sendgrid.helpers.mail import *
+import smtplib
+from django.template import loader
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
-from_email_address = 'app91642978@heroku.com'
-from_email_password = 'ddz0wkcz3463'
-sg_key = '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'
+from_email_address = 'herramientasconectate@gmail.com'
+from_email_password = 'conectate123'
 
 
-def send_email (to_email_address, subject, body):
-    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get(sg_key))
-    from_email = Email(from_email_address)
-    to_email = Email(to_email_address)
+def send_email_miembro(miembros_list, usuario_editor, herramienta):
+    subject = 'Nueva herramienta a la espera de ser revisada'
+    html_template = 'HTMLEmails/notification_miembroGTI.html'
+    text_template = 'HTMLEmails/notification_miembroGTI_text.html'
 
-    content = Content("text/plain", body)
-    final_mail = Mail(from_email, subject, to_email, content)
+    send_email_to_users(miembros_list, usuario_editor, herramienta, subject, html_template, text_template)
 
-    response = sg.client.mail.send.post(request_body=final_mail.get())
+def send_email_to_publish_tool (admin_list, owner, herramienta):
+    subject = 'Una herramienta ha sido marcada como lista para ser publicada'
+    html_template = 'HTMLEmails/notificacion_Herramienta_por_publicar.html'
+    text_template = 'HTMLEmails/notificacion_Herramienta_por_publicar_text.html'
 
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
+    send_email_to_users(admin_list, owner, herramienta, subject, html_template, text_template)
+
+def send_email_to_users(user_list, posting_user, herramienta, subject, html_template, text_template):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(from_email_address, from_email_password)
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = from_email_address
+
+    for user in user_list:
+        msg['To'] = user.email
+        text = loader.render_to_string(text_template,
+                                  {
+                                        'user_name': user.first_name,
+                                        'editors_name': posting_user,
+                                        'herramienta':  herramienta
+                                  }).encode('utf-8').strip()
+        html = loader.render_to_string(html_template,
+                                  {
+                                        'user_name': user.first_name,
+                                        'editors_name': posting_user,
+                                        'herramienta':  herramienta
+                                  }).encode('utf-8').strip()
+
+        part1 = MIMEText(text, 'plain')
+        part2 = MIMEText(html, 'html')
+
+        msg.attach(part1)
+        msg.attach(part2)
+
+        server.sendmail(from_email_address, [user.email], msg.as_string())
+
+    server.quit()

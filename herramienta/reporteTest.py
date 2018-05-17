@@ -108,8 +108,26 @@ class ReporteTest(TestCase):
         span = self.browser.find_element(By.XPATH, '//*[@id="herramientas"]/tr[1]/td[5]/a')
         span.click()
         self.browser.implicitly_wait(10)
-
-
-
+    #pc173 prueba
+    def test_reporteTutoriales(self):
+        self.browser.get('http://localhost:8000/herramientas')
+        link = self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(10)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys("admin@uniandes.edu.co")
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys("admin123456")
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        l2 = self.browser.find_element_by_id('menuHerramientas')
+        l2.click()
+        l3 = self.browser.find_element_by_id("reporteHerramientas")
+        l3.click()
+        self.browser.implicitly_wait(10)
+        self.browser.get("http://localhost:8000/herramientas/reporte/")
+        span = self.browser.find_element_by_css_selector('#herramientas > tr:nth-child(1) > td:nth-child(7) > a')
+        self.browser.execute_script("arguments[0].click();",span)
+        self.browser.implicitly_wait(10)
 
 
