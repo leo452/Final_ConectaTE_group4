@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.core.cache import cache
-from data_importer.views import DataImporterForm
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -22,7 +20,10 @@ from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
 from herramienta.models import Herramienta, HerramientaPorAprobar
 from herramienta.templatetags import filters
+from herramienta import EmailHandler
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+import usuario.models
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -197,21 +198,25 @@ def editHerramienta(request, id):
         return HttpResponse(json.dumps({"error": mensaje}), status=404,
                             content_type='application/json')
 
-    if request.method == "POST":
-        form = HerramientaForm(request.POST, instance=herramienta)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Herramienta editada con Éxito!')
-            #return redirect('home')
-            mensaje = {"mensaje": "edicion de herramienta exitoso"}
-            return HttpResponse(json.dumps(mensaje), status=200,
+    if filters.is_herramienta_owner(request.user, herramienta) or in_admin_group(request.user):
+        if request.method == "POST":
+            form = HerramientaForm(request.POST, instance=herramienta)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Herramienta editada con Éxito!')
+                #return redirect('home')
+                mensaje = {"mensaje": "edicion de herramienta exitoso"}
+                return HttpResponse(json.dumps(mensaje), status=200,
+                                    content_type='application/json')
+            erros = form.errors.items()
+            return HttpResponse(json.dumps(erros), status=400,
                                 content_type='application/json')
-        erros = form.errors.items()
-        return HttpResponse(json.dumps(erros), status=400,
+        mensaje = "Metodo no permitido"
+        return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
                             content_type='application/json')
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
-                        content_type='application/json')
+
+    else:
+        return redirect('home')
 
 
 # esta vista se llama usando la url herramienta/delete/#, se encarga de procesar la peticion tipo DELETE
@@ -229,12 +234,8 @@ def deleteHerramienta(request, id):
     if request.method == "DELETE":
         herramienta.delete()
         mensaje = {"mensaje": "Herramienta eliminada"}
-        return HttpResponse(json.dumps(mensaje), status=200,
-                            content_type='application/json')
-
-    mensaje = "Metodo no permitido"
-    return HttpResponse(json.dumps({"mensaje": mensaje}), status=404,
-                        content_type='application/json')
+        return HttpResponse(json.dumps(mensaje), status=200, content_type='application/json')
+    return redirect('home')
 
 
 def editHerramientaField(request, id):
@@ -244,25 +245,33 @@ def editHerramientaField(request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if herramienta.estado == 0:
-        herramienta.estado = 1
-        herramienta.save()
+    if not filters.has_group(request.user, "Administrador"):
+        if herramienta.estado == 0 and filters.is_herramienta_owner(request.user, herramienta):
+            herramienta.estado = 1
+            herramienta.save()
 
-    elif herramienta.estado == 1:
-        herramienta.estado = 0
-        herramienta.owner = request.user
-        herramienta.save()
+            miembros = User.objects.filter(groups__name="MiembroGTI").exclude(username=request.user.username)
+            EmailHandler.send_email_miembro(miembros, request.user, herramienta)
 
-    if herramienta.estado == 0:
-        text = "Borrador"
+        elif herramienta.estado == 1:
+            herramienta.estado = 0
+            herramienta.owner = request.user
+            herramienta.save()
+
+            herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+            for current_postulacion in herramientas_por_borrar:
+                current_postulacion.delete()
+
+        if herramienta.estado == 0:
+            text = "Borrador"
+        else:
+            text = "En Revisión"
+
+        messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
+
+        return redirect('tool_detail', index=herramienta.id)
     else:
-        text = "En Revisión"
-
-    messages.success(request, '¡La Herramienta ahora está en estado ' + text + '!')
-
-    # TODO: Add tool to the on revision table.
-
-    return redirect('tool_detail', index=herramienta.id)
+        return redirect('home')
 
 
 def addHerramientaParaPublicacion (request, id):
@@ -272,15 +281,20 @@ def addHerramientaParaPublicacion (request, id):
         messages.error(request, 'Herramienta no encontrada')
         return redirect('home')
 
-    if not filters.is_herramienta_owner(request.user, herramienta):
+    if not filters.is_herramienta_owner(request.user, herramienta) and not filters.has_group(request.user, "Administrador"):
         list_revisiones = HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
 
         for revision in list_revisiones:
             if revision.owner.username == request.user.username:
                 messages.error(request, 'Herramienta ya ha sido postulada por ti')
+
                 return redirect('tool_detail', id)
 
         HerramientaPorAprobar.objects.create(herramienta=herramienta, owner=request.user)
+
+        # Send Confirmation Email
+        admins = User.objects.filter(groups__name="Administrador")
+        EmailHandler.send_email_to_publish_tool(admins, herramienta.owner, herramienta)
 
         messages.success(request, 'Herramienta Postulada Correctamente')
         return redirect('tool_detail', id)
@@ -431,7 +445,7 @@ def addRevisionView(request):
 def addRevisionEstadoView(request):
     return render(request,'herramienta/add_estado_revision.html',{"form": RevisioForm()})
 
-
+#metodo encargado de dirigir al home y suministrarle la lista de herramientas respectiva segun los filtros
 def home(request):
     lista_herramientas = Herramienta.objects.all()
     if filters.has_group(request.user, "MiembroGTI"):
@@ -442,6 +456,7 @@ def home(request):
         lista_herramientas = lista_herramientas.exclude(estado=0)
     elif not filters.has_group(request.user, "Administrador"):
         lista_herramientas = lista_herramientas.filter(estado=2)
+
     #validar filtro
     categoria = request.GET.get('categoria',False)
     if categoria:
@@ -454,7 +469,6 @@ def home(request):
     if tipo_licencia:
         lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
     uso= request.GET.get('uso',False)
-    print uso
     if uso:
         lista_herramientas=lista_herramientas.filter(usos__icontains=uso, estado=1)
     context = {'lista_herramientas': lista_herramientas}
@@ -463,40 +477,124 @@ def home(request):
 
 def details(request, index=None):
     instance = get_object_or_404(Herramienta, id=index)
-    context = {'herramienta': instance}
-    return render(request, 'detalleherramienta.html', context)
+
+    if (filters.has_group(request.user, "Administrador") or instance.estado == 2 or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 1) or
+    (filters.has_group(request.user, "ConectaTE") and instance.estado == 1) or
+    (filters.has_group(request.user, "MiembroGTI") and instance.estado == 0 and instance.owner == request.user)):
+        context = {'herramienta': instance}
+        return render(request, 'detalleherramienta.html', context)
+    else:
+        return redirect('home')
+
+
+def lista_herramientas_por_publicar (request):
+    if(filters.has_group(request.user, "Administrador")):
+        lista_postulaciones = HerramientaPorAprobar.objects.all()
+
+        context = {'lista_postulaciones': lista_postulaciones}
+        return render(request, 'herramienta/lista_herramientas_publicacion.html', context)
+    else:
+        return redirect('home')
+
+def lista_postulaciones_aceptar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramienta.estado = 2
+        herramienta.save()
+
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
+
+def lista_postulaciones_rechazar (request, index=None):
+    try:
+        postulacion = models.HerramientaPorAprobar.objects.get(id=index)
+        herramienta = models.Herramienta.objects.get(id=postulacion.herramienta.id)
+    except ObjectDoesNotExist:
+        mensaje = "<h1>Esta herramienta no existe</h1>"
+        return HttpResponseNotFound(mensaje)
+
+    if filters.has_group(request.user, "Administrador"):
+        herramientas_por_borrar = models.HerramientaPorAprobar.objects.filter(herramienta_id=herramienta.id)
+        for current_postulacion in herramientas_por_borrar:
+            current_postulacion.delete()
+
+        return redirect('tool_detail', index=herramienta.id)
+    else:
+        return redirect('home')
+
+
+def reporteHerramientas(request):
+    herramienta_list = models.Herramienta.objects.all()
+    paginator = Paginator(herramienta_list, 10)
+
+    page = request.GET.get('page')
+    try:
+        herramientas = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        herramientas = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        herramientas = paginator.page(paginator.num_pages)
+
+    ret = []
+    for obj in herramientas:
+        h_nombre = obj.nombre
+        h_fecha = obj.creacion
+        edicion  = models.HerramientaEdicion.objects.filter(herramienta=obj.id).order_by('-creacion')[0]
+        e_fecha = edicion.creacion
+        u = obj.owner
+        u_nombre = u.username
+        n_ediciones = models.HerramientaEdicion.objects.filter(herramienta=obj.id).count()
+        n_tutorial = models.Tutorial.objects.filter(herramienta=obj).count()
+        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj).count()
+
+        ret.append({'herramienta': h_nombre, 'creado': h_fecha, 'edicion': e_fecha, 'usuario': u_nombre,
+                    'ediciones': n_ediciones, 'ejemplos': n_ejemplo, 'tutoriales': n_tutorial,
+                    'herramientaid': obj.id})
+
+    return render(request, 'herramienta/reporte_herramienta.html', {'lista': ret, 'herramientas': herramientas})
 
 
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
-        rows = request.POST.getlist('rows[]', False)
-        file = request.POST.get('file', False)
-        print '************** ',file
-        if rows and file:
-            data = cache.get(request.user.username)
-            if data:
-                rows = map(int, rows)
-                datos = data['files']
-                for x in datos:
-                    if x['id_file'] == int(file):
-                        for y in x['data']:
-                            if y['row'] in rows:
-                                fields = {}
-                                del y['row']
-                                for key, value in y.items():
-                                    if value != '':
-                                        fields.update({key:value})
-                                if fields:
-                                    herrami = models.Herramienta.objects.filter(nombre=fields['nombre'])
-                                    if herrami:
-                                        herrami.update(**fields)
-                                    else:
-                                        models.Herramienta.objects.create(**fields)
-        return HttpResponse('{}', content_type='application/json', status=201)
+        data = json.loads(request.POST.get('data', '[]'))
+        if data:
+            for y in data:
+                fields = {}
+                for key, value in y.items():
+                    if value != '':
+                        fields.update({key:value})
+                if fields:
+                    try:
+                        del fields['row']
+                    except KeyError:
+                        pass
+                    herrami = models.Herramienta.objects.filter(nombre=fields['nombre'])
+                    if herrami:
+                        herrami.update(**fields)
+                    else:
+                        models.Herramienta.objects.create(**fields)
+            return HttpResponse(json.dumps({"mensaje": "Actualizacion exitosa", "respuesta": True}),
+                                content_type='application/json', status=201)
+        return HttpResponse(json.dumps({"mensaje": "Error en el envio del archivo", "respuesta":False}), content_type='application/json', status=201)
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(SaveImporter, self).dispatch(request, args, kwargs)
+
 
 
 class Importer(LoginRequiredMixin, View):
@@ -511,7 +609,6 @@ class Importer(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            print 'Formulario valido'
             file_user = models.FileUser(file=request.FILES['file'])
             file_user.save()
             impor = self.importer(source=file_user.file, id_file=file_user.id)
@@ -523,5 +620,26 @@ class Importer(LoginRequiredMixin, View):
             else:
                 mensaje = {"mensaje": "La plantilla no tiene el numero de campos requeridos.", "respuesta": False}
                 return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
-        print form.errors.as_json()
         return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)
+
+from django.core.serializers.json import DjangoJSONEncoder
+
+#pc171 reporte ediciones
+def listarEdicionesHerramienta(request,id):
+    herramientasEdicion = models.HerramientaEdicion.objects.filter(herramienta=id).values('id', 'usuarioHerramienta__username', 'creacion')
+    context = {'lista_ediciones': list(herramientasEdicion)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+#pc172 reporte ejemplos
+def listarEjemplosHerramienta(request,id):
+    ejemplos = models.Ejemplo.objects.filter(herramienta=id).values('id','nombre')
+    context = {'lista_ejemplos': list(ejemplos)}
+    return HttpResponse(json.dumps(context, cls=DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+#pc172 ver el detalle de un ejemplo
+def ejemplo(request, id):
+    ejemplo= models.Ejemplo.objects.get(pk=id)
+    herramientas= models.Herramienta.objects.filter(ejemplo=ejemplo)
+    print herramientas
+    return render(request, 'herramienta/detalleEjemplo.html', {'ejemplo': ejemplo, 'herramientas': herramientas})

@@ -1,16 +1,16 @@
-from django.shortcuts import render, get_object_or_404, render_to_response, redirect
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login, get_user_model, logout, update_session_auth_hash
+from django.contrib.auth import  login, get_user_model, logout
 from django.core import serializers
 from django.http import Http404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import  user_passes_test
 from django.contrib.auth.models import Group, User
 from usuario.models import Usuario
 from django.urls import reverse
 from herramienta.models import Herramienta, HerramientaEdicion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib import messages
+
 
 #servicio rest para autenticar un usuario
 @csrf_exempt

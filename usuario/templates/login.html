@@ -39,18 +39,21 @@
 //metodo encargado de validar que la información de login sea correcta y de enviar la petición post para utilizar el servicio rest de login
 $('form').submit( function(e) {
 
-
-        if($("#email")[0].value==''){
-          $("#error").empty();
-          $("#error").append("el email no debe estar vacio");
-          $("#error").removeAttr("hidden");
-          return false;
-        }
+        $("#error").empty();
+        var error= '';
         var domain= $("#email")[0].value.split("@")[1];
-        if(domain!=="uniandes.edu.co")
+        if($("#email")[0].value=='')
         {
-          $("#error").empty();
-          $("#error").append("el email debe ser uniandes");
+          console.log("entra")
+          error="el email no debe estar vacio";
+        }
+        else if(domain!=="uniandes.edu.co")
+        {
+          error="el email debe ser uniandes";
+        }
+        if(error !== '')
+        {
+          $("#error").append(error);
           $("#error").removeAttr("hidden");
           return false;
         }

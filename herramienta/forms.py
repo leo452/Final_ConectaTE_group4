@@ -5,6 +5,13 @@ from django.contrib.admin import widgets
 import models
 from cuser.middleware import CuserMiddleware
 
+#creacion de formulario de tutorial
+class TutorialForm(forms.ModelForm):
+    class Meta:
+        model = models.Tutorial
+
+        fields = ['nombre', 'descripcion','herramienta']
+
 #creacion del formulario de categoria
 class CategoriaForm(forms.ModelForm):
     class Meta:
