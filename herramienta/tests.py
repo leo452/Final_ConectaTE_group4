@@ -249,7 +249,7 @@ class AtoTest(TestCase):
 
     #Prueba unitaria pc25
     def test_agregar_herramienta_miembro_gti(self):
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(3)
