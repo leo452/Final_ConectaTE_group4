@@ -1,5 +1,8 @@
  # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import time
+
 import models
 import views
 from django.urls import resolve, reverse
@@ -20,56 +23,56 @@ def getRealPath(rel_path):
     abs_file_path = os.path.join(script_dir, rel_path)
     return os.path.realpath(abs_file_path)
 
-class Test(TestCase):
+# class Test(TestCase):
 
-# test para validar el funcionamiento del servicio para eliminar herramientas
-    def test_HerramintaDelete(self):
-        herramienta = models.Herramienta.objects.create(nombre='Herramienta test', descripcion='')
-        if herramienta:
-            url = reverse('herramienta-delete', args=[herramienta.id])
-            response = self.client.delete(url)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response['content-type'], 'application/json')
+# # test para validar el funcionamiento del servicio para eliminar herramientas
+#     def test_HerramintaDelete(self):
+#         herramienta = models.Herramienta.objects.create(nombre='Herramienta test', descripcion='')
+#         if herramienta:
+#             url = reverse('herramienta-delete', args=[herramienta.id])
+#             response = self.client.delete(url)
+#             self.assertEqual(response.status_code, 200)
+#             self.assertEqual(response['content-type'], 'application/json')
+#
+#
+# #test para validar el funcionamiento del servicio que permite obtener todas las categorias
+#     def test_getCategorias(self):
+#         models.Categoria.objects.create(nombre='categoria test', descripcion='cat1')
+#         models.Categoria.objects.create(nombre='categoria test1', descripcion='cat2')
+#         url = reverse('categoria')
+#         response = self.client.get(url)
+#         arr = json.loads(response.content)
+#         self.assertEqual(arr[0]['fields']['nombre'], 'categoria test')
+#
+# #test para el metodo de filtrar herramientas por sistema opeativo en la home. PC19
+#     def test_filtrar_herramienta_metodo(self):
+#         lista_herramientas = models.Herramienta.objects.filter(sistema_operativo__icontains='windows')
+#         if lista_herramientas:
+#             url = reverse('home')
+#             response = self.client.delete(url)
+#             self.assertEqual(response.status_code, 200)
+#             self.assertEqual(response['content-type'], 'application/json')
+#
+# #test para el metodo de filtrar herramientas por tipo de licencia en la home. PC20
+#     def test_filtrar_herramienta_metodo_licencia(self):
+#         lista_herramientas = models.Herramienta.objects.filter(licencia__icontains='asd')
+#         if lista_herramientas:
+#             url = reverse('home')
+#             response = self.client.delete(url)
+#             self.assertEqual(response.status_code, 200)
+#             self.assertEqual(response['content-type'], 'application/json')
+#
+# #test para el metodo de filtrar herramientas por tipo de licencia en la home. PC14
+#     def test_filtrar_herramienta_metodo_uso(self):
+#         lista_herramientas = models.Herramienta.objects.all()
+#         print lista_herramientas
+#         if lista_herramientas:
+#             url = reverse('home')
+#             response = self.client.delete(url)
+#             self.assertEqual(response.status_code, 200)
+#             self.assertEqual(response['content-type'], 'application/json')
 
-
-#test para validar el funcionamiento del servicio que permite obtener todas las categorias
-    def test_getCategorias(self):
-        models.Categoria.objects.create(nombre='categoria test', descripcion='cat1')
-        models.Categoria.objects.create(nombre='categoria test1', descripcion='cat2')
-        url = reverse('categoria')
-        response = self.client.get(url)
-        arr = json.loads(response.content)
-        self.assertEqual(arr[0]['fields']['nombre'], 'categoria test')
-
-#test para el metodo de filtrar herramientas por sistema opeativo en la home. PC19
-    def test_filtrar_herramienta_metodo(self):
-        lista_herramientas = models.Herramienta.objects.filter(sistema_operativo__icontains='windows')
-        if lista_herramientas:
-            url = reverse('home')
-            response = self.client.delete(url)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response['content-type'], 'application/json')
-
-#test para el metodo de filtrar herramientas por tipo de licencia en la home. PC20
-    def test_filtrar_herramienta_metodo_licencia(self):
-        lista_herramientas = models.Herramienta.objects.filter(licencia__icontains='asd')
-        if lista_herramientas:
-            url = reverse('home')
-            response = self.client.delete(url)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response['content-type'], 'application/json')
-
-#test para el metodo de filtrar herramientas por tipo de licencia en la home. PC14
-    def test_filtrar_herramienta_metodo_uso(self):
-        lista_herramientas = models.Herramienta.objects.all()
-        print lista_herramientas
-        if lista_herramientas:
-            url = reverse('home')
-            response = self.client.delete(url)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response['content-type'], 'application/json')
-
-usuario_prueba = "tj.marrugo10@uniandes.edu.co"
+usuario_prueba= "tj.marrugo10@uniandes.edu.co"
 usuario_gti_prueba="pruebabuglogin@uniandes.edu.co"
 usuario_prueba_local= "pruebabug5@uniandes.edu.co"
 clave_prueba = "admin123456"
@@ -215,6 +218,34 @@ class AtoTest(TestCase):
         datos_parte1(self)
         datos_laterales(self)
 
+    #prueba unitaria automatica para PC172
+    def test_reporte_con_ejemplos_uso(self):
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
+        link = self.browser.find_element_by_id('login')
+        link.click()
+        self.browser.implicitly_wait(3)
+        input_email = self.browser.find_element_by_id('email')
+        input_email.send_keys(usuario_prueba)
+        input_pass = self.browser.find_element_by_id('password')
+        input_pass.send_keys(usuario_pruebaAdmin_clave)
+        btn_login = self.browser.find_element_by_id('btn_login')
+        btn_login.click()
+        self.browser.implicitly_wait(3)
+        l2 = self.browser.find_element_by_id('menuHerramientas')
+        l2.click()
+        self.browser.implicitly_wait(3)
+        l3 = self.browser.find_element_by_id('reporteHerramientas')
+        l3.click()
+        self.browser.implicitly_wait(3)
+        cantidadEjemplos = self.browser.find_element_by_id('herramientas').find_element(By.XPATH,'//tr/td[6]/a')
+        cantidadEjemplos.click()
+        time.sleep(2)
+        self.browser.implicitly_wait(5)
+        primerejemplo= self.browser.find_element_by_id('tabla_ejemplos').find_element(By.XPATH, '*//tr/td/a')
+        primerejemplo.click()
+        self.browser.implicitly_wait(3)
+        tituloejemplo = self.browser.find_element(By.XPATH,'//h1[text()="Ejemplo 1"]')
+        self.assertIsNotNone(tituloejemplo, "no existe el titulo del ejemplo que se consulto")
 
 
 #refactor PC194
@@ -258,3 +289,4 @@ def datos_laterales(self):
     h13 = self.browser.find_element(By.XPATH, '/html/body/div/div/div[2]/div[5]/div')
     self.assertIn('http://moodleinstitucional.uniandes.edu.co/course/view.php?id=1242&section=24', h13.text)
     self.browser.implicitly_wait(10)
+

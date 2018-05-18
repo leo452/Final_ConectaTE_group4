@@ -40,6 +40,28 @@ $.ajax({
         }
     })
 }
+
+function ListaEjemplos(id) {
+    $.ajax({
+        url:'/herramientas/reporte/ejemplos/'+id,
+        type: 'GET',
+        dataType: 'json',
+        success: function(response){
+            var data = response.lista_ejemplos;
+            var modal1 = $("#tabla_ejemplos tbody");
+            var html1;
+            data.forEach(function (element) {
+                html1 +=`<tr>
+                    <td><a href="/herramientas/ejemplo/${element.id}">${element.nombre}</a></td>
+                </tr>`;
+            });
+            modal1.html("");
+            modal1.append(html1);
+            $('#myModal1').modal('show')
+        }
+    })
+
+}
 function  openDetailTutorial(id) {
     window.location='/herramientas/reporte/tutoriales/detail/'+id
 }
