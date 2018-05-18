@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load filters %}
 {% block content %}
 
 <div class="container">
@@ -30,8 +31,10 @@
                     {% for herramienta in herramientas %}
                         <tr>
                             <td>
-                                <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
-                                <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
+                                {% if request.user|has_group:"Administrador" %}
+                                    <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
+                                    <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
+                                {% endif %}
                             </td>
                             <td>
                                 {{ herramienta.owner }}
