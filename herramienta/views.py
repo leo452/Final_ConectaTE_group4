@@ -12,18 +12,17 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from herramienta.importer import CSVImporterTool
-from herramienta.models import Herramienta, HerramientaPorAprobar
+from herramienta.models import Herramienta, HerramientaPorAprobar, Categoria
 from herramienta.templatetags import filters
 from herramienta import EmailHandler
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-import usuario.models
 
 # Create your views here.
 #API PARA CATERGORIAS
@@ -369,7 +368,7 @@ class ListHerramientaEdicion(AJAXListMixin, ListView):
 def addCategoriaView(request):
     return render(request,'herramienta/add_categoria.html',{"form": CategoriaForm()})
 
-@user_passes_test(in_admin_group)
+# @user_passes_test(in_admin_group)
 def listHerramienta(request):
     herramienta_list = models.Herramienta.objects.all()
     paginator = Paginator(herramienta_list, 3) # Show 25 contacts per page
@@ -458,20 +457,26 @@ def home(request):
         lista_herramientas = lista_herramientas.filter(estado=2)
 
     #validar filtro
-    categoria = request.GET.get('categoria',False)
+    categoria = request.GET.get('categoria', False)
     if categoria:
-        cat =int(categoria)
-        lista_herramientas = lista_herramientas.filter(tipo=cat,estado=1)
+        if not categoria == 'null':
+            cat = int(categoria)
+            lista_herramientas = lista_herramientas.filter(tipo=cat, estado=1)
     sistema_operativo = request.GET.get('sistema_operativo', False)
     if sistema_operativo:
-        lista_herramientas = lista_herramientas.filter(sistema_operativo__icontains=sistema_operativo)
+        if not sistema_operativo == 'null':
+            lista_herramientas = lista_herramientas.filter(sistema_operativo__icontains=sistema_operativo)
     tipo_licencia = request.GET.get('tipo_licencia', False)
     if tipo_licencia:
-        lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
-    uso= request.GET.get('uso',False)
+        if not sistema_operativo == 'null':
+            lista_herramientas = lista_herramientas.filter(licencia__icontains=tipo_licencia)
+    uso = request.GET.get('uso', False)
     if uso:
-        lista_herramientas=lista_herramientas.filter(usos__icontains=uso, estado=1)
-    context = {'lista_herramientas': lista_herramientas}
+        if not uso == "":
+            lista_herramientas=lista_herramientas.filter(usos__icontains=uso, estado=1)
+
+    categorias = Categoria.objects.all()
+    context = {'lista_herramientas': lista_herramientas, 'categorias': categorias}
     return render(request, 'home.html', context)
 
 
@@ -575,6 +580,7 @@ def reporteHerramientas(request):
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data', '[]'))
+        print data
         if data:
             for y in data:
                 fields = {}

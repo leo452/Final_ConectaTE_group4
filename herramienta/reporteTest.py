@@ -16,7 +16,7 @@ usuario_pruebaGTI_clave = "admin123456"
 class ReporteTest(TestCase):
 
     def setUp(self):
-        self.browser = webdriver.Chrome(executable_path=r"extra/chromedriver.exe")
+        self.browser = webdriver.Chrome()
         self.browser.set_window_size(1024, 786)
         self.browser.implicitly_wait(2)
 
@@ -86,33 +86,34 @@ class ReporteTest(TestCase):
 
     #pc171 Prueba
     def test_reporteEdiciones(self):
-        # self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)
         input_email = self.browser.find_element_by_id('email')
-        input_email.send_keys("admin@uniandes.edu.co")
+        input_email.send_keys("tj.marrugo10@uniandes.edu.co")
         input_pass = self.browser.find_element_by_id('password')
         input_pass.send_keys("admin123456")
         btn_login = self.browser.find_element_by_id('btn_login')
         btn_login.click()
-        l2 = self.browser.find_element_by_id('menuHerramientas')
+        l2 = self.browser.find_element_by_xpath('//*[@id="menuHerramientas"]')
         l2.click()
-        l3 = self.browser.find_element_by_id("reporteHerramientas")
+        l3 = self.browser.find_element_by_xpath('//*[@id="reporteHerramientas"]')
         l3.click()
-        self.browser.get("http://localhost:8000/herramientas/reporte/")
-        span = self.browser.find_element(By.XPATH, '//*[@id="herramientas"]/tr[1]/td[5]/a')
+        self.browser.get("https://final-conectate-group4.herokuapp.com/herramientas/reporte/")
+        span = self.browser.find_element_by_xpath('//*[@id="herramientas"]/tr[4]/td[5]/a')
         span.click()
+        h6 = self.browser.find_element(By.XPATH, '//*[@id="myModal"]/div/div/div[1]/h4')
+        self.assertIsNotNone(h6)
         self.browser.implicitly_wait(10)
     #pc173 prueba
     def test_reporteTutoriales(self):
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)
         input_email = self.browser.find_element_by_id('email')
-        input_email.send_keys("admin@uniandes.edu.co")
+        input_email.send_keys("tj.marrugo10@uniandes.edu.co")
         input_pass = self.browser.find_element_by_id('password')
         input_pass.send_keys("admin123456")
         btn_login = self.browser.find_element_by_id('btn_login')
@@ -121,10 +122,13 @@ class ReporteTest(TestCase):
         l2.click()
         l3 = self.browser.find_element_by_id("reporteHerramientas")
         l3.click()
+        self.browser.get("https://final-conectate-group4.herokuapp.com/herramientas/reporte/")
+        span = self.browser.find_element_by_xpath('//*[@id="herramientas"]/tr[3]/td[7]/a')
+        span.click()
+        h6 = self.browser.find_element(By.XPATH, '//*[@id="myModal2"]/div/div/div[1]/h4')
+        self.assertIsNotNone(h6)
         self.browser.implicitly_wait(10)
-        self.browser.get("http://localhost:8000/herramientas/reporte/")
-        span = self.browser.find_element_by_css_selector('#herramientas > tr:nth-child(1) > td:nth-child(7) > a')
-        self.browser.execute_script("arguments[0].click();",span)
-        self.browser.implicitly_wait(10)
+        self.browser.get("https://final-conectate-group4.herokuapp.com/herramientas/reporte/tutoriales/detail/1/")
 
+        self.browser.implicitly_wait(10)
 
