@@ -571,6 +571,7 @@ def reporteHerramientas(request):
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data', '[]'))
+        print data
         if data:
             for y in data:
                 fields = {}

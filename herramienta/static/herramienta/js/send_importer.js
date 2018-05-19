@@ -18,9 +18,10 @@
  * Created by dark on 6/03/18.
  */
 window.data = [];
+var oFileIn;
+window.vales_file = [];
+window.semaforo=true;
 $(document).ready(function () {
-    console.log("dadaasasas");
-    // bind form using 'ajaxForm'
     window.id_file=0;
     var options = {
         //beforeSubmit:  showRequest,  // pre-submit callback
@@ -36,19 +37,76 @@ $(document).ready(function () {
         // $.ajax options can be used here too, for example:
         //timeout:   3000
     };
+    oFileIn = document.getElementById('importer');
+      if (oFileIn.addEventListener) {
+        oFileIn.addEventListener('change', filePicked, false);
+      }
 
-    // bind form using 'ajaxForm'
-    //$('#form').ajaxForm(options);
-    $('#form').submit(function() {
-        // inside event callbacks 'this' is the DOM element so we first
-        // wrap it in a jQuery object and then invoke ajaxSubmit
-        $(this).ajaxSubmit(options);
 
-        // !!! Important !!!
-        // always return false to prevent standard browser submit and page navigation
-        return false;
-    });
+   $('#form').on('submit', function(e){
+        // validation code here
+       console.log(window.vales_file.length);
+        for (var i = 0; i < window.vales_file.length; i++) {
+            console.log(i,"  ",window.vales_file[i]);
+              var tem_row = {"row":i};
+              for (var key in window.vales_file[i]) {
+                  if (key != undefined) {
+                      tem_row[key.toLowerCase()] = window.vales_file[i][key];
+                  }
+              }
+              window.data.push(tem_row);
+          }
+        process_file();
+        e.preventDefault();
+
+  });
 });
+
+function filePicked(oEvent) {
+  // Get The File From The Input
+  var oFile = oEvent.target.files[0];
+  var sFilename = oFile.name;
+  // Create A File Reader HTML5
+  var reader = new FileReader();
+
+  // Ready The Event For When A File Gets Selected
+  reader.onload = function(e) {
+    var data = e.target.result;
+    var cfb = XLS.CFB.read(data, {
+      type: 'binary'
+    });
+    var wb = XLS.parse_xlscfb(cfb);
+    // Loop Over Each Sheet
+      window.semaforo=true;
+    wb.SheetNames.forEach(function(sheetName) {
+          // Obtain The Current Row As CSV
+        console.log("1");
+          var sCSV = XLS.utils.make_csv(wb.Sheets[sheetName]);
+          window.vales_file = XLS.utils.sheet_to_row_object_array(wb.Sheets[sheetName]);
+          console.log(sCSV);
+    });
+  };
+
+  // Tell JS To Start Reading The File.. You could delay this if desired
+  reader.readAsBinaryString(oFile);
+}
+
+function process_file() {
+    if(window.data){
+            var value ="";
+            var datos = window.data;
+            for(var i=0; i < datos.length; i++){
+                value+= "<option value=\""+datos[i].row+"\">"+datos[i].nombre+"</option>";
+            }
+            $("#datos").html("");
+            $("#datos").append(value);
+            $('.selectpicker').addClass('col-lg-12').selectpicker('setStyle');
+            $('.selectpicker').selectpicker('refresh');
+            $('#myModal').modal('show');
+        }else{
+            $('#myAlert').modal('show');
+    }
+}
 // pre-submit callback
 function showRequest(formData, jqForm, options) {
     // formData is an array; here we use $.param to convert it to a string to display it
