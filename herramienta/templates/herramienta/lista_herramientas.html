@@ -33,10 +33,12 @@
                     {% for herramienta in herramientas %}
                         <tr>
                             {% if request.user|has_group:"Administrador" %}
-                                <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
-                                <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
+                                <td>
+                                    <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
+                                    <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
+                                </td>
                             {% endif %}
-                            </td>
+
                             <td>
                                 {{ herramienta.owner }}
                             </td>
