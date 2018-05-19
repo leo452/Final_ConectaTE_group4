@@ -1,0 +1,133 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- SITE TITTLE -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Herramientas Conectate</title>
+
+  <!-- PLUGINS CSS STYLE -->
+  <!-- Bootstrap -->
+  <link href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css'%}" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="{% static 'plugins/font-awesome/css/font-awesome.min.css'%}" rel="stylesheet">
+  <!-- Owl Carousel -->
+  <link href="{% static 'plugins/slick-carousel/slick/slick.css'%}" rel="stylesheet">
+  <link href="{% static 'plugins/slick-carousel/slick/slick-theme.css'%}" rel="stylesheet">
+  <!-- Fancy Box -->
+  <link href="{% static 'plugins/fancybox/jquery.fancybox.pack.css'%}" rel="stylesheet">
+  <link href="{% static 'plugins/jquery-nice-select/css/nice-select.css'%}" rel="stylesheet">
+  <link href="{% static 'plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css'%}" rel="stylesheet">
+  <!-- CUSTOM CSS -->
+  <link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+  <!-- FAVICON -->
+  <link href="{% static 'img/favicon.png' %}" rel="shortcut icon">
+
+</head>
+
+<body class="body-wrapper">
+
+<section>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg  navigation">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto main-nav ">
+							<li class="nav-item active">
+								<a class="nav-link" href="{% url 'home' %}">Home</a>
+							</li>
+                            {% if request.user|has_group:"Administrador" or request.user|has_group:"MiembroGTI" %}
+							<li class="nav-item dropdown dropdown-slide">
+								<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Gestión de Herramientas <span><i class="fa fa-angle-down"></i></span>
+								</a>
+								<!-- Dropdown list -->
+								<div class="dropdown-menu dropdown-menu-right">
+                                    {% if request.user|has_group:"Administrador" %}
+									<a class="dropdown-item" href="{% url 'herramientas' %}">Lista de Herramientas</a>
+									<a class="dropdown-item" href="{% url 'lista_publicaciones' %}">Lista de Herramientas por Publicar</a>
+									<a class="dropdown-item" href="{% url 'importer' %}">Subir Herramienta en Bloque</a>
+									<a class="dropdown-item" href="{% url 'categoria-v' %}">Agregar Categoría</a>
+									<a class="dropdown-item" href="{% url 'ediciones' %}">Revisiones</a>
+									<a class="dropdown-item" href="{% url 'revision-v' %}">Agregar Estado de Revisión</a>
+									<a class="dropdown-item" href="{% url 'reporteHerramientas' %}">Reporte de Herramientas Registradas</a>
+                                    {% else %}
+									<a class="dropdown-item" href="{% url 'herramienta-v' %}">Crear Herramienta</a>
+                                    {% endif %}
+								</div>
+							</li>
+                            {% endif %}
+                            {% if request.user|has_group:"Administrador"%}
+							<li class="nav-item dropdown dropdown-slide">
+								<a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Gestión de Usuarios <span><i class="fa fa-angle-down"></i></span>
+								</a>
+								<!-- Dropdown list -->
+								<div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" href="{% url 'crearusuarioview' %}">Crear Usuario</a>
+									<a class="dropdown-item" href="{% url 'editarPerfilesview' %}">Perfiles</a>
+									<a class="dropdown-item" href="{% url 'usuarioherramientaview' %}">Heramientas por Usuarios</a>
+								</div>
+							</li>
+                            {% endif %}
+						</ul>
+						<ul class="navbar-nav ml-auto mt-10">
+                            {% if not user.is_authenticated %}
+							<li class="nav-item">
+								<a class="nav-link login-button" href="{% url 'loginview' %}">Login</a>
+							</li>
+                            {% else %}
+                            <li class="nav-item">
+								<a class="nav-link login-button">{{ request.user.username }}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link add-button" href="{% url 'logout' %}">Cerrar Sesión</a>
+							</li>
+                            {% endif %}
+						</ul>
+
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% block content%} {% endblock %}
+
+<ul id="messages" class="messages">
+{% if messages %}
+    {% for message in messages %}
+        <div class="MyAlert-bottom alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fixed-bottom" role="alert" style="width: 300px">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+</ul>
+  <!-- JAVASCRIPTS -->
+  <script src="{% static 'plugins/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'plugins/tether/js/tether.min.js' %}"></script>
+  <script src="{% static 'plugins/raty/jquery.raty-fa.js' %}"></script>
+  <script src="{% static 'plugins/bootstrap/dist/js/popper.min.js' %}"></script>
+  <script src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'plugins/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js' %}"></script>
+  <script src="{% static 'plugins/slick-carousel/slick/slick.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery-nice-select/js/jquery.nice-select.min.js' %}"></script>
+  <script src="{% static 'plugins/fancybox/jquery.fancybox.pack.js' %}"></script>
+  <script src="{% static 'plugins/smoothscroll/SmoothScroll.min.js' %}"></script>
+  <script src="{% static 'js/scripts.js' %}"></script>
+
+{% block script %}{% endblock %}
+
+</body>
+
+</html>

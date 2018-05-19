@@ -4,9 +4,11 @@
 
 <div class="container">
     <div class="row">
-        <a class="btn btn-primary col-sm-12 col-md-2" href="{% url 'herramienta-v' %}">Agregar Herramienta</a>
         <div class="col-sm-12">
-             <table class=" table table-striped">
+            <div class="control-group" style="padding-bottom: 10px">
+                <a class="btn btn-primary" href="{% url 'herramienta-v' %}">Agregar Herramienta</a>
+            </div>
+             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>
@@ -19,7 +21,7 @@
                             Nombre
                         </th>
                         <th>
-                            Descripciòn
+                            Descripción
                         </th>
                         <th>
                             Estado
@@ -29,7 +31,7 @@
                 <tbody>
                     {% for herramienta in herramientas %}
                         <tr>
-                            <td>
+                            <td style="text-align: center; ">
                                 <a href="{% url 'herramienta-edit' id=herramienta.id %}" >Editar</a><br>
                                 <a id="del_{{ herramienta.id }}" href="#" onclick="validate({{ herramienta.id }},'{{ herramienta.nombre }}')" >Eliminar</a>
                             </td>
@@ -37,7 +39,7 @@
                                 {{ herramienta.owner }}
                             </td>
                             <td>
-                                {{ herramienta.nombre }}
+                                <a href="{% url 'tool_detail' herramienta.id %}"> {{ herramienta.nombre }}</a>
                             </td>
                             <td>
                                 {{ herramienta.descripcion }}
@@ -96,7 +98,7 @@ function validate(idDel, nombre) {
                 div +='</div>';
                 $("#messages").prepend(div);
                 //window.location.reload();
-                window.setTimeout(function(){location.reload()},5000)
+                location.reload()
             }
         })
     }

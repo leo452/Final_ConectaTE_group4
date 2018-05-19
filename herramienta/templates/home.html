@@ -1,110 +1,113 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load static %}
 {% load filters %}
-{% block script %}
 
-{% endblock %}
 {% block content %}
+    <!--===============================
+=            Hero Area            =
+================================-->
 
+<section class="hero-area bg-1 text-center overly">
+	<!-- Container Start -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Header Contetnt -->
+				<div class="content-block">
+					<h1>Herramientas Conecta-TE</h1>
+					<p>Construyamos la Innovación<br> Autonomía, Flexibilidad, Interacción</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Container End -->
+</section>
 
-<!-- Page Content -->
-<div class="row">
-<div class="container col-2" >
-    <form method="get">
-        <div class="row">
+    <section class="section-sm">
+        <div class="container">
+            <form method="get">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="category-sidebar">
+                            <div class="form-group widget filter">
+                                <h4 class="widget-header">Sistema Operativo</h4>
+                                <select id="sistema_operativo" class="form-control" name="sistema_operativo">
+                                    <option value="null">Todos los Sistemas</option>
+                                    <option value="Windows">Windows</option>
+                                    <option value="Linux">Linux</option>
+                                    <option value="MacOS">MacOS</option>
+                                    <option value="Android">Android</option>
+                                    <option value="iOS">iOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="category-sidebar">
+                            <div class="form-group widget filter">
+                                <h4 class="widget-header">Tipo de Licencia</h4>
+                                <select id="tipo_licencia" class="form-control" name="tipo_licencia">
+                                    <option value="null">Todas las Licencias</option>
+                                    <option value="GPL">GPL</option>
+                                    <option value="BSD">BSD</option>
+                                    <option value="MIT">MIT</option>
+                                    <option value="Apache">Apache</option>
+                                    <option value="GNU">GNU</option>
+                                    <option value="Open Source">Open Source</option>
+                                </select>
+                            </div>
+                        </div>
 
-            <div class="form-group row" id="sel_sistema_operativo">
-                <label for="sistema_operativo"><b>Sistema operativo</b></label>
-                <select id="sistema_operativo" class="form-control" name="sistema_operativo">
-                        <option value="">Todos los sistemas</option>
-                        <option value="Windows">Windows</option>
-                        <option value="Linux">Linux</option>
-                        <option value="MacOS">MacOS</option>
-                        <option value="Android">Android</option>
-                        <option value="iOS">iOS</option>
-                    </select>
-            </div>
-            <div class="w-100"></div>
-            <div class="form-group row" id="sel_tipo_licencia">
-                <label for="tipo_licencia"><b>Tipo de licencia</b></label>
-                <select id="tipo_licencia" class="form-control" name="tipo_licencia">
-                        <option value="">Todas las licencias</option>
-                        <option value="GPL">GPL</option>
-                        <option value="BSD">BSD</option>
-                        <option value="MIT">MIT</option>
-                        <option value="APACHE">Apache</option>
-                        <option value="GNU">GNU</option>
-                        <option value="OPEN">Open Source</option>
-                    </select>
+                        {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"ConectaTE" %}
+                            <div class="category-sidebar">
+                                <div class="form-group widget filter">
+                                    <h4 class="widget-header">Categorías</h4>
+                                    <select id="categorias" class="form-control" name="categoria">
+                                        <option value="null">Todas las Categorías</option>
+                                        {% for categoria in categorias %}
+                                            <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group widget price-range">
+                                <h4 class="widget-header">Uso de la Herramienta</h4>
+                                <div class="block">
+                                    <input name="uso" id="uso" type="text" class="form-control span2" value=""/>
+                                </div>
+                            </div>
+                        {% endif %}
 
-
-            </div>
-            <div class="w-100"></div>
-            <div class="form-group row">
-            <h5></h5>
-            </div>
-
-            {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"ConectaTE" %}
-            <div class="form-group row">
-            <h5>Herramientas en revision:</h5>
-            </div>
-            <div class="form-group row" id="sel_categoria">
-                <label for="categorias"><b>Categorias</b></label>
-                    <select id="categorias" class="form-control" name="categoria">
-                        <option value="">Todas las categorias</option>
-                    </select>
-            </div>
-            <div class="w-100"></div>
-            <div class="form-group row" id="sel_uso">
-                <label for="uso"><b>Uso de la herramienta</b></label>
-                    <input type="text" name="uso" id="uso" class="form-control" placeholder="Ejemplo: Educativo">
-
-            </div>
-            <div class="w-100"></div>
-           {% endif %}
-            <div class ="form-group row" style="padding-top: 2%">
-                <button id="btnFiltrar" type="submit" class="btn btn-default" style="height: 40px;">Filtrar</button>
-                <a href="/herramientas/" class="btn btn-default"/>Limpiar filtros</a>
-            </div>
+                        <button id="btnFiltrar" type="submit" class="btn btn-primary">Filtrar</button>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="product-grid-list">
+                            <div class="row mt-30">
+                                {% for currentHerramienta in lista_herramientas %}
+                                <div class="col-sm-12 col-lg-4 col-md-6">
+                                    <!-- product card -->
+                                    <div class="product-item bg-light">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title"><a href="{% url 'tool_detail' currentHerramienta.id %}">{{ currentHerramienta.nombre }}</a></h4>
+                                                <ul class="list-inline product-meta">
+                                                    <li class="list-inline-item">
+                                                        <a><i class="fa fa-folder-open-o"></i>{{ currentHerramienta.tipo }}</a>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <a><i class="fa fa-calendar"></i>{{ currentHerramienta.sistema_operativo }}r</a>
+                                                    </li>
+                                                </ul>
+                                                <p class="card-text">{{ currentHerramienta.descripcion|slice:"125" }}{% if currentHerramienta.descripcion|length > 125 %}...{% endif %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-<div class="container col-8">
-    <div id="herramientas" class="row">
-
-        {% for currentHerramienta in lista_herramientas %}
-            <div class="col-sm-4 py-2">
-              <div class="card" style="height: 235px;">
-                  <div id="herramienta_{{ currentHerramienta.id }}_nombre" class="card-header text-center"><a href="{% url 'tool_detail' currentHerramienta.id %}"> {{ currentHerramienta.nombre }}</a></div>
-                  <div class="card-body" >
-                    <h6>{{ currentHerramienta.tipo }}</h6>
-                    <hr />
-                    <p class="card-text">{{ currentHerramienta.descripcion|slice:"125" }}{% if currentHerramienta.descripcion|length > 125 %}...{% endif %}</p>
-                  </div>
-              </div>
-            </div>
-        {% endfor %}
-
-    </div>
-    <!-- /.row -->
-
-    <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-    </div>
-
-</div>
-<!-- /.container -->
-</div>
-
-<script>
-$( document ).ready(function() {
-    $.getJSON('/herramientas/api/categorias/').done(function (data) {
-        $.each(data, function (i, item) {
-            $("#categorias").append(
-                '<option value="' + item.pk + '">' + item.fields.nombre + '</option>'
-            );
-        })
-    })
-});
-</script>
-
+    </section>
 {% endblock %}
