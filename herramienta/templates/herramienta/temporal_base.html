@@ -5,8 +5,7 @@
     <head>
         <title>Herramientas ConectaTE</title>
 
-        <link href="{%  static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/shop-homepage.css' %}" rel="stylesheet">
+        <link href="{%  static 'plugins/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
         <style type="text/css">
             .jumbotron {
@@ -65,9 +64,9 @@
         {% block content %}{% endblock %}
 
         <script src="{% static 'herramienta/js/jquery-3.3.1.min.js' %}"></script>
-        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'plugins/jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
         {% block script %}{% endblock %}
     </body>
