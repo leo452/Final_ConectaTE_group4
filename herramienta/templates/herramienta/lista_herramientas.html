@@ -12,9 +12,11 @@
              <table class="table table-striped">
                 <thead>
                     <tr>
+                        {% if request.user|has_group:"Administrador" %}
                         <th>
                             Accion
                         </th>
+                        {% endif %}
                         <th>
                             Owner
                         </th>
