@@ -47,19 +47,19 @@
 							</li>
                             {% if request.user|has_group:"Administrador" or request.user|has_group:"MiembroGTI" %}
 							<li class="nav-item dropdown dropdown-slide">
-								<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a id="menuHerramientas" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Gestión de Herramientas <span><i class="fa fa-angle-down"></i></span>
 								</a>
 								<!-- Dropdown list -->
 								<div class="dropdown-menu dropdown-menu-right">
                                     {% if request.user|has_group:"Administrador" %}
-									<a class="dropdown-item" href="{% url 'herramientas' %}">Lista de Herramientas</a>
-									<a class="dropdown-item" href="{% url 'lista_publicaciones' %}">Lista de Herramientas por Publicar</a>
+									<a class="dropdown-item" id="itemListaHerrramienta" href="{% url 'herramientas' %}">Lista de Herramientas</a>
+									<a class="dropdown-item" id="listaPorPublicacion" href="{% url 'lista_publicaciones' %}">Lista de Herramientas por Publicar</a>
 									<a class="dropdown-item" href="{% url 'importer' %}">Subir Herramienta en Bloque</a>
 									<a class="dropdown-item" href="{% url 'categoria-v' %}">Agregar Categoría</a>
 									<a class="dropdown-item" href="{% url 'ediciones' %}">Revisiones</a>
 									<a class="dropdown-item" href="{% url 'revision-v' %}">Agregar Estado de Revisión</a>
-									<a class="dropdown-item" href="{% url 'reporteHerramientas' %}">Reporte de Herramientas Registradas</a>
+									<a class="dropdown-item" id="reporteHerramientas" href="{% url 'reporteHerramientas' %}">Reporte de Herramientas Registradas</a>
                                     {% else %}
 									<a class="dropdown-item" href="{% url 'herramienta-v' %}">Crear Herramienta</a>
                                     {% endif %}
@@ -68,7 +68,7 @@
                             {% endif %}
                             {% if request.user|has_group:"Administrador"%}
 							<li class="nav-item dropdown dropdown-slide">
-								<a class="nav-link dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link dropdown-toggle" id="menuUsuarios" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Gestión de Usuarios <span><i class="fa fa-angle-down"></i></span>
 								</a>
 								<!-- Dropdown list -->
@@ -83,14 +83,14 @@
 						<ul class="navbar-nav ml-auto mt-10">
                             {% if not user.is_authenticated %}
 							<li class="nav-item">
-								<a id="login" class="nav-link login-button" href="{% url 'loginview' %}">Login</a>
+								<a class="nav-link login-button" id="login" href="{% url 'loginview' %}">Login</a>
 							</li>
                             {% else %}
                             <li class="nav-item">
 								<a class="nav-link login-button">{{ request.user.username }}</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link add-button" href="{% url 'logout' %}">Cerrar Sesión</a>
+								<a class="nav-link add-button" id="cerrar_sesion" href="{% url 'logout' %}">Cerrar Sesión</a>
 							</li>
                             {% endif %}
 						</ul>
