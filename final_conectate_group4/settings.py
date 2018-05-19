@@ -36,6 +36,10 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'herramientasconectate@gmail.com'
 EMAIL_HOST_PASSWORD = 'conectate123'
 
+# Theme
+
+BOOTSTRAP3 = { 'theme_url': '/static/bootstrap/css/bootstrap.min.css', }
+
 # Application definition
 
 INSTALLED_APPS = [
