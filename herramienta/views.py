@@ -544,6 +544,7 @@ def lista_postulaciones_rechazar (request, index=None):
 #se obtienen todas las herramientas y se pagina de forma que solo se muestren 10 herramientas por pagina.
 #luego se obtienen los datos de propietario de la herramienta, fecha de creacion y ultima edicion, numero de ediciones
 #numero de ejemoplos y tutoriales
+@user_passes_test(in_admin_group)
 def reporteHerramientas(request):
     herramienta_list = models.Herramienta.objects.all().order_by('id')
     paginator = Paginator(herramienta_list, 10)
