@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load filters %}
+
+{% block content %}
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Post Content Column -->
+            <div class="col-lg-8">
+                <!-- Title -->
+                <h1 class="mt-4">{{ tutorial.nombre }}</h1>
+
+                <p class="lead">Herramientas asociadas: <a href="{% url 'tool_detail' tutorial.herramienta.id %}"> {{ tutorial.herramienta.nombre }}</a></p>
+                <!-- Post Content -->
+                <h3>Detalles del {{ tutorial.nombre }}</h3>
+                <p class="lead"> {{ tutorial.descripcion }}</p>
+                <hr>
+            </div>
+            <!-- Sidebar Widgets Column -->
+            <div class="col-md-4">
+                <!-- Side Widget -->
+                <div class="card my-4">
+                    <h5 class="card-header">Recursos</h5>
+                    <div class="card-body">
+                        <p class="lead"><a target="_blank" href="{{ tutorial.link_recurso }}"> {{ tutorial.link_recurso }}</a></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    </div>
+    <!-- /.container -->
+{% endblock %}

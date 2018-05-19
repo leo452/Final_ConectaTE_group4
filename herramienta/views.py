@@ -6,7 +6,7 @@ from django.views import View
 import models
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseNotFound
-from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm
+from forms import CategoriaForm, RevisioForm, HerramientaForm, HerramientaEdicionForm, ImporterForm, TutorialForm
 from django.views.generic import ListView
 import json
 from django.core.exceptions import ObjectDoesNotExist
@@ -368,7 +368,7 @@ class ListHerramientaEdicion(AJAXListMixin, ListView):
 def addCategoriaView(request):
     return render(request,'herramienta/add_categoria.html',{"form": CategoriaForm()})
 
-@user_passes_test(in_admin_group)
+# @user_passes_test(in_admin_group)
 def listHerramienta(request):
     herramienta_list = models.Herramienta.objects.all()
     paginator = Paginator(herramienta_list, 3) # Show 25 contacts per page
@@ -541,7 +541,7 @@ def lista_postulaciones_rechazar (request, index=None):
 
 
 def reporteHerramientas(request):
-    herramienta_list = models.Herramienta.objects.all()
+    herramienta_list = models.Herramienta.objects.all().order_by('id')
     paginator = Paginator(herramienta_list, 10)
 
     page = request.GET.get('page')
@@ -564,7 +564,7 @@ def reporteHerramientas(request):
         u_nombre = u.username
         n_ediciones = models.HerramientaEdicion.objects.filter(herramienta=obj.id).count()
         n_tutorial = models.Tutorial.objects.filter(herramienta=obj).count()
-        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj).count()
+        n_ejemplo = models.Ejemplo.objects.filter(herramienta=obj.id).count()
 
         ret.append({'herramienta': h_nombre, 'creado': h_fecha, 'edicion': e_fecha, 'usuario': u_nombre,
                     'ediciones': n_ediciones, 'ejemplos': n_ejemplo, 'tutoriales': n_tutorial,
@@ -626,3 +626,105 @@ class Importer(LoginRequiredMixin, View):
                 mensaje = {"mensaje": "La plantilla no tiene el numero de campos requeridos.", "respuesta": False}
                 return HttpResponse(json.dumps(mensaje), content_type='application/json', status=201)
         return HttpResponse(json.dumps(form.errors.as_json()), content_type='application/json', status=201)
+
+from django.core.serializers.json import DjangoJSONEncoder
+
+#pc171 reporte ediciones
+def listarEdicionesHerramienta(request,id):
+    herramientasEdicion = models.HerramientaEdicion.objects.filter(herramienta=id).values('id', 'usuarioHerramienta__username', 'creacion')
+    context = {'lista_ediciones': list(herramientasEdicion)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+#pc172 reporte ejemplos
+def listarEjemplosHerramienta(request,id):
+    ejemplos = models.Ejemplo.objects.filter(herramienta=id).values('id','nombre')
+    context = {'lista_ejemplos': list(ejemplos)}
+    return HttpResponse(json.dumps(context, cls=DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+#pc172 ver el detalle de un ejemplo
+def ejemplo(request, id):
+    ejemplo= models.Ejemplo.objects.get(pk=id)
+    herramientas= models.Herramienta.objects.filter(ejemplo=ejemplo)
+    print herramientas
+    return render(request, 'herramienta/detalleEjemplo.html', {'ejemplo': ejemplo, 'herramientas': herramientas})
+
+#pc173 reporte de tutoriales
+@csrf_exempt
+def addTutorial(request):
+    if request.method == "POST":
+        form = TutorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Tutorial agregado con Éxito!"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}),status=404,
+                        content_type='application/json')
+
+def getTutorial(request):
+    if request.method == "GET":
+        id = request.GET.get('id')
+        if id:
+            tutorial = models.Tutorial.objects.get(id=id)
+        else:
+            Tutorial = models.Tutorial.objects.all()
+
+        data = serializers.serialize('json', tutorial)
+        return HttpResponse(data, status=200,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                        content_type='application/json')
+
+@csrf_exempt
+def editTutorial(request, id):
+    try:
+        tutorial = models.Tutorial.objects.get(id=id)
+    except ObjectDoesNotExist:
+        mensaje = "Este tutorial no existe"
+        return HttpResponse(json.dumps({"error": mensaje}), status=404,
+                            content_type='application/json')
+
+    if request.method == "POST":
+        form = TutorialForm(request.POST, instance=tutorial)
+        if form.is_valid():
+            form.save()
+            mensaje = {"mensaje": "Guardado exitoso"}
+            return HttpResponse(json.dumps({"mensaje": mensaje}), status=200,
+                                content_type='application/json')
+        erros = form.errors.items()
+        return HttpResponse(json.dumps(erros), status=400,
+                            content_type='application/json')
+    mensaje = "Metodo no permitido"
+    return HttpResponse(json.dumps({"mensaje": mensaje}),status=404,
+                        content_type='application/json')
+
+
+class ListTutoriales(AJAXListMixin, ListView):
+    model = models.Tutorial
+
+    def get_queryset(self):
+        q = self.request.GET.get('q', '')
+        querysert = super(AJAXListMixin, self).get_queryset()
+        return querysert.filter(nombre__icontains=q)
+
+
+def addTutorialView(request):
+    return render(request,'herramienta/add_tutorial.html',{"form": TutorialForm()})
+
+def listarTutorialesHerramienta(request,id):
+    herramientasTutorial = models.Tutorial.objects.filter(herramienta=id).values('id', 'nombre')
+    context = {'lista_tutoriales': list(herramientasTutorial)}
+    return HttpResponse(json.dumps(context,  cls= DjangoJSONEncoder), status=200,
+                        content_type='application/json')
+
+def detailTutorial(request, id=None):
+    instance = get_object_or_404(models.Tutorial, id=id)
+    context = {'tutorial': instance}
+    return render(request, 'detalletutorial.html', context)

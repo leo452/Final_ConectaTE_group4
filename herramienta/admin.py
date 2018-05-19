@@ -55,14 +55,14 @@ class HerramientaAdmin(admin.ModelAdmin):
 
 #formulario para edicion de herramienta
 class HerramientaEdicionAdmin(admin.ModelAdmin):
-    list_display = ['editor','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
-    search_fields = ['usuarioHerramienta__usuario__first_name', 'usuarioHerramienta__usuario__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
+    list_display = ['editor','herramienta','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
+    search_fields = ['herramienta__nombre','usuarioHerramienta__usuario__first_name', 'usuarioHerramienta__usuario__last_name','nombre', 'descripcion', 'informacion', 'usos', 'enlaces', 'documentacion', 'licencia']
     form = forms.HerramientaEdicionForm
 
 #formulario de tutorial
 class TutorialAdmin(admin.ModelAdmin):
-    list_display = ['nombre','descripcion','herramienta']
-    search_fields = ['nombre','descripcion']
+    list_display = ['nombre', 'descripcion','link_recurso','herramienta']
+    search_fields = ['nombre', 'descripcion','link_recurso','herramienta']
     form = forms.TutorialForm
 
 #registro de los formularios en django admin y para usarlos en las vistas
@@ -72,4 +72,5 @@ admin.site.register(models.Herramienta, HerramientaAdmin)
 admin.site.register(models.HerramientaEdicion, HerramientaEdicionAdmin)
 admin.site.register(models.FileUser)
 admin.site.register(models.HerramientaPorAprobar, HerramientaPorAprobarAdmin)
-admin.site.register(models.Tutorial)
+admin.site.register(models.Ejemplo)
+admin.site.register(models.Tutorial, TutorialAdmin)

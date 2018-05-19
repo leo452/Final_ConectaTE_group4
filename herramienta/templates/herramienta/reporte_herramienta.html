@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -23,9 +24,10 @@
                             <td>{{ obj.creado }}</td>
                             <td>{{ obj.edicion }}</td>
                             <td>{{ obj.usuario }}</td>
-                            <td align="center"><a href="" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
-                            <td align="center"><a href="" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
-                            <td align="center"><a href="" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
+                            <td align="center"><a href="#" onclick="ListaEdiciones({{ obj.herramientaid }})">{{ obj.ediciones }}</a></td>
+                            <td align="center"><a href="#" onclick="ListaEjemplos({{ obj.herramientaid }})">{{ obj.ejemplos }}</a></td>
+                            <td align="center"><a href="#" onclick="ListaTutorial({{ obj.herramientaid }})">{{ obj.tutoriales }}</a></td>
+
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -65,17 +67,89 @@
                 class="glyphicon glyphicon-step-backward">Volver</span></a>
         </div>
     </div>
-<script>
-function ListaEdiciones(id) {
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Ediciones de la herramienta</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
-}
+      </div>
+      <div class="modal-body">
 
-function ListaEjemplos(id) {
+          <table class="table table-striped" id="tabla_ediciones">
+              <thead>
+              <tr>
+                  <td>Autor</td>
+                  <td>Fecha</td>
+              </tr>
+              </thead>
+              <tbody>
 
-}
+              </tbody>
 
-function ListaTutorial(id) {
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 
-}
-</script>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal2">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Tutoriales</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+      </div>
+      <div class="modal-body">
+
+          <table class="table table-striped" id="tabla_tutoriales">
+              <thead>
+              <tr>
+                  <td>Nombres</td>
+
+              </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Ejemplos de la herramienta</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+      </div>
+      <div class="modal-body">
+
+          <table class="table table-striped" id="tabla_ejemplos">
+              <tbody>
+
+              </tbody>
+
+          </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript" src="{% static 'herramienta/js/reporte_herramienta.js' %}"></script>
 {% endblock %}

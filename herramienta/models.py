@@ -168,7 +168,7 @@ class Ejemplo(models.Model):
     nombre = models.CharField(max_length=100,default='',null=True, blank=True)
     descripcion = models.CharField(max_length=1000,default='',null=True, blank=True)
     link_recurso = models.CharField(max_length=1000,default='',null=True, blank=True)
-    herramienta = models.ForeignKey(Herramienta, null=False, blank=False)
+    herramienta = models.ManyToManyField(Herramienta, null=False, blank=False)
 
     def __unicode__(self):
         return '%s' % self.nombre
