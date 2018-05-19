@@ -8,7 +8,7 @@ from django.test import TestCase
 from selenium import webdriver
 
 
-usuario_pruebaAdmin = "usr.admin@uniandes.edu.co"
+usuario_pruebaAdmin = "usr.admon@uniandes.edu.co"
 usuario_pruebaAdmin_clave = "admin123456"
 usuario_pruebaGTI = "usr.gti@uniandes.edu.co"
 usuario_pruebaGTI_clave = "admin123456"
@@ -25,8 +25,7 @@ class ReporteTest(TestCase):
         self.browser.quit()
 
     def test_MenuReporte(self):
-        #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)
@@ -44,8 +43,7 @@ class ReporteTest(TestCase):
         self.assertIsNotNone(success)
 
     def test_PaginaReporte(self):
-        #self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)
@@ -66,8 +64,7 @@ class ReporteTest(TestCase):
         self.assertEqual(l4.text, 'Reporte de Herramientas')
 
     def test_PaginaReporteTabla(self):
-        # self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
-        self.browser.get('http://localhost:8000/herramientas')
+        self.browser.get('https://final-conectate-group4.herokuapp.com/herramientas')
         link = self.browser.find_element_by_id('login')
         link.click()
         self.browser.implicitly_wait(10)

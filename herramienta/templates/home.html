@@ -30,7 +30,7 @@
                 <div class="row text-center">
                     <div class="col-md-3">
                         <div class="category-sidebar">
-                            <div class="form-group widget filter">
+                            <div class="form-group widget filter" id="sel_sistema_operativo">
                                 <h4 class="widget-header">Sistema Operativo</h4>
                                 <select id="sistema_operativo" class="form-control" name="sistema_operativo">
                                     <option value="null">Todos los Sistemas</option>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="category-sidebar">
-                            <div class="form-group widget filter">
+                            <div class="form-group widget filter" id="sel_tipo_licencia">
                                 <h4 class="widget-header">Tipo de Licencia</h4>
                                 <select id="tipo_licencia" class="form-control" name="tipo_licencia">
                                     <option value="null">Todas las Licencias</option>
@@ -59,7 +59,7 @@
 
                         {% if request.user|has_group:"MiembroGTI" or request.user|has_group:"ConectaTE" %}
                             <div class="category-sidebar">
-                                <div class="form-group widget filter">
+                                <div class="form-group widget filter" id="sel_categoria">
                                     <h4 class="widget-header">Categorías</h4>
                                     <select id="categorias" class="form-control" name="categoria">
                                         <option value="null">Todas las Categorías</option>
@@ -69,7 +69,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group widget price-range">
+                            <div class="form-group widget price-range" id="sel_uso">
                                 <h4 class="widget-header">Uso de la Herramienta</h4>
                                 <div class="block">
                                     <input name="uso" id="uso" type="text" class="form-control span2" value=""/>
@@ -81,14 +81,14 @@
                     </div>
                     <div class="col-md-9">
                         <div class="product-grid-list">
-                            <div class="row mt-30">
+                            <div class="row mt-30" id="herramientas">
                                 {% for currentHerramienta in lista_herramientas %}
                                 <div class="col-sm-12 col-lg-4 col-md-6">
                                     <!-- product card -->
                                     <div class="product-item bg-light">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title"><a href="{% url 'tool_detail' currentHerramienta.id %}">{{ currentHerramienta.nombre }}</a></h4>
+                                                <h4 class="card-title" id="herramienta_{{ currentHerramienta.id }}_nombre"><a href="{% url 'tool_detail' currentHerramienta.id %}">{{ currentHerramienta.nombre }}</a></h4>
                                                 <ul class="list-inline product-meta">
                                                     <li class="list-inline-item">
                                                         <a><i class="fa fa-folder-open-o"></i>{{ currentHerramienta.tipo }}</a>
