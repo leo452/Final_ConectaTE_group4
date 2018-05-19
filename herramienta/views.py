@@ -540,6 +540,10 @@ def lista_postulaciones_rechazar (request, index=None):
         return redirect('home')
 
 
+#esta vista se encarga de mostrar reporte_herramienta.html. se encarga de preparar los datos para poder armar el reporte
+#se obtienen todas las herramientas y se pagina de forma que solo se muestren 10 herramientas por pagina.
+#luego se obtienen los datos de propietario de la herramienta, fecha de creacion y ultima edicion, numero de ediciones
+#numero de ejemoplos y tutoriales
 def reporteHerramientas(request):
     herramienta_list = models.Herramienta.objects.all().order_by('id')
     paginator = Paginator(herramienta_list, 10)
@@ -576,6 +580,7 @@ def reporteHerramientas(request):
 class SaveImporter(View):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.POST.get('data', '[]'))
+        print data
         if data:
             for y in data:
                 fields = {}
